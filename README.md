@@ -9,7 +9,14 @@ Work for one learner, set up the same way as the Student 1 folder. Student 2 is 
 - `plan/` — the plan for the topic in focus and the session log.
 - `study-materials/` — tablet lessons and teacher guides made for Student 2.
 - `worksheets/` — paper sheets (worksheet-forge), one folder per sheet.
+- `site/` — what students see online: an index page plus copies of `knowledge-graph/graph-page.html` and `study-materials/equations-practice.html`. When either source page changes, copy it into `site/` again and push.
 - `templates-from-student-1/` — Student 1's work, copied to adapt. Do not hand these to Student 2 as they are.
+
+## Online
+
+- Site for students: https://grade8-maths-practice.vercel.app (index), https://grade8-maths-practice.vercel.app/equations-practice and https://grade8-maths-practice.vercel.app/knowledge-graph.
+- Source: https://github.com/bijit-create/grade8-maths-practice (public). Vercel project `grade8-maths-practice`, root directory `site/`, deploys `main` on every push.
+- Kept off GitHub by `.gitignore`: `profile.md`, `data/`, `plan/` and `templates-from-student-1/` (that folder names a school and a learner detail). They stay on this machine only.
 
 ## About the templates
 They were made for Student 1 (MYP2, integers) and still say so inside:
