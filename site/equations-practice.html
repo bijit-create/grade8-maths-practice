@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Equations</title>
+<style>
+/* Same tokens and layout as the Student 1 lessons; one card in the middle, keypad below, Next at the bottom */
+:root{
+  --bg:#F4F6F8; --card:#FFFFFF; --ink:#1A2430; --muted:#5B6878; --line:#D3DAE2;
+  --ok:#25724A; --no:#B5442E; --warn:#9A5A00; --accent:#1F6FB2; --move:#6B4FA0;
+  --key:#E9EEF3; --keyink:#1A2430; --soft:#EEF3F8;
+  --f:system-ui,"Segoe UI",Roboto,Arial,sans-serif; --mono:ui-monospace,Consolas,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121820; --card:#1A222C; --ink:#E6ECF2; --muted:#9AA8B6; --line:#2E3A47;
+  --ok:#62C48F; --no:#F08A72; --warn:#E8B04D; --accent:#6BAEF0; --move:#B49BE8;
+  --key:#26313D; --keyink:#E6ECF2; --soft:#1F2934; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121820; --card:#1A222C; --ink:#E6ECF2; --muted:#9AA8B6; --line:#2E3A47;
+  --ok:#62C48F; --no:#F08A72; --warn:#E8B04D; --accent:#6BAEF0; --move:#B49BE8;
+  --key:#26313D; --keyink:#E6ECF2; --soft:#1F2934; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:17px;line-height:1.4;-webkit-user-select:none;user-select:none}
+.app{display:grid;grid-template-rows:auto auto 1fr auto;min-height:100%;max-width:1100px;margin:0 auto;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));gap:8px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.top h1{font-size:1.1rem;margin:0;font-weight:700}
+.prog{display:flex;gap:5px;align-items:center;flex-wrap:wrap;max-width:70%}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dot.on{background:var(--accent)}.dot.ok{background:var(--ok)}.dot.bad{background:var(--no)}
+.tstrip{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:1rem;color:var(--ink);font-weight:600}
+.work{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:6px 0;min-height:260px}
+.q{font-family:var(--mono);font-size:2.1rem;font-weight:700;text-wrap:balance}
+.q.small{font-family:var(--f);font-size:1.3rem;font-weight:600;max-width:46ch;text-align:left;line-height:1.5}
+.sub{color:var(--muted);font-size:1.05rem;max-width:46ch}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.82em;margin:0 .12em;line-height:1.15}
+.fr>.nu{border-bottom:2px solid currentColor;padding:0 .2em}
+.fr>.de{padding:0 .2em}
+.choices{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.ch{min-width:110px;min-height:60px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:700 1.35rem var(--mono);padding:8px 16px;cursor:pointer}
+.ch.txt{font:600 1.1rem var(--f)}
+.ch:focus-visible,button:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.ch.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--card))}
+.ch.wrong{border-color:var(--no);background:color-mix(in srgb,var(--no) 15%,var(--card))}
+.steps{display:grid;grid-template-columns:auto auto;gap:6px 22px;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 18px}
+.steps .ln{font:700 1.45rem var(--mono);text-align:right}
+.steps .mv{font:600 .98rem var(--f);color:var(--move);text-align:left}
+.steps .mv::before{content:"↓ "}
+.ansrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;font:700 1.6rem var(--mono)}
+.ansrow .unit{font:600 1.1rem var(--f);color:var(--muted)}
+.ansbox{min-width:150px;min-height:58px;border:3px solid var(--line);border-radius:10px;background:var(--card);font-family:var(--mono);font-size:1.9rem;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 12px}
+.ansbox.right{border-color:var(--ok)}.ansbox.wrong{border-color:var(--no)}
+.keypad{display:grid;grid-template-columns:repeat(4,68px);gap:7px}
+.keypad button{height:48px;border:1px solid var(--line);border-radius:10px;background:var(--key);color:var(--keyink);font:700 1.35rem var(--mono);cursor:pointer}
+.keypad button.go{background:var(--accent);color:#fff;border-color:var(--accent);font-family:var(--f);font-size:1.1rem}
+.fb{min-height:1.6em;font-size:1.1rem;font-weight:600;max-width:60ch}
+.fb.ok{color:var(--ok)}.fb.no{color:var(--no)}
+.bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:600 1rem var(--f);padding:10px 16px;cursor:pointer}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.small{font-size:.85rem;padding:6px 10px}
+.hide{display:none!important}
+.overlay{position:fixed;inset:0;background:rgba(10,16,24,.55);display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;z-index:10;overflow:auto}
+.ovcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;max-width:860px;width:100%;-webkit-user-select:text;user-select:text}
+.ovcard h2{margin:0 0 8px;font-size:1.3rem}
+.ovcard table{border-collapse:collapse;width:100%;font-size:.88rem}
+.ovcard td,.ovcard th{border-top:1px solid var(--line);padding:5px 6px;text-align:left;vertical-align:top}
+.ovcard th{font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ladder{display:inline-flex;gap:3px;vertical-align:middle}
+.ladder i{width:10px;height:14px;border:1px solid var(--line);border-radius:2px;display:inline-block}
+.ladder i.on{background:var(--accent);border-color:var(--accent)}
+.home{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;max-width:52ch;margin:auto}
+.home p{margin:0;color:var(--muted)}
+.ex{display:grid;grid-template-columns:auto auto;gap:12px 28px;font-family:var(--mono);font-size:1.35rem;font-weight:700;align-items:center}
+.ex span:nth-child(odd){text-align:right}
+.ex span:nth-child(even){text-align:left;color:var(--move)}
+.hints{background:var(--soft);border:1px dashed var(--line);border-radius:10px;padding:8px 14px;font:600 1.1rem var(--mono);text-align:left}
+.hints div{margin:2px 0}
+@media (max-width:700px){.q{font-size:1.6rem}.steps .ln{font-size:1.15rem}.keypad{grid-template-columns:repeat(4,58px)}.ex{font-size:1.1rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <h1>Equations</h1>
+    <div class="prog" id="prog"></div>
+    <button class="btn small" id="teacherBtn">Teacher</button>
+  </div>
+  <div class="tstrip" id="tstrip">Press Start.</div>
+  <div class="work" id="work"></div>
+  <div class="bottom">
+    <div class="fb" id="fb"></div>
+    <div><button class="btn hide" id="peekBtn">Show steps</button> <button class="btn primary" id="nextBtn">Start</button></div>
+  </div>
+</div>
+<div class="overlay hide" id="overlay"><div class="ovcard" id="ovcard"></div></div>
+
+<script>
+/* ============================================================
+   Equations practice for Student 2 (Grade 8, CBSE), outcome M806.
+   Authored by ConveGenius, 24 Oct 2026. Method: Student 1 lesson-method.md (Direct Instruction,
+   high-frequency item cycles, five-rung fading ladder, spaced returns). Skills and knowledge items
+   from Student 2/knowledge-graph/graph-data.json.
+
+   MODEL CARD. One model: the equation is two sides that stay equal. Every move is done to BOTH sides.
+   Fixed moves (the only words used): "Take __ from both sides", "Add __ to both sides",
+   "Divide both sides by __", "Open the bracket", "Multiply every term by __", "Cross-multiply".
+   Never "move it across and change the sign" (the source of the misrule in SK-AG-30's separation test).
+   ============================================================ */
+
+/*GEN-START*/
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;};
+const lcm=(...xs)=>xs.reduce((a,b)=>a*b/gcd(a,b),1);
+class F{constructor(n,d=1){if(d===0)throw new Error("zero denominator");if(d<0){n=-n;d=-d;}const g=gcd(n,d);this.n=n/g;this.d=d/g;}
+  static of(x){return x instanceof F?x:new F(x,1);}
+  add(o){o=F.of(o);return new F(this.n*o.d+o.n*this.d,this.d*o.d);} sub(o){return this.add(F.of(o).neg());}
+  mul(o){o=F.of(o);return new F(this.n*o.n,this.d*o.d);} div(o){o=F.of(o);return new F(this.n*o.d,this.d*o.n);}
+  neg(){return new F(-this.n,this.d);} eq(o){o=F.of(o);return this.n===o.n&&this.d===o.d;}
+  isInt(){return this.d===1;} get v(){return this.n/this.d;} get zero(){return this.n===0;} get one(){return this.n===1&&this.d===1;}
+  toString(){return this.d===1?`${this.n}`:`${this.n}/${this.d}`;}}
+const M="−";
+function sj(parts){let o="";parts.forEach((p,i)=>{o+=i===0?(p.neg?M:"")+p.s:(p.neg?" − ":" + ")+p.s;});return o||"0";}
+function numS(f){f=F.of(f);const a=Math.abs(f.n);return f.d===1?String(a):`{${a}|${f.d}}`;}
+function numT(f){f=F.of(f);return (f.n<0?M:"")+numS(f);}
+function termS(c,v="x"){c=F.of(c);const a=Math.abs(c.n);if(c.d===1)return (a===1?"":a)+v;return `{${a===1?"":a}${v}|${c.d}}`;}
+function termT(c,v="x"){c=F.of(c);return (c.n<0?M:"")+termS(c,v);}
+function lin(a,b,v="x"){a=F.of(a);b=F.of(b);const p=[];if(!a.zero)p.push({neg:a.n<0,s:termS(a,v)});if(!b.zero||!p.length)p.push({neg:b.n<0,s:numS(b)});return sj(p);}
+function times(k,expr){k=F.of(k);if(k.one)return expr;if(k.eq(-1))return `${M}(${expr})`;return `${numT(k)}(${expr})`;}
+function solveStd(s){const A=F.of(s.a).sub(s.c);if(A.zero)return null;return F.of(s.d).sub(s.b).div(A);}
+
+/* Steps that take a std equation ax + b = cx + d to x = value, with the fixed moves of the model card */
+function solveSteps(s){let a=F.of(s.a),b=F.of(s.b),c=F.of(s.c),d=F.of(s.d);const st=[];const L=()=>lin(a,b)+" = "+lin(c,d);
+  if(!c.zero){const t=termS(c);const pos=c.n>0;
+    const mv=pos?`Take ${t} from both sides`:`Add ${t} to both sides`;
+    const w=[pos?`Add ${t} to both sides`:`Take ${t} from both sides`, pos?`Take ${t} from the right side only`:`Add ${t} to the left side only`];
+    a=a.sub(c);c=new F(0);st.push({move:mv,chip:mv,wrong:w,line:L(),kind:"x"});}
+  if(!b.zero){const t=numS(b);const pos=b.n>0;
+    const mv=pos?`Take ${t} from both sides`:`Add ${t} to both sides`;
+    const w=[pos?`Add ${t} to both sides`:`Take ${t} from both sides`,`Divide both sides by ${t}`];
+    d=d.sub(b);b=new F(0);st.push({move:mv,chip:mv,wrong:w,line:L(),kind:"n"});}
+  if(!a.one){const t=numT(a);const mv=`Divide both sides by ${t}`;
+    st.push({move:mv,chip:mv,wrong:[`Take ${numS(a)} from both sides`,`Multiply both sides by ${t}`],line:"x = "+numT(d.div(a)),kind:"d"});}
+  return st;}
+
+/* Parse a typed answer: integer or a/b, with the − key */
+function parseAns(s){s=String(s).replace(/−/g,"-");if(!/^-?\d+(\/\d+)?$/.test(s))return null;const [n,d]=s.split("/");if(d!==undefined&&+d===0)return null;return new F(parseInt(n,10),d===undefined?1:parseInt(d,10));}
+
+/* ---------- Knowledge-item generators: tap questions. {q, sub, choices, ans, show} ---------- */
+function oneSideEq(){const x0=rnd(1,9),a=rnd(2,6),b=rnd(-9,12)||4,c=rnd(0,Math.min(3,a-1)),d=(a-c)*x0+b;return {a,b,c,d,x0};}
+const ITEMGEN={
+  K18(){const e=oneSideEq();const yes=Math.random()<.5;const cand=yes?e.x0:pick([e.x0+1,e.x0-1,e.x0+2].filter(v=>v!==0));
+    const L=e.a*cand+e.b,R=e.c*cand+e.d;const eq=`${lin(e.a,e.b)} = ${lin(e.c,e.d)}`;
+    return {q:`Is x = ${cand} a solution of ${eq}?`,small:true,choices:["Yes","No"],ans:L===R?"Yes":"No",
+      show:`x = ${cand}: left side ${L}, right side ${R}. ${L===R?"Both sides are equal.":"The sides are not equal."}`};},
+  K19(){const n=rnd(2,12),r=rnd(2,30);const f=pick(["add","sub","mul","div"]);
+    const eq={add:`x + ${n} = ${r+n}`,sub:`x − ${n} = ${r}`,mul:`${n}x = ${n*r}`,div:`{x|${n}} = ${r}`}[f];
+    const ans={add:`− ${n}`,sub:`+ ${n}`,mul:`÷ ${n}`,div:`× ${n}`}[f];
+    const all=[`− ${n}`,`+ ${n}`,`÷ ${n}`,`× ${n}`];const ch=shuffle([ans,...shuffle(all.filter(x=>x!==ans)).slice(0,2)]);
+    const xv={add:r,sub:r+n,mul:r,div:r*n}[f];
+    return {q:eq,sub:"What do you do to both sides?",choices:ch,ans,show:`${ans} on both sides gives x = ${xv}.`};},
+  K11(){let a,b;do{a=rnd(-9,9);b=rnd(-9,9);}while(!a||!b||a+b===0);const s=a+b;
+    const expr=lin(a,0)+(b<0?" − ":" + ")+termS(Math.abs(b));const ans=termT(s);
+    const pool=[a-b,-s,Math.abs(a)+Math.abs(b),s+1].filter(v=>v!==0&&v!==s).map(v=>termT(v));const w=[...new Set(pool)].slice(0,1);w.push(numT(s));
+    return {q:expr,sub:"Add the like terms.",choices:shuffle([ans,...w]),ans,show:`${numT(a)} ${b<0?"−":"+"} ${Math.abs(b)} = ${numT(s)}, so ${expr} = ${ans}.`};},
+  K13(){const k=pick([2,3,4,5,6,-2,-3,-4]);const p=pick([1,2,3,4,5,6,7,-1,-2,-3,-4,-5,-6]);const a=pick([1,1,2,3]);
+    const expr=times(k,lin(a,p));const ans=lin(k*a,k*p);const w1=lin(k*a,p),w2=lin(k*a,-k*p);
+    return {q:expr,sub:"Open the bracket.",choices:shuffle([ans,w1,w2]),ans,show:`${numT(k)} × ${termT(a)} = ${termT(k*a)}, and ${numT(k)} × ${numT(p)} = ${numT(k*p)}.`};},
+  K24(){let a=rnd(2,9),c=pick([1,2,3,4,5,-1,-2,-3]);if(a===c)a++;const b=rnd(-12,12)||-7,d=rnd(-15,20)||8;
+    const eq=`${lin(a,b)} = ${lin(c,d)}`;const mv=c>0?`Take ${termS(c)} from both sides.`:`Add ${termS(-c)} to both sides.`;
+    const ans=`${lin(a-c,b)} = ${numT(d)}`;const w1=`${lin(a+c,b)} = ${numT(d)}`;const w2=`${lin(a-c,b)} = ${lin(c,d)}`;
+    return {q:eq,sub:mv,choices:shuffle([ans,w1,w2]),ans,show:`Both sides: ${lin(a,b)} ${c>0?"−":"+"} ${termS(Math.abs(c))} = ${lin(a-c,b)}, and ${lin(c,d)} ${c>0?"−":"+"} ${termS(Math.abs(c))} = ${numT(d)}.`};},
+  K61(){const g=gen31A(3);const L=g.L;const ans=g.pre[0].line;
+    const wx=`${lin(g.std.a,g.raw.B)} = ${lin(g.std.c,g.raw.v)}`;const wl=`${lin(g.std.a,g.std.b)} = ${lin(g.raw.C,g.raw.v)}`;
+    return {q:g.eq,sub:`Multiply every term by ${L}.`,choices:shuffle([ans,wx,wl]),ans,show:`Every term, numbers too: ${ans}.`};},
+  K07(){const g=gen32(3);const ans=g.pre[0].line;return {q:g.eq,sub:"Cross-multiply.",choices:shuffle([ans,g.swapLine,g.numLine]),ans,show:`Top left × bottom right = bottom left × top right: ${ans}.`};},
+  K59(){const [N,his]=pick(NAMES);const n=rnd(2,12);const k=rnd(2,4);const who=Math.random()<.5;const later=Math.random()<.5;
+    const base=who?termS(k):"x";const ans=later?lin(who?k:1,n):lin(who?k:1,-n);
+    const w=later?[lin(who?k:1,-n), who?times(k,lin(1,n)):`${n}x`]:[lin(who?k:1,n), who?times(k,lin(1,-n)):`${n}x`];
+    return {q:`${who?`${N}'s mother is ${base} years old now.`:`${N} is x years old now.`} How old ${later?`will ${who?"she":his==="his"?"he":"she"} be in ${n} years`:`was ${who?"she":his==="his"?"he":"she"} ${n} years ago`}?`,small:true,
+      choices:shuffle([ans,...w]),ans,show:`${later?"In":"Before"} ${n} years every age ${later?"grows":"was smaller"} by ${n}: ${ans}.`};},
+  K62(){const t=pick(["whole","even","odd","mult"]);const m=t==="mult"?rnd(3,12):0;const step={whole:1,even:2,odd:2,mult:m}[t];
+    const what={whole:"consecutive numbers",even:"consecutive even numbers",odd:"consecutive odd numbers",mult:`consecutive multiples of ${m}`}[t];
+    const ans=`x + ${step}, x + ${2*step}`;const w=[t==="whole"?`x + 2, x + 4`:`x + 1, x + 2`, t==="mult"?`${m}x, ${2*m}x`:`2x, 3x`];
+    return {q:`Three ${what}. The smallest is x. The other two?`,small:true,choices:shuffle([ans,...w]),ans,show:`${what[0].toUpperCase()+what.slice(1)} go up by ${step}: x, ${ans}.`};},
+  K60(){const pairs=[[7,5],[3,2],[5,3],[4,3],[5,4],[7,3],[8,5],[9,4]];const [a,b]=pick(pairs);const [P,Q]=pick([["boys","girls"],["red beads","blue beads"],["Riya's money","Arjun's money"]]);
+    const ans=`${a}x and ${b}x`;return {q:`${P} : ${Q} = ${a} : ${b}. Write both with x.`,small:true,choices:shuffle([ans,`${a} and ${b}`,`x + ${a} and x + ${b}`]),ans,show:`Ratio ${a} : ${b} means ${a}x and ${b}x.`};},
+  KD(){const f=pick(["tens","units","swap"]);const s=rnd(5,13);const d=rnd(1,9);
+    if(f==="tens"){const ans=`10x + ${d}`;return {q:`A two-digit number has tens digit x and units digit ${d}. The number is?`,small:true,choices:shuffle([ans,`x + ${d}`,`${10*d} + x`]),ans,show:`Tens digit × 10, plus the units digit: ${ans}.`};}
+    if(f==="units"){const ans=`${10*d} + x`;return {q:`A two-digit number has tens digit ${d} and units digit x. The number is?`,small:true,choices:shuffle([ans,`${d} + x`,`10x + ${d}`]),ans,show:`Tens digit × 10, plus the units digit: ${ans}.`};}
+    const ans=`10(${s} − x) + x`;return {q:`Tens digit x, units digit ${s} − x. Swap the digits. The new number is?`,small:true,choices:shuffle([ans,`10x + (${s} − x)`,`(${s} − x) + x`]),ans,show:`After the swap the tens digit is ${s} − x: ${ans}.`};},
+  K32(){const f=Math.random()<.5;if(f){const b=pick([2,3,4,5]),a=rnd(1,b-1),q=b*rnd(2,12);const ans=String(a*q/b);
+      const w=[...new Set([String(q/b),String(q-q/b),String(a*q/b+a),String(q*a)])].filter(x=>x!==ans).slice(0,2);return {q:`{${a}|${b}} of ${q} = ?`,choices:shuffle([ans,...w]),ans,show:`{${a}|${b}} × ${q} = ${ans}.`};}
+    const b=pick([2,3,4,5]),a=rnd(1,b-1),p=pick([2,3,4]);const prod=new F(a,b*p);const ans=termS(prod);
+    return {q:`{${a}|${b}} of {x|${p}} = ?`,choices:shuffle([ans,termS(new F(a,b)),numS(prod)]),ans,show:`{${a}|${b}} × {x|${p}} = ${ans}.`};},
+};
+const NAMES=[["Sahil","his"],["Riya","her"],["Arjun","his"],["Kavya","her"],["Imran","his"],["Neha","her"],["Rohan","his"],["Anjali","her"]];
+
+/* ---------- Skill generators ---------- */
+// SK-AG-30: variable on both sides or inside a bracket
+function gen30(rung){for(let t=0;t<500;t++){const form=pick(["F1","F1","F2","F3"]);const frac=rung>=4&&Math.random()<.2;
+  const x0=frac?new F(pick([1,2,3,5,7])*pick([1,-1]),pick([2,3,4,5])):new F(pick([rnd(1,12),rnd(1,12),rnd(-6,-1)]));
+  if(form==="F1"){const a=rnd(2,9)*(Math.random()<.12?-1:1);const c=pick([1,2,3,4,5,6,7,-1,-2,-3,-4]);if(a===c)continue;const A=a-c;
+    const b=rnd(-20,20);if(b===0)continue;const d=x0.mul(A).add(b);if(!d.isInt()||Math.abs(d.v)>60)continue;
+    const std={a,b,c,d:d.v};return mkSolve(`${lin(a,b)} = ${lin(c,d)}`,std,[],x0,"F1");}
+  if(form==="F2"){const k=pick([2,3,4,5,6,-2,-3]);const p=rnd(-9,9);if(!p)continue;const c=pick([1,2,3,-1,-2,4,7]);if(c===k)continue;const A=k-c;
+    const d=x0.mul(A).add(k*p);if(!d.isInt()||Math.abs(d.v)>60)continue;const std={a:k,b:k*p,c,d:d.v};
+    const line=`${lin(k,k*p)} = ${lin(c,d)}`;
+    const pre=[{move:`Open the bracket: multiply each term inside by ${numT(k)}`,chip:`Open the bracket: ${line}`,wrong:[`Open the bracket: ${lin(k,p)} = ${lin(c,d)}`,`Open the bracket: ${lin(k,-k*p)} = ${lin(c,d)}`],line,kind:"br",bad:{a:k,b:p,c,d:d.v}}];
+    return mkSolve(`${times(k,lin(1,p))} = ${lin(c,d)}`,std,pre,x0,"F2");}
+  const k1=pick([2,3,4,5,6,-2]),k2=pick([2,3,4,5,-2,-3]);if(k1===k2)continue;const p=rnd(-8,8);if(!p)continue;const A=k1-k2;
+  const qF=x0.mul(A).add(k1*p).div(k2);if(!qF.isInt()||qF.zero||Math.abs(qF.v)>12)continue;const q=qF.v;
+  const std={a:k1,b:k1*p,c:k2,d:k2*q};const line=`${lin(k1,k1*p)} = ${lin(k2,k2*q)}`;
+  const pre=[{move:"Open both brackets: multiply each term inside",chip:`Open the brackets: ${line}`,wrong:[`Open the brackets: ${lin(k1,p)} = ${lin(k2,q)}`,`Open the brackets: ${lin(k1,k1*p)} = ${lin(k2,q)}`],line,kind:"br",bad:{a:k1,b:p,c:k2,d:q}}];
+  return mkSolve(`${times(k1,lin(1,p))} = ${times(k2,lin(1,q))}`,std,pre,x0,"F3");}
+  throw new Error("gen30 failed");}
+function mkSolve(eq,std,pre,x0,form){const steps=[...pre,...solveSteps(std)];
+  steps.forEach(s=>{const right=s.chip||s.move;s.wrong=[...new Set((s.wrong||[]).filter(w=>w!==right))].slice(0,2);if(s.wrong.length<2)throw new Error("too few wrong moves "+eq);});
+  const chk=solveStd(std);if(!chk||!chk.eq(x0))throw new Error("solve mismatch "+eq);
+  return {kind:"solve",eq,std,pre,steps,ans:x0,form,errs:errs30(std,pre)};}
+// Wrong answers each move error would give; sep = the error the skill's separation test describes
+function errs30(std,pre){const a=F.of(std.a),b=F.of(std.b),c=F.of(std.c),d=F.of(std.d);const sol=solveStd(std);const out=[];
+  const add=(v,code,msg,sep)=>{if(v&&!v.eq(sol)&&!out.some(o=>o.v.eq(v)))out.push({v,code,msg,sep:!!sep});};
+  const tryDiv=(n,m)=>m.zero?null:n.div(m);
+  if(!c.zero){const t=termS(c.n<0?c.neg():c);add(tryDiv(d.sub(b),a.add(c)),"x-term one side",`${c.n>0?"Take":"Add"} ${t} ${c.n>0?"from":"to"} both sides. On the left: ${termT(a)} ${c.n>0?"−":"+"} ${t} = ${termT(a.sub(c))}.`,true);}
+  if(!b.zero){const A=a.sub(c);add(tryDiv(d.add(b),A),"number one side",`${b.n>0?"Take":"Add"} ${numS(b)} ${b.n>0?"from":"to"} both sides. On the right: ${numT(d)} ${b.n>0?"−":"+"} ${numS(b)} = ${numT(d.sub(b))}.`,false);}
+  if(!b.zero&&!c.zero)add(tryDiv(d.add(b),a.add(c)),"both one side",`Do the same to both sides, every time.`,true);
+  pre.filter(p=>p.bad).forEach(p=>add(solveStd(p.bad),"bracket",`Open the bracket: multiply each term inside.`,false));
+  add(sol.neg(),"sign",`Check the sign of x.`,false);
+  if(!d.sub(b).zero){const A=a.sub(c);add(A.div(d.sub(b)),"divide upside down",`Divide both sides by ${numT(A)}: x = ${numT(d.sub(b))} ÷ ${A.n<0?"("+numT(A)+")":numT(A)}.`,false);}
+  return out;}
+// SK-AG-31: fractions with number denominators
+function gen31A(rung){for(let t=0;t<800;t++){const p=pick([2,3,4,5,6]),r=pick([2,3,4,5,6]),q=pick([2,3,4,5,6]);if(p===r)continue;
+  const A=new F(pick([1,1,2,3]),p),C=new F(pick([1,1,2]),r);if(A.eq(C))continue;const B=new F(rnd(1,5)*pick([1,-1]),q);if(Math.abs(B.v)>3)continue;
+  const x0=new F(pick([rnd(1,12),rnd(1,12),rnd(-6,-1)]));const v=A.sub(C).mul(x0).add(B);
+  if(v.zero||v.d>6||Math.abs(v.v)>12)continue;const L=lcm(A.d,C.d,B.d,v.d);if(L>60||L<4)continue;
+  const std={a:A.mul(L).v,b:B.mul(L).v,c:C.mul(L).v,d:v.mul(L).v};if(Object.values(std).some(z=>Math.abs(z)>120))continue;const line=`${lin(std.a,std.b)} = ${lin(std.c,std.d)}`;
+  const pre=[{move:`Multiply every term by ${L}`,chip:`Multiply every term by ${L}`,wrong:[`Multiply the x terms by ${L}`,`Add ${L} to every term`],line,kind:"lcm"}];
+  const g=mkSolve(`${lin(A,B)} = ${lin(C,v)}`,std,pre,x0,"A");g.L=L;g.raw={A,B,C,v};
+  g.errs.unshift({v:x0.div(L),code:"x terms only",msg:`Multiply every term by ${L}, the numbers too.`,sep:true});return g;}
+  throw new Error("gen31A failed");}
+function gen31B(rung){for(let t=0;t<800;t++){const p=pick([2,3,4,5,6]),q=pick([2,3,4,5,6]);if(p===q)continue;const L=lcm(p,q);
+  const a=rnd(1,4),c=rnd(0,3);const x0=new F(pick([rnd(1,10),rnd(1,10),rnd(-5,-1)]));const b=rnd(-7,7);
+  const top=x0.mul(a).add(b);if(top.zero)continue;const val=top.div(p);const dF=val.mul(q).sub(x0.mul(c));if(!dF.isInt()||Math.abs(dF.v)>12)continue;const d=dF.v;
+  if(new F(a,p).eq(new F(c,q)))continue;const kl=L/p,kr=L/q;
+  if(c===0&&(d<=0||gcd(d,q)!==1))continue;const rhs=c===0?`{${d}|${q}}`:`{${lin(c,d)}|${q}}`;
+  const line1=`${times(kl,lin(a,b))} = ${c===0?numT(kr*d):times(kr,lin(c,d))}`;const std={a:kl*a,b:kl*b,c:kr*c,d:kr*d};const line2=`${lin(std.a,std.b)} = ${lin(std.c,std.d)}`;
+  const pre=[{move:`Multiply both sides by ${L}`,chip:`Multiply both sides by ${L}`,wrong:[`Multiply the left side by ${L}`,`Add ${L} to both sides`],line:line1,kind:"lcm"}];
+  if(kl!==1||(kr!==1&&c!==0))pre.push({move:"Open the brackets",chip:`Open the brackets: ${line2}`,wrong:[`Open the brackets: ${lin(kl*a,b)} = ${lin(kr*c,d)}`,`Open the brackets: ${lin(a,b)} = ${lin(c,d)}`,`Open the brackets: ${lin(std.a,-std.b)} = ${lin(std.c,std.d)}`,`Open the brackets: ${lin(std.a,std.b)} = ${lin(std.c,-std.d)}`],line:line2,kind:"br"});
+  const g=mkSolve(`{${lin(a,b)}|${p}} = ${rhs}`,std,pre,x0,"B");g.L=L;return g;}
+  throw new Error("gen31B failed");}
+const gen31=r=>Math.random()<.6?gen31A(r):gen31B(r);
+// SK-AG-32: variable in the numerator and the denominator
+function gen32(rung){for(let t=0;t<800;t++){const a=rnd(1,4),c=rnd(1,3),b=rnd(-8,8),d=Math.random()<.2?0:rnd(-8,8);
+  const x0=new F(pick([rnd(1,10),rnd(1,10),rnd(-5,-1)]));const top=x0.mul(a).add(b),bot=x0.mul(c).add(d);if(top.zero||bot.zero)continue;
+  const val=top.div(bot);const p=val.n,q=val.d;if(Math.abs(p)>12||q>12||p===q)continue;if(q*a===p*c)continue;if(d!==0&&q===1&&Math.random()<.5)continue;
+  const den=d===0?termS(c):lin(c,d);const rhs=q===1?numT(p):`${p<0?M:""}{${Math.abs(p)}|${q}}`;
+  const line=`${times(q,lin(a,b))} = ${d===0?termT(p*c):times(p,den)}`;const std={a:q*a,b:q*b,c:p*c,d:p*d};
+  const pre=[{move:"Cross-multiply",chip:`Cross-multiply: ${line}`,wrong:[`Cross-multiply: ${times(p,lin(a,b))} = ${d===0?termT(q*c):times(q,den)}`,`${lin(a,b)} = ${numT(p)}`],line,kind:"cross"}];
+  const g=mkSolve(`{${lin(a,b)}|${den}} = ${rhs}`,std,pre,x0,"X");
+  g.swapLine=`${times(p,lin(a,b))} = ${d===0?termT(q*c):times(q,den)}`;g.numLine=`${lin(a,b)} = ${numT(p)}`;
+  const nv=new F(p-b,a);if(!nv.eq(x0))g.errs.unshift({v:nv,code:"numerators equal",msg:`Cross-multiply first: ${line}.`,sep:true});
+  const sw=solveStd({a:p*a,b:p*b,c:q*c,d:q*d});if(sw&&!sw.eq(x0))g.errs.push({v:sw,code:"cross the wrong way",msg:`Cross-multiply: top left × bottom right = bottom left × top right.`,sep:false});
+  return g;}
+  throw new Error("gen32 failed");}
+
+/* ---------- Word problems (SK-AG-25, 26, 27, 28; SK-AG-29 chooses their equation) ----------
+   Each returns {text, letx, eq, std, pre, xVal, ans, ask, askIsX, unit, hint[], dis:[{eq,std,msg,sep}], extra:[{v,msg}]} */
+function prob(o){o.steps=[...(o.pre||[]),...solveSteps(o.std)];const x=solveStd(o.std);if(!x||!x.eq(o.xVal))throw new Error("problem mismatch "+o.text);
+  o.ans=o.askFn(o.xVal);o.kind="prob";o.dis.forEach(d=>{const xv=solveStd(d.std);try{d.val=xv?o.askFn(xv):null;}catch(e){d.val=null;}});return o;}
+const PROBS={
+  P25a(){const m=rnd(3,12),k=rnd(2,25),x0=m*k,S=3*x0+3*m;const big=Math.random()<.4;
+    return prob({skill:"SK25",text:`The sum of three consecutive multiples of ${m} is ${S}. Find the ${big?"largest":"smallest"} of them.`,letx:"Let x be the smallest multiple.",
+      eq:`x + (x + ${m}) + (x + ${2*m}) = ${S}`,std:{a:3,b:3*m,c:0,d:S},pre:[{move:"Add the like terms",line:`${lin(3,3*m)} = ${S}`}],xVal:new F(x0),
+      askFn:x=>big?x.add(2*m):x,askIsX:!big,ask:big?"the largest multiple":"the smallest multiple",unit:"",hint:["Smallest: x",`Next two: x + ${m}, x + ${2*m}`],
+      dis:[{eq:`x + (x + 1) + (x + 2) = ${S}`,std:{a:3,b:3,c:0,d:S},msg:`Consecutive multiples of ${m} go up by ${m}, not by 1.`,sep:true},
+           {eq:`x + ${m}x + ${2*m}x = ${S}`,std:{a:1+3*m,b:0,c:0,d:S},msg:`Go up by ${m}: x + ${m}, not ${m}x.`,sep:false}]});},
+  P25b(){const [N,his]=pick(NAMES);const k=rnd(2,4),n=rnd(2,10),x0=rnd(5,15),S=(k+1)*x0+2*n;const mum=Math.random()<.4;
+    return prob({skill:"SK25",text:`${N}'s mother is ${k} times as old as ${N}. In ${n} years, their ages will add up to ${S} years. How old is ${mum?N+"'s mother":N} now?`,letx:`Let x be ${N}'s age now.`,
+      eq:`(x + ${n}) + (${k}x + ${n}) = ${S}`,std:{a:k+1,b:2*n,c:0,d:S},pre:[{move:"Add the like terms",line:`${lin(k+1,2*n)} = ${S}`}],xVal:new F(x0),
+      askFn:x=>mum?x.mul(k):x,askIsX:!mum,ask:mum?`${N}'s mother's age now`:`${N}'s age now`,unit:"years",hint:[`${N} now: x. Mother now: ${k}x.`,`In ${n} years: x + ${n} and ${k}x + ${n}`],
+      dis:[{eq:`x + ${k}x + ${n} = ${S}`,std:{a:k+1,b:n,c:0,d:S},msg:`In ${n} years both ages grow by ${n}. Add ${n} to each age.`,sep:true},
+           {eq:`(x + ${n}) + ${k}(x + ${n}) = ${S}`,std:{a:k+1,b:n+k*n,c:0,d:S},msg:`In ${n} years the mother is ${k}x + ${n}, not ${k}(x + ${n}).`,sep:false}]});},
+  P25c(){const a=rnd(1,9),x0=rnd(3,20),P=4*x0+2*a;const len=Math.random()<.5;
+    return prob({skill:"SK25",text:`The length of a rectangle is ${a} cm more than its width. Its perimeter is ${P} cm. Find its ${len?"length":"width"}.`,letx:"Let x be the width in cm.",
+      eq:`2(x + x + ${a}) = ${P}`,std:{a:4,b:2*a,c:0,d:P},pre:[{move:"Open the bracket",line:`${lin(4,2*a)} = ${P}`}],xVal:new F(x0),
+      askFn:x=>len?x.add(a):x,askIsX:!len,ask:len?"the length":"the width",unit:"cm",hint:["Width: x",`Length: x + ${a}`,"Perimeter: 2 × (length + width)"],
+      dis:[{eq:`x + (x + ${a}) = ${P}`,std:{a:2,b:a,c:0,d:P},msg:"The perimeter is all four sides: 2 × (length + width).",sep:false},
+           {eq:`2(x + ${a}) = ${P}`,std:{a:2,b:2*a,c:0,d:P},msg:`Use the length and the width: 2(x + x + ${a}).`,sep:false}]});},
+  P25d(){const k=rnd(1,8),x0=rnd(2,20),N=15*x0+10*k;const [n]=pick(NAMES);const tens=Math.random()<.4;
+    return prob({skill:"SK25",text:`${n} has some ₹5 coins and some ₹10 coins. There are ${k} more ₹10 coins than ₹5 coins. Together they make ₹${N}. How many ${tens?"₹10":"₹5"} coins are there?`,letx:"Let x be the number of ₹5 coins.",
+      eq:`5x + 10(x + ${k}) = ${N}`,std:{a:15,b:10*k,c:0,d:N},pre:[{move:"Open the bracket and add the like terms",line:`${lin(15,10*k)} = ${N}`}],xVal:new F(x0),
+      askFn:x=>tens?x.add(k):x,askIsX:!tens,ask:tens?"the number of ₹10 coins":"the number of ₹5 coins",unit:"coins",hint:["₹5 coins: x, worth 5x",`₹10 coins: x + ${k}, worth 10(x + ${k})`],
+      dis:[{eq:`x + (x + ${k}) = ${N}`,std:{a:2,b:k,c:0,d:N},msg:"Add the money, not the number of coins: 5x + 10(x + "+k+").",sep:false},
+           {eq:`5x + 10x + ${k} = ${N}`,std:{a:15,b:k,c:0,d:N},msg:`Each ₹10 coin is worth 10: 10(x + ${k}).`,sep:false}]});},
+  P27a(){for(let t=0;t<200;t++){const k1=rnd(2,3),k2=k1+rnd(1,3),m=rnd(2,10);const num=m*(k2-1),den=k2-k1;if(num%den)continue;const x0=num/den;if(x0<=m||x0>20)continue;
+    const [A]=pick(NAMES.slice(0,4)),[B]=pick(NAMES.slice(4));const askA=Math.random()<.5;
+    return prob({skill:"SK27",text:`${A} is ${k1} times as old as ${B}. ${m} years ago, ${A} was ${k2} times as old as ${B}. How old is ${askA?A:B} now?`,letx:`Let x be ${B}'s age now.`,
+      eq:`${k1}x − ${m} = ${k2}(x − ${m})`,std:{a:k1,b:-m,c:k2,d:-k2*m},pre:[{move:"Open the bracket",line:`${lin(k1,-m)} = ${lin(k2,-k2*m)}`}],xVal:new F(x0),
+      askFn:x=>askA?x.mul(k1):x,askIsX:!askA,ask:askA?`${A}'s age now`:`${B}'s age now`,unit:"years",hint:[`${B} now: x. ${A} now: ${k1}x.`,`${m} years ago: x − ${m} and ${k1}x − ${m}`],
+      dis:[{eq:`${k1}x − ${m} = ${k2}x`,std:{a:k1,b:-m,c:k2,d:0},msg:`${m} years ago both were ${m} years younger: x − ${m} too.`,sep:true},
+           {eq:`${k1}(x − ${m}) = ${k2}(x − ${m})`,std:{a:k1,b:-k1*m,c:k2,d:-k2*m},msg:`${m} years ago ${A} was ${k1}x − ${m}: take ${m} from ${A}'s age now.`,sep:false}]});}
+    throw new Error("P27a");},
+  P27b(){const [a,b]=pick([[7,5],[3,2],[5,3],[4,3],[5,4],[7,4],[8,5],[9,7]]);const x0=rnd(2,8),d=(a-b)*x0;const w=pick(["students","boys","girls"]);
+    return prob({skill:"SK27",text:`The boys and girls in a class are in the ratio ${a} : ${b}. There are ${d} more boys than girls. How many ${w} are in the class?`,letx:`Let the boys be ${a}x and the girls ${b}x.`,
+      eq:`${a}x = ${b}x + ${d}`,std:{a,b:0,c:b,d},pre:[],xVal:new F(x0),askFn:x=>w==="students"?x.mul(a+b):w==="boys"?x.mul(a):x.mul(b),askIsX:false,ask:`the number of ${w}`,unit:w,
+      hint:[`Boys: ${a}x. Girls: ${b}x.`,`Boys = girls + ${d}`],
+      dis:[{eq:`${a}x + ${b}x = ${d}`,std:{a:a+b,b:0,c:0,d},msg:`There are ${d} MORE boys: boys = girls + ${d}.`,sep:false},
+           {eq:`${b}x = ${a}x + ${d}`,std:{a:b,b:0,c:a,d},msg:`The boys are more: ${a}x = ${b}x + ${d}.`,sep:false}]});},
+  P27c(){const k1=rnd(3,9),k2=rnd(1,k1-1),x0=rnd(2,15),d=(k1-k2)*x0;const k2w=k2===1?"the number":`${k2} times the number`;
+    return prob({skill:"SK27",text:`${k1} times a number is ${d} more than ${k2w}. Find the number.`,letx:"Let x be the number.",
+      eq:`${k1}x = ${lin(k2,d)}`,std:{a:k1,b:0,c:k2,d},pre:[],xVal:new F(x0),askFn:x=>x,askIsX:true,ask:"the number",unit:"",hint:[`${k1} times the number: ${k1}x`,`${d} more than ${k2w}: ${lin(k2,d)}`],
+      dis:[{eq:`${k1}x + ${d} = ${termS(k2)}`,std:{a:k1,b:d,c:k2,d:0},msg:`"${d} more than ${k2w}" is ${lin(k2,d)}.`,sep:false},
+           k2>1?{eq:`${k1}x = ${k2}(x + ${d})`,std:{a:k1,b:0,c:k2,d:k2*d},msg:`Add ${d} after multiplying: ${lin(k2,d)}.`,sep:false}
+               :{eq:`x = ${k1}x + ${d}`,std:{a:1,b:0,c:k1,d},msg:`${k1} times the number is the bigger one: ${k1}x = x + ${d}.`,sep:false}]});},
+  P26(){for(let t=0;t<100;t++){const tt=rnd(1,8),u=rnd(tt+1,9),s=tt+u,d=9*(u-tt);
+    return prob({skill:"SK26",text:`The two digits of a number add up to ${s}. When the digits are swapped, the new number is ${d} more than the first number. Find the first number.`,letx:"Let x be the tens digit.",
+      eq:`10(${s} − x) + x = 10x + (${s} − x) + ${d}`,std:{a:-9,b:10*s,c:9,d:s+d},pre:[{move:"Open the bracket and add the like terms",line:`${lin(-9,10*s)} = ${lin(9,s+d)}`}],xVal:new F(tt),
+      askFn:x=>x.mul(9).add(s),askIsX:false,ask:"the first number",unit:"",hint:[`Tens digit: x. Units digit: ${s} − x.`,`First number: 10x + (${s} − x)`,`New number: 10(${s} − x) + x`],
+      extra:[{v:new F(10*u+tt),msg:"That is the new number, after the swap. The question asks for the first number."}],
+      dis:[{eq:`(${s} − x) + x = x + (${s} − x) + ${d}`,std:{a:0,b:s,c:0,d:s+d},msg:`A tens digit is worth 10 times: the number is 10x + (${s} − x), not x + (${s} − x).`,sep:true},
+           {eq:`10x + (${s} − x) = 10(${s} − x) + x + ${d}`,std:{a:9,b:s,c:-9,d:10*s+d},msg:`The new number is the bigger one: new = first + ${d}.`,sep:false}]});}},
+  P28a(){for(let t=0;t<300;t++){const p=pick([2,3,4]),b=pick([2,3,4,5]),a=rnd(1,b-1);const L=p*b;const x0=L*rnd(1,8);const r=new F(x0*(p-1)*(b-a),L);if(!r.isInt()||r.v<2)continue;
+    const rest=new F(p-1,p);const R=r.v;
+    return prob({skill:"SK28",text:`{1|${p}} of a herd of deer are grazing. {${a}|${b}} of the rest are playing. The other ${R} are drinking water. How many deer are in the herd?`,letx:"Let x be the number of deer.",
+      eq:`${termS(new F(1,p))} + {${a}|${b}} × ${termS(rest)} + ${R} = x`,std:{a:b+a*(p-1),b:R*L,c:L,d:0},
+      pre:[{move:`Multiply every term by ${L}`,line:`${lin(b,0)} + ${lin(a*(p-1),0)} + ${R*L} = ${lin(L,0)}`},{move:"Add the like terms",line:`${lin(b+a*(p-1),R*L)} = ${lin(L,0)}`}],
+      xVal:new F(x0),askFn:x=>x,askIsX:true,ask:"the number of deer",unit:"deer",hint:[`Grazing: ${termS(new F(1,p))}`,`The rest: ${termS(rest)}`,`Playing: {${a}|${b}} of ${termS(rest)}`],
+      dis:[{eq:`${termS(new F(1,p))} + ${termS(new F(a,b))} + ${R} = x`,std:{a:b+a*p,b:R*L,c:L,d:0},msg:`{${a}|${b}} of the REST, not of the whole herd.`,sep:true},
+           {eq:`${termS(new F(1,p))} + {${a}|${b}} + ${R} = x`,std:{a:b,b:a*p+R*L,c:L,d:0},msg:`"Of" means multiply: {${a}|${b}} × ${termS(rest)}.`,sep:false}]});}
+    throw new Error("P28a");},
+  P28b(){for(let t=0;t<500;t++){const x0=rnd(1,15),dd=rnd(2,10),a=rnd(1,15),b=rnd(1,dd-1);const val=new F(x0+a,x0+dd-b);const p=val.n,q=val.d;
+    if(p===q||p>20||q>20||q===1)continue;if(gcd(x0+a,x0+dd-b)===1)continue; // the shown fraction must be reduced, or equating numerators would work by chance
+    return prob({skill:"SK28",text:`The denominator of a rational number is ${dd} more than its numerator. If ${a} is added to the numerator and ${b} is taken from the denominator, the new number is {${p}|${q}}. Find the rational number.`,letx:"Let x be the numerator.",
+      eq:`{x + ${a}|${lin(1,dd-b)}} = {${p}|${q}}`,std:{a:q,b:q*a,c:p,d:p*(dd-b)},pre:[{move:"Cross-multiply",line:`${q}(x + ${a}) = ${p}(${lin(1,dd-b)})`},{move:"Open the brackets",line:`${lin(q,q*a)} = ${lin(p,p*(dd-b))}`}],
+      xVal:new F(x0),askFn:x=>x.div(x.add(dd)),askIsX:false,ask:"the rational number",unit:"",frac:true,hint:[`The number: {x|x + ${dd}}`,`New number: {x + ${a}|${lin(1,dd-b)}}`],
+      dis:[{eq:`x + ${a} = ${p}`,std:{a:1,b:a,c:0,d:p},msg:`Cross-multiply: ${q}(x + ${a}) = ${p}(${lin(1,dd-b)}).`,sep:true},
+           {eq:`${p}(x + ${a}) = ${q}(${lin(1,dd-b)})`,std:{a:p,b:p*a,c:q,d:q*(dd-b)},msg:`Cross-multiply: top left × bottom right = bottom left × top right.`,sep:false}]});}
+    throw new Error("P28b");},
+};
+const PROB_BY_SKILL={SK25:["P25a","P25b","P25c","P25d"],SK27:["P27a","P27b","P27c"],SK26:["P26"],SK28:["P28a","P28b"]};
+/*GEN-END*/
+
+/* ============================================================
+   Cards: the learner-facing sentence for every item and skill (shown in the strip), the teacher id and kind.
+   ============================================================ */
+const CARD={
+  K18:{id:"KI-AG-18",kind:"Concept",name:"is it a solution?",say:"A solution makes both sides equal. Put the number in for x."},
+  K19:{id:"KI-AG-19",kind:"Principle",name:"same to both sides",say:"Do the same to both sides. Undo what was done to x."},
+  K11:{id:"KI-AG-11",kind:"Principle",name:"like terms",say:"Like terms: add or take away the numbers in front of x."},
+  K13:{id:"KI-AG-13",kind:"Procedure",name:"open the bracket",say:"Open the bracket: multiply each term inside."},
+  K24:{id:"KI-AG-24",kind:"Procedure",name:"take x from both sides",say:"Take the x term from both sides."},
+  K61:{id:"KI-AG-61",kind:"Procedure",name:"clear the fractions",say:"Multiply every term by the same number, the numbers too."},
+  K07:{id:"KI-RP-07",kind:"Principle",name:"cross-multiply",say:"Cross-multiply: top left × bottom right = bottom left × top right."},
+  K59:{id:"KI-AG-59",kind:"Principle",name:"ages",say:"In some years, every age grows by the same number."},
+  K62:{id:"KI-AG-62",kind:"Concept",name:"consecutive numbers",say:"Consecutive numbers go up by the same step."},
+  K60:{id:"KI-AG-60",kind:"Principle",name:"ratios",say:"Ratio 7 : 5 means 7x and 5x."},
+  KD:{id:"KI-NN-11",kind:"Concept",name:"digits",say:"Tens digit × 10, plus the units digit."},
+  K32:{id:"KI-RN-32",kind:"Concept",name:"fraction of",say:"A fraction of a quantity: multiply."},
+  SK30:{id:"SK-AG-30",name:"solve: x on both sides",say:"Do the same to both sides: x terms on the left, numbers on the right.",peek:"Show steps",type:"solve",gen:gen30},
+  SK31:{id:"SK-AG-31",name:"solve with fractions",say:"First multiply every term by the same number. Then solve.",peek:"Show steps",type:"solve",gen:gen31},
+  SK32:{id:"SK-AG-32",name:"solve with x below the line",say:"First cross-multiply. Then solve.",peek:"Show steps",type:"solve",gen:gen32},
+  SK29:{id:"SK-AG-29",name:"write the equation",say:"Write the others with x. Make two expressions equal.",peek:"Show help",type:"write"},
+  SK25:{id:"SK-AG-25",name:"word problems",say:"Write the equation. Solve it. Answer the question asked.",peek:"Show the equation",type:"prob"},
+  SK27:{id:"SK-AG-27",name:"word problems: x on both sides",say:"Write the equation. Solve it. Answer the question asked.",peek:"Show the equation",type:"prob"},
+  SK26:{id:"SK-AG-26",name:"digit puzzles",say:"Write the number with 10x. Solve. Answer the question asked.",peek:"Show the equation",type:"prob"},
+  SK28:{id:"SK-AG-28",name:"word problems with fractions",say:"Write the equation. Clear the fractions. Answer the question asked.",peek:"Show the equation",type:"prob"},
+};
+const ITEM_ORDER=["K18","K19","K11","K13","K24","K61","K07","K62","K60","K59","KD","K32"];
+const SKILL_ORDER=["SK30","SK31","SK32","SK29","SK25","SK27","SK26","SK28"];
+// Gates from the graph (decision row 15): "teach" items (fact, term, concept) must be passed before the skill starts;
+// "attain" items (procedure, principle) are taught alongside and must be held before the skill counts as attained.
+const GATE={
+  SK30:{teach:["K18"],attain:["K19","K11","K13","K24"],after:{}},
+  SK31:{teach:[],attain:["K61"],after:{SK30:4}},
+  SK32:{teach:[],attain:["K07"],after:{SK30:4}},
+  SK29:{teach:["K62"],attain:["K59","K60"],after:{SK30:3}},
+  SK25:{teach:["K62"],attain:["K59"],after:{SK29:3,SK30:4}},
+  SK27:{teach:[],attain:["K59","K60"],after:{SK29:3,SK30:4}},
+  SK26:{teach:["KD"],attain:[],after:{SK29:3,SK30:4}},
+  SK28:{teach:["K32"],attain:["K61","K07"],after:{SK29:3,SK31:4,SK32:3}},
+};
+const MASTERY={score:9,of:10,days:2,rtMedian:6000};
+const DUE_DAYS=[1,3,7,14];
+const EXAMPLES={
+  K18:[["x = 4 in 3x − 5 = 7","12 − 5 = 7 ✓"],["x = 5 in 3x − 5 = 7","15 − 5 = 10 ✗"],["x = 2 in 2x + 1 = x + 3","5 = 5 ✓"],["x = 3 in 2x + 1 = x + 3","7 and 6 ✗"]],
+  K19:[["x + 7 = 15","− 7 on both sides: x = 8"],["x − 7 = 15","+ 7 on both sides: x = 22"],["7x = 21","÷ 7 on both sides: x = 3"],["{x|7} = 2","× 7 on both sides: x = 14"]],
+  K11:[["5x + 2x","7x"],["5x − 2x","3x"],["2x − 5x","−3x"],["−x + 4x","3x"]],
+  K13:[["3(x + 4)","3x + 12"],["3(x − 4)","3x − 12"],["−3(x − 4)","−3x + 12"],["2(3x + 1)","6x + 2"]],
+  K24:[["5x − 7 = 2x + 8","take 2x from both sides: 3x − 7 = 8"],["5x − 7 = −2x + 8","add 2x to both sides: 7x − 7 = 8"],["4x + 1 = x + 10","take x from both sides: 3x + 1 = 10"],["x + 9 = 3x + 1","take 3x from both sides: −2x + 9 = 1"]],
+  K61:[["{x|2} + {1|3} = 2","× 6, every term: 3x + 2 = 12"],["{x|2} + 1 = {x|3}","× 6, every term: 3x + 6 = 2x"],["{x|4} − {1|2} = {x|8}","× 8, every term: 2x − 4 = x"],["{x|3} = {x|5} + 2","× 15, every term: 5x = 3x + 30"]],
+  K07:[["{x + 1|2x + 3} = {3|8}","8(x + 1) = 3(2x + 3)"],["{x|x + 4} = {1|3}","3x = x + 4"],["{y + 2|y − 1} = {4|3}","3(y + 2) = 4(y − 1)"],["{2x − 1|x} = 5","2x − 1 = 5x"]],
+  K59:[["Riya now: x","in 5 years: x + 5"],["Riya now: x","5 years ago: x − 5"],["Mother now: 3x","in 5 years: 3x + 5"],["Mother now: 3x","5 years ago: 3x − 5"]],
+  K62:[["consecutive numbers","x, x + 1, x + 2"],["consecutive even numbers","x, x + 2, x + 4"],["consecutive odd numbers","x, x + 2, x + 4"],["consecutive multiples of 8","x, x + 8, x + 16"]],
+  K60:[["ratio 7 : 5","7x and 5x"],["ratio 3 : 2","3x and 2x"],["ratio 7 : 5, total","7x + 5x = 12x"],["ratio 7 : 5, difference","7x − 5x = 2x"]],
+  KD:[["tens 4, units 7","10 × 4 + 7 = 47"],["tens x, units 7","10x + 7"],["tens 7, units x","70 + x"],["tens x, units 9 − x","10x + (9 − x)"]],
+  K32:[["{1|2} of 40","20"],["{3|4} of 40","30"],["{1|2} of x","{x|2}"],["{3|4} of {x|2}","{3x|8}"]],
+};
+
+/* ---------- Storage ---------- */
+const pad=n=>String(n).padStart(2,"0");
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;};
+function addDays(s,n){const [y,m,d]=s.split("-").map(Number);const x=new Date(y,m-1,d+n);return `${x.getFullYear()}-${pad(x.getMonth()+1)}-${pad(x.getDate())}`;}
+const KEY="student2-equations-v1";
+const STORAGE_OK=(()=>{try{localStorage.setItem("__t","1");localStorage.removeItem("__t");return true;}catch(e){return false;}})();
+function blank(){const items={};ITEM_ORDER.forEach(k=>items[k]={hist:[],days:{},mastered:null,passed:null,due:null,dueIdx:0,entry:null,shown:false});
+  const skills={};SKILL_ORDER.forEach(k=>skills[k]={rung:1,streak:0,wrong:0,hist:[],attained:null,due:null,dueIdx:0,peeks:0,top:0});
+  return {items,skills,sessions:[],log:[],chosen:null};}
+function load(){try{const b=blank();const s=JSON.parse(localStorage.getItem(KEY));if(!s)return b;Object.assign(b.items,s.items||{});Object.assign(b.skills,s.skills||{});b.sessions=s.sessions||[];b.log=s.log||[];b.chosen=s.chosen||null;return b;}catch(e){return blank();}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}}
+let DB=load();
+let S=DB.items,SK=DB.skills;
+const median=a=>{if(!a.length)return 0;const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)];};
+function itemMastered(k){const it=S[k];if(it.mastered)return true;
+  const good=Object.values(it.days).filter(h=>{const l=h.slice(-MASTERY.of);return l.length>=MASTERY.of&&l.filter(x=>x.c).length>=MASTERY.score&&median(l.map(x=>x.rt))<=MASTERY.rtMedian;});
+  if(good.length>=MASTERY.days){it.mastered=today();it.dueIdx=0;it.due=addDays(today(),DUE_DAYS[0]);return true;}return false;}
+const itemPassed=k=>S[k].entry===5||!!S[k].passed||itemMastered(k);
+// "teach" items gate the start; "attain" items are taught alongside and gate only attainment (row 15)
+function skillOpen(k){const g=GATE[k];return g.teach.every(itemPassed)&&Object.entries(g.after).every(([s,r])=>SK[s].rung>=r);}
+const doneToday=k=>(S[k].days[today()]||[]).length>=MASTERY.of;
+
+/* ---------- Session plan: due returns, a second-day check of items met before, new item cycles, then open skills ---------- */
+function plan(){
+  if(DB.chosen&&DB.chosen.length)return DB.chosen.map(c=>c.t==="item"?{t:"item",k:c.k}:c.t==="skill"?{t:"skill",k:c.k,n:10}:{t:"review",items:ITEM_ORDER.filter(k=>S[k].shown),n:12});
+  const blocks=[],t=today();
+  const due=ITEM_ORDER.filter(k=>S[k].mastered&&S[k].due&&S[k].due<=t);
+  if(due.length)blocks.push({t:"review",items:due,n:Math.min(9,due.length*3)});
+  SKILL_ORDER.filter(k=>SK[k].attained&&SK[k].due&&SK[k].due<=t).forEach(k=>blocks.push({t:"skill",k,n:5,ret:true}));
+  const check=ITEM_ORDER.filter(k=>S[k].shown&&!itemMastered(k)&&!doneToday(k)).slice(0,2);
+  if(check.length)blocks.push({t:"check",items:check,n:10*check.length});
+  const fresh=ITEM_ORDER.filter(k=>!S[k].shown).slice(0,check.length?1:2);
+  fresh.forEach(k=>blocks.push({t:"item",k}));
+  blocks.push({t:"skills",max:(fresh.length+(check.length?1:0)+(due.length?1:0))>=2?1:2});
+  return blocks;}
+function planNames(pl){return [...new Set(pl.flatMap(b=>b.t==="item"?[CARD[b.k].name]:b.t==="skill"?[CARD[b.k].name]:b.t==="skills"?SKILL_ORDER.filter(k=>skillOpen(k)&&!SK[k].attained).slice(0,b.max).map(k=>CARD[k].name):["quick ones from before"]))];}
+
+/* ---------- Rendering ---------- */
+const fx=s=>String(s).replace(/\{([^{}|]*)\|([^{}]*)\}/g,'<span class="fr"><span class="nu">$1</span><span class="de">$2</span></span>');
+const work=document.getElementById("work"),fb=document.getElementById("fb"),nextBtn=document.getElementById("nextBtn"),peekBtn=document.getElementById("peekBtn"),tstrip=document.getElementById("tstrip"),prog=document.getElementById("prog");
+let blocks=[],bi=0,sessionId=null,cur=null,t0=0,onNext=null,curBlock="";
+nextBtn.onclick=()=>{const f=onNext;onNext=null;if(f)f();};
+document.getElementById("teacherBtn").onclick=teacherPanel;
+const say=s=>{tstrip.textContent=s;};
+function h(html){work.innerHTML=html;}
+function showNext(label,f){nextBtn.textContent=label;nextBtn.classList.remove("hide");onNext=f;}
+function hideNext(){nextBtn.classList.add("hide");onNext=null;}
+function setProg(n,i,res){prog.innerHTML="";for(let j=0;j<n;j++){const d=document.createElement("span");d.className="dot"+(j<i?(res[j]?" ok":" bad"):j===i?" on":"");prog.appendChild(d);}}
+function logRow(r){r.ts=new Date().toISOString();r.session=sessionId;DB.log.push(r);}
+function stepsHTML(steps,eq){return `<div class="steps"><span class="ln">${fx(eq)}</span><span></span>${steps.map(s=>`<span class="ln">${fx(s.line)}</span><span class="mv">${fx(s.move)}</span>`).join("")}</div>`;}
+function typedUI(prefix,unit){return `<div class="ansrow">${prefix?`<span>${fx(prefix)}</span>`:""}<div class="ansbox" id="ans">&nbsp;</div>${unit?`<span class="unit">${unit}</span>`:""}</div>
+  <div class="keypad">${["7","8","9","⌫","4","5","6","−","1","2","3","/"].map(x=>`<button data-k="${x}">${x}</button>`).join("")}<button data-k="0">0</button><button class="go" data-k="go" style="grid-column:span 3">Enter</button></div>`;}
+function bindKeypad(onEnter){let s="";const ab=work.querySelector("#ans");const paint=()=>ab.innerHTML=s?fx(s.includes("/")?`${s.startsWith("−")?"−":""}{${s.replace("−","").split("/")[0]}|${s.split("/")[1]||"&nbsp;"}}`:s):"&nbsp;";
+  work.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{const k=b.dataset.k;
+    if(k==="go"){const v=parseAns(s);if(!v)return;work.querySelectorAll(".keypad button").forEach(x=>x.disabled=true);onEnter(v,s);return;}
+    if(k==="⌫")s=s.slice(0,-1);else if(k==="−")s=s.startsWith("−")?s.slice(1):"−"+s;else if(k==="/"){if(!s.includes("/")&&/\d$/.test(s))s+="/";}else if(s.replace(/[−/]/g,"").length<6)s+=k;paint();});}
+function home(){const pl=plan();setProg(0,0,[]);fb.textContent="";fb.className="fb";peekBtn.classList.add("hide");
+  const names=planNames(pl);
+  h(`<div class="home"><div class="q" style="font-family:var(--f);font-size:1.6rem">Day ${DB.sessions.length+1}</div>
+    <p style="font-size:1.2rem;color:var(--ink)">Today: ${names.join(", then ")}.</p><p>About 15 minutes. Keep your notebook open.</p></div>`);
+  say("Press Start.");showNext("Start",startSession);}
+function startSession(){sessionId=Date.now().toString(36);DB.sessions.push({id:sessionId,date:today(),ts:Date.now(),chosen:!!(DB.chosen&&DB.chosen.length)});blocks=plan();DB.chosen=null;save();bi=-1;nextBlock();}
+function nextBlock(){bi++;if(bi>=blocks.length)return endSession();const b=blocks[bi];
+  if(b.t==="skills"){const open=SKILL_ORDER.filter(k=>skillOpen(k)&&!SK[k].attained).slice(0,b.max);const add=open.map(k=>({t:"skill",k,n:b.max===1?6:8}));
+    const sofar=DB.log.filter(r=>r.session===sessionId&&r.retry===0&&r.correct!=="").length;const att=SKILL_ORDER.filter(k=>SK[k].attained);
+    if(!add.length&&sofar<20&&att.length)shuffle(att).slice(0,2).forEach(k=>add.push({t:"skill",k,n:5,mix:true}));
+    blocks.splice(bi,1,...add);bi--;return nextBlock();}
+  curBlock=b.t==="item"||b.t==="skill"?CARD[b.k].id:b.t;
+  if(b.t==="item")itemCycle(b.k);else if(b.t==="skill")skillBlock(b);else mixedBlock(b);}
+
+/* ---------- Item cycle: entry check → show → faultless examples → retrieval burst with corrections ---------- */
+function itemCycle(k){const it=S[k];const st=[];if(it.entry===null)st.push("entry");if(!it.shown)st.push("show","examples");st.push("burst");runStages(k,st);}
+function runStages(k,st){const s=st.shift();if(!s)return nextBlock();
+  if(s==="entry"){const qs=Array.from({length:5},()=>Object.assign(ITEMGEN[k](),{item:k}));
+    return runBurst(qs,{entry:true,label:"entry check"},res=>{S[k].entry=res.filter(Boolean).length;if(S[k].entry===5){S[k].shown=true;S[k].passed=today();st.length=0;st.push("burst");}save();runStages(k,st);});}
+  if(s==="show"){say(CARD[k].say);setProg(0,0,[]);fb.textContent="";peekBtn.classList.add("hide");const ex=ITEMGEN[k]();
+    h(`<div class="q${ex.small?" small":""}">${fx(ex.q)}</div>${ex.sub?`<div class="sub">${fx(ex.sub)}</div>`:""}<div class="choices"><button class="ch right${ex.ans.length>8?" txt":""}" disabled>${fx(ex.ans)}</button></div><div class="sub">${fx(ex.show||"")}</div>`);
+    return showNext("Next",()=>runStages(k,st));}
+  if(s==="examples"){say(CARD[k].say);h(`<div class="sub">Look. The same every time.</div><div class="ex">${EXAMPLES[k].map(([a,b])=>`<span>${fx(a)}</span><span>${fx(b)}</span>`).join("")}</div>`);
+    S[k].shown=true;save();return showNext("Next",()=>runStages(k,st));}
+  if(s==="burst"){const n=rnd(10,13);const earlier=ITEM_ORDER.slice(0,ITEM_ORDER.indexOf(k)).filter(i=>S[i].shown).slice(-3);const qs=[];
+    for(let i=0;i<n;i++){const kk=earlier.length&&i%3===2?pick(earlier):k;qs.push(Object.assign(ITEMGEN[kk](),{item:kk}));}
+    return runBurst(qs,{label:"quick answers"},()=>{checkPassed(k);itemMastered(k);save();runStages(k,st);});}}
+function checkPassed(k){const l=(S[k].days[today()]||[]).slice(-MASTERY.of);if(l.length>=MASTERY.of&&l.filter(x=>x.c).length>=MASTERY.score&&!S[k].passed)S[k].passed=today();}
+// A burst of tap questions with the correction routine: wrong → right answer and why → back after 2 others → a cousin at the end
+function runBurst(qs,o,done){const queue=qs.map(q=>({q,retry:0}));let qi=0;const results=[];const endQ=[];
+  const ask=()=>{if(qi>=queue.length){if(endQ.length&&!o.entry){queue.push(...endQ.splice(0));}else return done(results);}
+    const c=queue[qi],q=c.q;cur=q;setProg(queue.length,qi,results);say(CARD[q.item].say);hideNext();peekBtn.classList.add("hide");fb.textContent="";fb.className="fb";
+    h(`<div class="q${q.small?" small":""}">${fx(q.q)}</div>${q.sub?`<div class="sub">${fx(q.sub)}</div>`:""}<div class="choices">${q.choices.map((x,i)=>`<button class="ch${x.length>8?" txt":""}" data-i="${i}">${fx(x)}</button>`).join("")}</div><div class="sub" id="why"></div>`);
+    t0=performance.now();
+    work.querySelectorAll(".ch").forEach(b=>b.onclick=()=>{const rt=Math.round(performance.now()-t0);const v=q.choices[+b.dataset.i];const ok=v===q.ans;
+      work.querySelectorAll(".ch").forEach(x=>{x.disabled=true;if(q.choices[+x.dataset.i]===q.ans)x.classList.add("right");});if(!ok)b.classList.add("wrong");
+      if(c.retry===0){results[qi]=ok;if(!o.entry){const it=S[q.item];const rec={c:ok,rt};it.hist.push(rec);(it.days[today()]=it.days[today()]||[]).push(rec);}}
+      logRow({block:o.label,id:CARD[q.item].id,rung:"",task:q.q,answer:v,correct:ok?1:0,err:"",rt,peek:0,retry:c.retry,sep:0});save();
+      if(ok){fb.className="fb ok";fb.textContent="Yes.";setTimeout(()=>{qi++;ask();},o.entry?350:550);}
+      else{fb.className="fb no";fb.textContent=o.entry?"":CARD[q.item].say;if(!o.entry)work.querySelector("#why").innerHTML=fx(q.show||"");
+        if(o.entry){setTimeout(()=>{qi++;ask();},350);return;}
+        queue.splice(Math.min(qi+3,queue.length),0,{q,retry:c.retry+1});endQ.push({q:Object.assign(ITEMGEN[q.item](),{item:q.item}),retry:c.retry+1});
+        showNext("Next",()=>{qi++;ask();});}});};
+  ask();}
+// Mixed blocks: spaced returns of held items, and the second-day check of items met before
+function mixedBlock(b){const qs=[];const items=b.items.length?b.items:ITEM_ORDER.filter(k=>S[k].shown);if(!items.length)return nextBlock();
+  for(let i=0;i<b.n;i++){const k=items[i%items.length];qs.push(Object.assign(ITEMGEN[k](),{item:k}));}
+  runBurst(shuffle(qs),{label:b.t==="check"?"second-day check":"return"},res=>{
+    if(b.t==="review")items.forEach(k=>{const it=S[k];const mine=qs.map((q,i)=>q.item===k?res[i]:null).filter(x=>x!==null);const ok=mine.filter(Boolean).length>=mine.length-1;
+      if(ok)it.dueIdx=Math.min(it.dueIdx+1,DUE_DAYS.length-1);else{it.dueIdx=0;SKILL_ORDER.filter(s=>GATE[s].attain.includes(k)||GATE[s].teach.includes(k)).forEach(s=>{if(SK[s].rung>1)SK[s].rung--;SK[s].attained=null;SK[s].streak=0;});}
+      it.due=addDays(today(),DUE_DAYS[it.dueIdx]);});
+    else items.forEach(k=>{checkPassed(k);itemMastered(k);});
+    save();nextBlock();});}
+
+/* ---------- Skill block: the five-rung ladder ----------
+   Solving (SK-AG-30, 31, 32):  1 every step shown · 2 she picks every move · 3 she picks the first move · 4 equation only, "Show steps" on tap · 5 equation only
+   Writing (SK-AG-29):          1–2 help lines shown · 3 no help · 4 "Show help" on tap · 5 no help
+   Problems (SK-AG-25 to 28):   1 equation and steps shown · 2 equation shown · 3 she picks the equation · 4 problem only, "Show the equation" on tap · 5 problem only */
+function genSkill(k,rung){const c=CARD[k];if(c.type==="solve")return c.gen(rung);
+  if(c.type==="prob")return PROBS[pick(PROB_BY_SKILL[k])]();
+  const pool=["P25a","P25b","P25c","P25d","P27a","P27b","P27c"];if(itemPassed("KD"))pool.push("P26");if(itemPassed("K32")&&SK.SK31.rung>=3)pool.push("P28a");if(SK.SK32.rung>=3)pool.push("P28b");
+  return PROBS[pick(pool)]();}
+function skillBlock(b){const k=b.k,sk=SK[k],type=CARD[k].type;let i=0;const n=b.n;const results=[];const soon=[];const endQ=[];
+  const next=()=>{let q=null,retry=0;const due=soon.findIndex(x=>x.at<=i);
+    if(due>=0){q=soon.splice(due,1)[0].q;retry=1;}else if(i>=n){if(endQ.length){q=endQ.shift();retry=1;}else return finish();}else q=genSkill(k,sk.rung);
+    present(q,retry);};
+  const finish=()=>{if(b.ret){const miss=results.filter(x=>x===false).length;if(miss>1){sk.dueIdx=0;if(sk.rung>4)sk.rung=4;sk.attained=null;}else sk.dueIdx=Math.min(sk.dueIdx+1,DUE_DAYS.length-1);sk.due=addDays(today(),DUE_DAYS[sk.dueIdx]);}save();nextBlock();};
+  const fixed=b.ret||b.mix;
+  const present=(q,retry)=>{cur=q;const rung=fixed?5:sk.rung;setProg(n,i,results);say(CARD[k].say);fb.textContent="";fb.className="fb";hideNext();peekBtn.classList.add("hide");
+    let moveMiss=false,peeked=false;
+    const verdict=(ok,given,err)=>{const rt=Math.round(performance.now()-t0);const sep=!!(err&&err.sep);const okAll=ok&&!moveMiss;
+      if(!retry){results[i]=okAll;sk.hist.push({c:okAll,rt,rung,peek:peeked?1:0});}
+      logRow({block:"ladder",id:CARD[k].id,rung,task:q.eq||q.text,answer:given,correct:okAll?1:0,err:err?err.code:(ok?(moveMiss?"move":""):"other"),rt,peek:peeked?1:0,retry,sep:sep?1:0});
+      if(okAll){fb.className="fb ok";fb.textContent="Yes.";if(!retry&&!fixed){sk.streak++;sk.wrong=0;
+          if(sk.streak>=4&&sk.rung<5){sk.rung++;sk.streak=0;fb.textContent="Yes. Next level.";logRow({block:"ladder move",id:CARD[k].id,rung:sk.rung,task:"up",answer:"",correct:"",err:"",rt:0,peek:0,retry:0,sep:0});}
+          else if(sk.rung===5&&sk.streak>=4&&!sk.attained&&GATE[k].attain.every(itemMastered)){sk.attained=today();sk.dueIdx=0;sk.due=addDays(today(),DUE_DAYS[0]);}}
+        save();setTimeout(()=>{if(!retry)i++;next();},ok&&!moveMiss?800:1200);return;}
+      if(!retry&&!fixed){sk.streak=0;if(!ok)sk.wrong++; // a wrong move choice resets the streak; only a wrong answer or a separation error moves her down
+        if(!ok&&(sk.wrong>=2||sep)&&sk.rung>1){sk.rung--;sk.wrong=0;sk.attained=null;logRow({block:"ladder move",id:CARD[k].id,rung:sk.rung,task:sep?"down: separation error":"down: two wrong",answer:"",correct:"",err:"",rt:0,peek:0,retry:0,sep:0});}endQ.push(genSkill(k,sk.rung));}
+      save();showNext("Next",()=>{if(!retry){i++;soon.push({q,at:i+2});}next();});};
+    if(type==="write")return presentWrite(q,rung,verdict,()=>{peeked=true;sk.peeks++;});
+    if(type==="solve")return presentSolve(q,rung,verdict,()=>{peeked=true;sk.peeks++;},()=>{moveMiss=true;});
+    return presentProb(q,rung,verdict,()=>{peeked=true;sk.peeks++;},()=>{moveMiss=true;});};
+  next();}
+// Check a typed value against the answer and the known wrong answers; returns the line to show
+function judge(q,v){if(v.eq(q.ans))return {ok:true};
+  const ex=(q.extra||[]).find(e=>e.v.eq(v));if(ex)return {ok:false,err:{code:"other quantity",msg:ex.msg,sep:false}};
+  if(q.kind==="prob"&&!q.askIsX&&v.eq(q.xVal))return {ok:false,err:{code:"answered x",msg:`That is x. The question asks for ${q.ask}.`,sep:false}};
+  if(q.kind==="prob"){const d=q.dis.find(d=>d.val&&d.val.eq(v));if(d)return {ok:false,err:{code:"equation: "+d.eq,msg:d.msg,sep:d.sep}};
+    const xe=errs30(q.std,q.pre||[]).find(e=>{try{return q.askFn(e.v).eq(v);}catch(x){return false;}});if(xe)return {ok:false,err:Object.assign({},xe,{sep:false})};return {ok:false};}
+  const e=q.errs.find(e=>e.v.eq(v));return e?{ok:false,err:e}:{ok:false};}
+function answerUI(q){return q.kind==="prob"?typedUI("Answer:",q.unit||""):typedUI("x =","");}
+function afterWrong(q,res,stepsBox){fb.className="fb no";fb.innerHTML=fx(res.err?res.err.msg:CARD[q.kind==="prob"?"SK25":"SK30"].say);if(stepsBox)stepsBox.innerHTML=stepsHTML(q.steps,q.eq)+`<div class="sub" style="margin-top:6px">${q.kind==="prob"?`Answer: ${fx(numT(q.ans))} ${q.unit||""}`:""}</div>`;}
+function presentSolve(q,rung,verdict,onPeek,onMoveMiss){const top=`<div class="q">${fx(q.eq)}</div>`;
+  if(rung===1){h(top+stepsHTML(q.steps,q.eq)+`<div class="sub">Read x from the last line.</div>`+answerUI(q)+`<div id="sbox"></div>`);}
+  else if(rung===2||rung===3){const upto=rung===2?q.steps.length:1;h(top+`<div class="steps" id="lines"><span class="ln">${fx(q.eq)}</span><span></span></div><div class="choices" id="mv"></div><div id="ansArea"></div><div id="sbox"></div>`);
+    let j=0;const lines=work.querySelector("#lines"),mv=work.querySelector("#mv");
+    const askMove=()=>{if(j>=upto){mv.innerHTML="";if(rung===3&&j<q.steps.length)work.querySelector("#ansArea").innerHTML=`<div class="sub">Finish in your notebook.</div>`+answerUI(q);else work.querySelector("#ansArea").innerHTML=answerUI(q);bindKeypad(onAns);t0=performance.now();return;}
+      const s=q.steps[j];const opts=shuffle([s.chip||s.move,...(s.wrong||[])]);fb.textContent="";
+      mv.innerHTML=`<div class="sub" style="flex-basis:100%">What do you do next?</div>`+opts.map((o,i)=>`<button class="ch txt" data-i="${i}">${fx(o)}</button>`).join("");
+      mv.querySelectorAll("button").forEach(bt=>bt.onclick=()=>{const pickd=opts[+bt.dataset.i];const ok=pickd===(s.chip||s.move);
+        mv.querySelectorAll("button").forEach(x=>{x.disabled=true;if(opts[+x.dataset.i]===(s.chip||s.move))x.classList.add("right");});
+        if(!ok){bt.classList.add("wrong");onMoveMiss();fb.className="fb no";fb.innerHTML=fx(`${s.move}.`);logRow({block:"move",id:CARD[curSkillId(q)]?.id||"",rung,task:q.eq,answer:pickd,correct:0,err:s.kind,rt:0,peek:0,retry:0,sep:s.kind==="x"||s.kind==="lcm"||s.kind==="cross"?1:0});}
+        setTimeout(()=>{lines.insertAdjacentHTML("beforeend",`<span class="ln">${fx(s.line)}</span><span class="mv">${fx(s.move)}</span>`);j++;askMove();},ok?400:1500);});};
+    askMove();return;}
+  else{h(top+(rung===4?`<div class="sub">Work in your notebook.</div>`:`<div class="sub">Work in your notebook.</div>`)+answerUI(q)+`<div id="sbox"></div>`);
+    if(rung===4){peekBtn.textContent="Show steps";peekBtn.classList.remove("hide");peekBtn.onclick=()=>{onPeek();peekBtn.classList.add("hide");work.querySelector("#sbox").innerHTML=stepsHTML(q.steps,q.eq);};}}
+  function onAns(v,s){const res=judge(q,v);work.querySelector(".ansbox").classList.add(res.ok?"right":"wrong");peekBtn.classList.add("hide");if(!res.ok)afterWrong(q,res,rung>1?work.querySelector("#sbox"):null);verdict(res.ok,s,res.err);}
+  bindKeypad(onAns);t0=performance.now();}
+const curSkillId=q=>q.form?(q.form==="X"?"SK32":q.form==="A"||q.form==="B"?"SK31":"SK30"):(q.skill||"SK25");
+function presentWrite(q,rung,verdict,onPeek){const hints=`<div class="hints">${q.hint.map(x=>`<div>${fx(x)}</div>`).join("")}</div>`;
+  const opts=shuffle([q.eq,...q.dis.map(d=>d.eq)]);
+  h(`<div class="q small">${fx(q.text)}</div><div class="sub">${fx(q.letx)} Which equation fits?</div>${rung<=2?hints:`<div id="hbox"></div>`}<div class="choices">${opts.map((o,i)=>`<button class="ch txt" data-i="${i}" style="font-family:var(--mono)">${fx(o)}</button>`).join("")}</div>`);
+  if(rung===4){peekBtn.textContent="Show help";peekBtn.classList.remove("hide");peekBtn.onclick=()=>{onPeek();peekBtn.classList.add("hide");work.querySelector("#hbox").innerHTML=hints;};}
+  t0=performance.now();
+  work.querySelectorAll(".ch").forEach(b=>b.onclick=()=>{const v=opts[+b.dataset.i];const ok=v===q.eq;peekBtn.classList.add("hide");
+    work.querySelectorAll(".ch").forEach(x=>{x.disabled=true;if(opts[+x.dataset.i]===q.eq)x.classList.add("right");});
+    let err=null;if(!ok){b.classList.add("wrong");const d=q.dis.find(d=>d.eq===v);err={code:"equation: "+v,msg:d.msg,sep:d.sep};fb.className="fb no";fb.innerHTML=fx(d.msg);if(rung>2&&work.querySelector("#hbox"))work.querySelector("#hbox").innerHTML=hints;}
+    verdict(ok,v,err);});}
+function presentProb(q,rung,verdict,onPeek,onMoveMiss){const text=`<div class="q small">${fx(q.text)}</div>`;const eqLine=`<div class="sub">${fx(q.letx)}</div><div class="q">${fx(q.eq)}</div>`;
+  const ansNote=q.frac?`<div class="sub">Type it as a fraction, like 3/5.</div>`:"";
+  if(rung===1){h(text+`<div class="sub">${fx(q.letx)}</div>`+stepsHTML(q.steps,q.eq)+`<div class="sub">Now answer the question: ${fx(q.ask)}.</div>`+ansNote+answerUI(q)+`<div id="sbox"></div>`);}
+  else if(rung===2){h(text+eqLine+`<div class="sub">Solve in your notebook. Then answer the question.</div>`+ansNote+answerUI(q)+`<div id="sbox"></div>`);}
+  else if(rung===3){const opts=shuffle([q.eq,...q.dis.map(d=>d.eq)]);
+    h(text+`<div class="sub">${fx(q.letx)} Which equation fits?</div><div class="choices" id="eqc">${opts.map((o,i)=>`<button class="ch txt" data-i="${i}" style="font-family:var(--mono)">${fx(o)}</button>`).join("")}</div><div id="ansArea"></div><div id="sbox"></div>`);
+    work.querySelectorAll("#eqc .ch").forEach(b=>b.onclick=()=>{const v=opts[+b.dataset.i];const ok=v===q.eq;work.querySelectorAll("#eqc .ch").forEach(x=>{x.disabled=true;if(opts[+x.dataset.i]===q.eq)x.classList.add("right");});
+      if(!ok){b.classList.add("wrong");onMoveMiss();const d=q.dis.find(d=>d.eq===v);fb.className="fb no";fb.innerHTML=fx(d.msg);logRow({block:"equation pick",id:CARD[q.skill].id,rung,task:q.text,answer:v,correct:0,err:"equation",rt:0,peek:0,retry:0,sep:d.sep?1:0});}
+      work.querySelector("#ansArea").innerHTML=`<div class="sub">Solve in your notebook. Then answer the question.</div>`+ansNote+answerUI(q);bindKeypad(onAns);t0=performance.now();});
+    t0=performance.now();return;}
+  else{h(text+`<div class="sub">Write the equation and solve it in your notebook.</div>`+ansNote+answerUI(q)+`<div id="sbox"></div>`);
+    if(rung===4){peekBtn.textContent="Show the equation";peekBtn.classList.remove("hide");peekBtn.onclick=()=>{onPeek();peekBtn.classList.add("hide");work.querySelector("#sbox").innerHTML=eqLine;};}}
+  function onAns(v,s){const res=judge(q,v);work.querySelector(".ansbox").classList.add(res.ok?"right":"wrong");peekBtn.classList.add("hide");if(!res.ok)afterWrong(q,res,work.querySelector("#sbox"));verdict(res.ok,s,res.err);}
+  bindKeypad(onAns);t0=performance.now();}
+
+function endSession(){const s=DB.sessions[DB.sessions.length-1];const rows=DB.log.filter(r=>r.session===sessionId&&(r.block==="ladder"||r.block==="quick answers"||r.block==="return"||r.block==="second-day check"||r.block==="entry check"));
+  s.n=rows.length;s.right=rows.filter(r=>r.correct===1).length;s.ended=true;
+  const wrong=rows.filter(r=>r.correct===0);const by={};wrong.forEach(r=>by[r.id]=(by[r.id]||0)+1);const worst=Object.entries(by).sort((a,b)=>b[1]-a[1])[0];s.worst=worst?worst.join(" ×"):"";
+  s.peeks=DB.log.filter(r=>r.session===sessionId&&r.peek===1).length;save();
+  setProg(0,0,[]);fb.textContent="";peekBtn.classList.add("hide");
+  h(`<div class="home"><div class="q" style="font-family:var(--f);font-size:1.6rem">Done.</div><p style="font-size:1.2rem;color:var(--ink)">${s.right} right out of ${s.n}.</p><p>Same time tomorrow.</p></div>`);
+  say("Finished.");showNext("Back",home);}
+
+/* ---------- Teacher panel ---------- */
+function csvText(){const cols=["ts","session","block","id","rung","task","answer","correct","err","rt","peek","retry","sep"];
+  return cols.join(",")+"\n"+DB.log.map(r=>cols.map(c=>`"${String(r[c]??"").replace(/"/g,'""')}"`).join(",")).join("\n");}
+function teacherPanel(){const ov=document.getElementById("overlay"),card=document.getElementById("ovcard");ov.classList.remove("hide");
+  const lad=r=>`<span class="ladder">${[1,2,3,4,5].map(x=>`<i class="${x<=r?"on":""}"></i>`).join("")}</span>`;
+  const gateTxt=k=>{const g=GATE[k];const p=[];if(g.teach.length)p.push("before: "+g.teach.map(i=>CARD[i].id).join(", "));if(g.attain.length)p.push("alongside: "+g.attain.map(i=>CARD[i].id).join(", "));Object.entries(g.after).forEach(([s,r])=>p.push(`${CARD[s].id} at ${r}+`));return p.join("; ");};
+  card.innerHTML=`<h2>Teacher</h2><p style="color:var(--muted);margin:0 0 10px">The screen does the talking. Say only what the grey strip says. If she is stuck, point at the steps and press Next; the same question comes back after two others. Current block: <b>${curBlock||"–"}</b></p>
+   <table><tr><th>Order</th><th>Knowledge item</th><th>Kind</th><th>Entry</th><th>Last 10</th><th>Passed</th><th>Held</th><th>Next return</th></tr>
+   ${ITEM_ORDER.map(k=>{const it=S[k];const l=it.hist.slice(-10);return `<tr><td><button class="btn small ord" data-t="item" data-k="${k}">–</button></td><td>${CARD[k].id} <small style="color:var(--muted)">${CARD[k].name}</small></td><td>${CARD[k].kind}</td><td>${it.entry===null?"–":it.entry+"/5"}</td><td>${l.length?l.filter(x=>x.c).length+"/"+l.length+" · "+median(l.map(x=>x.rt))+" ms":"–"}</td><td>${it.passed||"–"}</td><td>${it.mastered||"no"}</td><td>${it.due||"–"}</td></tr>`;}).join("")}</table>
+   <table style="margin-top:12px"><tr><th>Order</th><th>Skill</th><th>Level</th><th>Answers</th><th>Peeks</th><th>Separation errors</th><th>Open?</th><th>Attained</th></tr>
+   ${SKILL_ORDER.map(k=>{const s=SK[k];const rows=DB.log.filter(r=>r.id===CARD[k].id&&r.block==="ladder");return `<tr><td><button class="btn small ord" data-t="skill" data-k="${k}">–</button></td><td>${CARD[k].id} ${CARD[k].name}<br><small style="color:var(--muted)">${gateTxt(k)}</small></td><td>${lad(s.rung)} ${s.rung}</td><td>${rows.filter(r=>r.correct===1).length}/${rows.length}</td><td>${s.peeks}</td><td>${DB.log.filter(r=>r.id===CARD[k].id&&r.sep===1).length}</td><td>${skillOpen(k)?"yes":"not yet"}</td><td>${s.attained||"–"}</td></tr>`;}).join("")}
+   <tr><td><button class="btn small ord" data-t="review" data-k="review">–</button></td><td colspan="7">Quick ones from before (12 taps on items she has met)</td></tr></table>
+   <p style="margin:12px 0 6px"><b>Sessions:</b> ${DB.sessions.map(s=>`${s.date} ${s.right??"?"}/${s.n??"?"}${s.worst?" · most missed "+s.worst:""}${s.peeks?" · peeks "+s.peeks:""}`).join(" · ")||"none yet"}</p>${STORAGE_OK?"":"<p style='color:var(--warn)'>This browser is not saving progress. Export the CSV before closing.</p>"}
+   <p style="margin:10px 0 6px;color:var(--muted)">Tap the Order buttons to number the blocks, then "Start this order now" (one session). Nothing numbered: the automatic plan. A chosen skill runs even if its gate is not met.</p>
+   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center"><button class="btn primary" id="usePick">Start this order now</button><button class="btn" id="autoPick">Clear order</button><span id="pickOrder" style="font-size:.9rem;color:var(--muted)">Order: automatic</span></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="csv">Export record (CSV)</button><button class="btn" id="close">Close</button><button class="btn small" id="reset" style="margin-left:auto;color:var(--no)">Reset all progress</button></div>
+   <textarea id="csvbox" class="hide" style="width:100%;height:120px;margin-top:10px;font:12px var(--mono)"></textarea>`;
+  const order=[];const paint=()=>{card.querySelectorAll(".ord").forEach(b=>{const i=order.findIndex(o=>o.k===b.dataset.k);b.textContent=i>=0?String(i+1):"–";b.style.borderColor=i>=0?"var(--accent)":"";b.style.fontWeight=i>=0?"700":"";});
+    card.querySelector("#pickOrder").textContent="Order: "+(order.map(o=>o.k==="review"?"quick ones":CARD[o.k].name).join(" → ")||"automatic");};
+  card.querySelectorAll(".ord").forEach(b=>b.onclick=()=>{const i=order.findIndex(o=>o.k===b.dataset.k);if(i>=0)order.splice(i,1);else order.push({t:b.dataset.t,k:b.dataset.k});paint();});
+  card.querySelector("#usePick").onclick=()=>{if(!order.length)return;DB.chosen=order.slice();save();ov.classList.add("hide");startSession();};
+  card.querySelector("#autoPick").onclick=()=>{order.length=0;DB.chosen=null;save();paint();};
+  card.querySelector("#close").onclick=()=>ov.classList.add("hide");
+  card.querySelector("#reset").onclick=()=>{const b=card.querySelector("#reset");if(b.dataset.arm){DB=blank();S=DB.items;SK=DB.skills;save();ov.classList.add("hide");home();}else{b.dataset.arm="1";b.textContent="Tap again to reset";}};
+  card.querySelector("#csv").onclick=()=>{const name=`student2-equations-${today()}.csv`;try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csvText()],{type:"text/csv"}));a.download=name;a.click();}catch(e){}
+    const t=card.querySelector("#csvbox");t.classList.remove("hide");t.value=csvText();t.select();};}
+
+home();
+</script>
+</body>
+</html>

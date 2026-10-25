@@ -1,0 +1,373 @@
+{
+ "meta": {
+  "title": "Grade 8 Mathematics Knowledge Graph (CBSE)",
+  "page_title": "Grade 8 Maths Knowledge Graph",
+  "page_subtitle": "Mathematics, Grade 8, CBSE; NCERT (2017) outcomes M801 to M820 from SLOF; skills and knowledge items authored by ConveGenius",
+  "subject": "Mathematics",
+  "profile": "maths",
+  "grades": [
+   8
+  ],
+  "source": {
+   "label": "NCERT (2017) learning outcomes for Class VIII mathematics, as recorded in the ConveGenius SLOF Learning Outcome Master Sheet (tab Grade 8), quoted via the PAL Maths Grades 6-10 graph of 6 Oct 2026",
+   "url": "https://docs.google.com/spreadsheets/d/1IKc2PaaJkBT0jHFCO0lIQRgDY2qjz3O3cfSSWQr96Bk/edit"
+  },
+  "built_domains": [],
+  "gates": {
+   "Fact or term": "before teaching",
+   "Concept": "before teaching",
+   "Procedure": "before attainment",
+   "Principle": "before attainment"
+  },
+  "reuse": "Records copied from the PAL Maths Grades 6-10 graph (6 Oct 2026) and the Student 1 MYP2 graph (24 Oct 2026) keep their ids and text. A copied skill keeps its outcome when that outcome is in this graph; otherwise its outcome field points to the Grade 8 outcome and the original is kept in source_outcome. Neither source graph is changed."
+ },
+ "domains": {
+  "RN": "Rational numbers",
+  "NN": "Number and number theory",
+  "RP": "Ratio and proportion",
+  "AG": "Algebraic generalisation",
+  "GE": "Geometry",
+  "ME": "Mensuration",
+  "DA": "Data",
+  "PR": "Probability",
+  "NA": "Not assigned"
+ },
+ "decisions": {
+  "2": "NCERT (2017) outcomes from SLOF; everything below them authored by ConveGenius.",
+  "9": "Kind kept; it sets the gate.",
+  "12": "Seven link types.",
+  "13": "Open: every is part of records always or sometimes.",
+  "14": "Open: every is part of is a reported step case.",
+  "15": "Facts, terms, concepts required before teaching; procedures, principles before attainment; every knowledge item needs an entry check.",
+  "17": "Open: routes list skills only.",
+  "32": "Mathematical domain field, content areas only. Closed list for Grades 6–10: the six Grades 6–8 values of V2 §9; from the Grades 9–10 row, Formal algebra, Quadratic relationships, Coordinate geometry, Trigonometric reasoning and Probability (Similarity and Proof-oriented reasoning folded into Geometry); plus Number and number theory (authored by ConveGenius) and Not assigned.",
+  "note": "Decided framework rows copied unchanged from the PAL graph (6 Oct 2026); the ConGov decision log was not read in this session (no access to the ConGov project)."
+ },
+ "outcomes": [
+  {
+   "id": "LO-M801",
+   "grade": 8,
+   "domain": "RN",
+   "text": "Generalises properties of addition, subtraction, multiplication and division of rational numbers through patterns",
+   "code": "M801",
+   "ncf_goal": [
+    "CG-1"
+   ],
+   "ncf_competency": [
+    "C-1.1"
+   ],
+   "note": "",
+   "nas_code": []
+  },
+  {
+   "id": "LO-M802",
+   "grade": 8,
+   "domain": "RN",
+   "text": "Finds out as many rational numbers as possible between two given rational numbers.",
+   "code": "M802",
+   "ncf_goal": [
+    "CG-1"
+   ],
+   "ncf_competency": [
+    "C-1.4"
+   ],
+   "note": "",
+   "nas_code": [
+    "M802"
+   ]
+  },
+  {
+   "id": "LO-M803",
+   "grade": 8,
+   "domain": "NN",
+   "text": "Proves divisibility rules of 2, 3,4, 5, 6, 9 and 11",
+   "code": "M803",
+   "ncf_goal": [
+    "CG-1"
+   ],
+   "ncf_competency": [
+    "C-1.2"
+   ],
+   "note": "The chapter that taught this (Playing with Numbers) was removed from the NCERT Class 8 textbook in the 2023 rationalisation; the outcome stands in SLOF.",
+   "nas_code": [
+    "M803"
+   ]
+  },
+  {
+   "id": "LO-M804",
+   "grade": 8,
+   "domain": "NN",
+   "text": "Finds squares, cubes and square roots and cube roots of numbers using different methods.",
+   "code": "M804",
+   "ncf_goal": [
+    "CG-1"
+   ],
+   "ncf_competency": [
+    "C-1.1"
+   ],
+   "note": "",
+   "nas_code": [
+    "M804"
+   ]
+  },
+  {
+   "id": "LO-M805",
+   "grade": 8,
+   "domain": "NN",
+   "text": "Solves problems with integral exponents",
+   "code": "M805",
+   "ncf_goal": [
+    "CG-1"
+   ],
+   "ncf_competency": [
+    "C-1.1"
+   ],
+   "note": "",
+   "nas_code": [
+    "M706"
+   ]
+  },
+  {
+   "id": "LO-M806",
+   "grade": 8,
+   "domain": "AG",
+   "text": "Solves puzzles and daily life problems using variables.",
+   "code": "M806",
+   "ncf_goal": [
+    "CG-7"
+   ],
+   "ncf_competency": [
+    "C-7.1"
+   ],
+   "note": "",
+   "nas_code": []
+  },
+  {
+   "id": "LO-M807",
+   "grade": 8,
+   "domain": "AG",
+   "text": "Multiplies algebraic expressions. E.g. Expands (2x-5) (3x+7).",
+   "code": "M807",
+   "ncf_goal": [
+    "CG-2"
+   ],
+   "ncf_competency": [
+    "C-2.3"
+   ],
+   "note": "",
+   "nas_code": []
+  },
+  {
+   "id": "LO-M808",
+   "grade": 8,
+   "domain": "AG",
+   "text": "Uses various algebraic identities in solving problems of daily life",
+   "code": "M808",
+   "ncf_goal": [
+    "CG-2"
+   ],
+   "ncf_competency": [
+    "C-2.4"
+   ],
+   "note": "",
+   "nas_code": [
+    "M808"
+   ]
+  },
+  {
+   "id": "LO-M809",
+   "grade": 8,
+   "domain": "RP",
+   "text": "Applies the concept of percent in profit and loss situation in finding discount, vat and compound interest. E.g., calculates discount per cent when marked price and actual discount are given or finds profit per cent when cost price and profit in a transaction are given.",
+   "code": "M809",
+   "ncf_goal": [
+    "CG-1"
+   ],
+   "ncf_competency": [
+    "C-1.5"
+   ],
+   "note": "",
+   "nas_code": []
+  },
+  {
+   "id": "LO-M810",
+   "grade": 8,
+   "domain": "RP",
+   "text": "Solves problems based on direct and inverse proportions",
+   "code": "M810",
+   "ncf_goal": [
+    "CG-1"
+   ],
+   "ncf_competency": [
+    "C-1.4"
+   ],
+   "note": "",
+   "nas_code": []
+  },
+  {
+   "id": "LO-M811",
+   "grade": 8,
+   "domain": "GE",
+   "text": "Solves problems related to angles of a quadrilateral using angle sum property",
+   "code": "M811",
+   "ncf_goal": [
+    "CG-3"
+   ],
+   "ncf_competency": [
+    "C-3.2"
+   ],
+   "note": "",
+   "nas_code": []
+  },
+  {
+   "id": "LO-M812",
+   "grade": 8,
+   "domain": "GE",
+   "text": "Verifies properties of parallelograms and establishes the relationship between them through reasoning.",
+   "code": "M812",
+   "ncf_goal": [
+    "CG-3"
+   ],
+   "ncf_competency": [
+    "C-3.1"
+   ],
+   "note": "",
+   "nas_code": [
+    "M812"
+   ]
+  },
+  {
+   "id": "LO-M813",
+   "grade": 8,
+   "domain": "GE",
+   "text": "Represents 3D shapes on a plane surface such as sheet of paper, black board etc.",
+   "code": "M813",
+   "ncf_goal": [
+    "CG-3"
+   ],
+   "ncf_competency": [
+    "C-3.3"
+   ],
+   "note": "The chapter that taught this (Visualising Solid Shapes) was removed from the NCERT Class 8 textbook in the 2023 rationalisation; the outcome stands in SLOF.",
+   "nas_code": []
+  },
+  {
+   "id": "LO-M814",
+   "grade": 8,
+   "domain": "GE",
+   "text": "Verifies Euler’s relation through pattern",
+   "code": "M814",
+   "ncf_goal": [
+    "CG-6"
+   ],
+   "ncf_competency": [
+    "C-6.1"
+   ],
+   "note": "The chapter that taught this (Visualising Solid Shapes) was removed from the NCERT Class 8 textbook in the 2023 rationalisation; the outcome stands in SLOF.",
+   "nas_code": []
+  },
+  {
+   "id": "LO-M815",
+   "grade": 8,
+   "domain": "GE",
+   "text": "Constructs different quadrilaterals using compasses and straight edge.",
+   "code": "M815",
+   "ncf_goal": [
+    "CG-3"
+   ],
+   "ncf_competency": [
+    "C-3.4"
+   ],
+   "note": "The chapter that taught this (Practical Geometry) was removed from the NCERT Class 8 textbook in the 2023 rationalisation; the outcome stands in SLOF.",
+   "nas_code": []
+  },
+  {
+   "id": "LO-M816",
+   "grade": 8,
+   "domain": "ME",
+   "text": "Estimates the area of shapes like trapezium and other polygons by using square grid / graph sheet and verifies using formulas.",
+   "code": "M816",
+   "ncf_goal": [
+    "CG-4"
+   ],
+   "ncf_competency": [
+    "C-4.1"
+   ],
+   "note": "",
+   "nas_code": [
+    "M717"
+   ]
+  },
+  {
+   "id": "LO-M817",
+   "grade": 8,
+   "domain": "ME",
+   "text": "Finds the area of a polygon.",
+   "code": "M817",
+   "ncf_goal": [
+    "CG-4"
+   ],
+   "ncf_competency": [
+    "C-4.1"
+   ],
+   "note": "",
+   "nas_code": []
+  },
+  {
+   "id": "LO-M818",
+   "grade": 8,
+   "domain": "ME",
+   "text": "Finds surface area and volume of cuboidal and cylindrical object.",
+   "code": "M818",
+   "ncf_goal": [
+    "#VALUE!"
+   ],
+   "ncf_competency": [
+    "Ident"
+   ],
+   "note": "In SLOF the curricular goal cell shows #VALUE! and the competency cell is incomplete. Read as: finds the surface area and volume of cuboids, cubes and cylinders.",
+   "nas_code": [
+    "M818"
+   ]
+  },
+  {
+   "id": "LO-M819",
+   "grade": 8,
+   "domain": "DA",
+   "text": "Draws and interprets bar charts and pie charts",
+   "code": "M819",
+   "ncf_goal": [
+    "CG-5"
+   ],
+   "ncf_competency": [
+    "C-5.2"
+   ],
+   "note": "",
+   "nas_code": [
+    "M819"
+   ]
+  },
+  {
+   "id": "LO-M820",
+   "grade": 8,
+   "domain": "PR",
+   "text": "Makes hypotheses on chances of future events on the basis of its earlier occurrences or available data like, after repeated throws of dice and coins",
+   "code": "M820",
+   "ncf_goal": [
+    "CG-8"
+   ],
+   "ncf_competency": [
+    "C-8.2"
+   ],
+   "note": "SLOF maps this to Middle-stage CG-8, which is about the history of mathematics, not chance or data.",
+   "nas_code": []
+  }
+ ],
+ "skills": [],
+ "knowledge_items": [],
+ "ki_requires": [],
+ "links": [],
+ "routes": [],
+ "findings": {},
+ "errors": []
+}

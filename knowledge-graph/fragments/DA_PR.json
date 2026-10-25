@@ -1,0 +1,1069 @@
+{
+ "group": "DA_PR",
+ "built_domains": [
+  "DA",
+  "PR"
+ ],
+ "skills": [
+  {
+   "id": "SK-PR-05",
+   "outcome": "LO-M820",
+   "statement": "Calculates the theoretical probability of an event in an experiment of one stage with equally likely outcomes.",
+   "action": "calculates",
+   "content": "the theoretical probability of an event, one stage",
+   "conditions": "a fair coin, a fair die with 4, 6, 8 or 12 faces, a spinner with up to 10 equal sectors, or a counter, card or letter taken at random from up to 52 items; events described in words, including 'not' events; answer as a fraction in simplest form, or as a decimal or percentage when asked",
+   "role": "step",
+   "example": "A bag holds 5 red, 3 blue and 4 green counters. One counter is taken at random. Find the probability that it is (a) blue, (b) not red.",
+   "separation": {
+    "neighbour": "SK-PR-08",
+    "learner": "A learner finds the experimental probability of blue as 21/50 from 50 recorded spins of a three-sector spinner but gives the probability of blue for the same spinner, worked out from its equal sectors, as 21/50 again instead of 1/3."
+   },
+   "stopping": "Counting the outcomes in the event and in the sample space and writing their ratio is one procedure practised as a whole.",
+   "requires": [
+    {
+     "ki": "KI-PR-12",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-13",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-PR-13",
+     "basis": "mathematical necessity",
+     "helpful": true
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-PR-11",
+     "always": true
+    }
+   ],
+   "review": "pending",
+   "source_outcome": "LO-MYP2-28"
+  },
+  {
+   "id": "SK-PR-08",
+   "outcome": "LO-M820",
+   "statement": "Calculates the experimental probability of an event from the recorded results of trials.",
+   "action": "calculates",
+   "content": "the experimental probability of an event",
+   "conditions": "20 to 200 trials, from a simulation the learner has run and recorded in a tally or frequency table, or results given in a table; answer as a fraction, a decimal or a percentage as asked",
+   "role": "step",
+   "example": "A spinner with three equal sectors was spun 50 times: red 18, blue 21, yellow 11. Find the experimental probability of landing on blue, as a decimal and as a percentage.",
+   "separation": {
+    "neighbour": "SK-PR-05",
+    "learner": "A learner gives the theoretical probability of blue on the spinner as 1/3 but, asked for the experimental probability after the 50 recorded spins, writes 1/3 again instead of 21/50 = 0.42."
+   },
+   "stopping": "One division of the number of successes by the number of trials.",
+   "requires": [
+    {
+     "ki": "KI-PR-17",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-PR-09",
+     "always": true
+    },
+    {
+     "skill": "SK-PR-11",
+     "always": true
+    }
+   ],
+   "review": "pending",
+   "source_outcome": "LO-MYP2-29"
+  },
+  {
+   "id": "SK-DA-19",
+   "outcome": "LO-M819",
+   "statement": "Draws a bar graph of a data set from a table, with a scale the learner chooses.",
+   "action": "draws",
+   "content": "a bar graph of one data set",
+   "conditions": "table of 4 to 8 categories with whole-number values from 5 to 500; categories such as sports, months, subjects, years; graph paper; scale chosen by the learner; bars of equal width with equal gaps; both axes labelled and the graph titled",
+   "role": "outcome task",
+   "example": "The table shows the number of Class 8 students whose favourite sport is Cricket 45, Football 30, Hockey 15, Kabaddi 20, Kho-kho 10. Draw a bar graph on graph paper, choosing a scale.",
+   "separation": {
+    "neighbour": "SK-DA-20",
+    "learner": "A learner draws a bar graph of the five sports correctly but, for boys 25, 20, 15 and girls 35, 10, 5 in cricket, football and hockey, draws the girls' bar over the boys' bar in the same place, shades both alike and gives no key."
+   },
+   "stopping": "Marking the axes, drawing each bar to its length and labelling are done together in every graph and cannot be evidenced apart; choosing the scale is split off as SK-DA-21.",
+   "requires": [
+    {
+     "ki": "KI-DA-31",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-DA-05",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-DA-20",
+   "outcome": "LO-M819",
+   "statement": "Draws a double bar graph of two data sets for the same categories from a table, with a key and a scale the learner chooses.",
+   "action": "draws",
+   "content": "a double bar graph of two data sets",
+   "conditions": "table of 3 to 6 categories with two whole-number values each, from 5 to 500; contexts such as boys and girls, marks in two terms, rainfall in two years; graph paper; one scale for both data sets; two shades and a key; both axes labelled and the graph titled",
+   "role": "outcome task",
+   "example": "The table gives the marks of one student in the half-yearly and the annual examination: Maths 60 and 75, Science 55 and 68, English 70 and 64, Hindi 62 and 80. Draw a double bar graph with a key.",
+   "separation": {
+    "neighbour": "SK-DA-19",
+    "learner": "A learner draws a double bar graph with the half-yearly and annual bars side by side and shaded differently but gives no key, so the reader cannot tell which shade is which examination."
+   },
+   "stopping": "Placing the two bars of each category side by side, shading them and writing the key are done together in every graph.",
+   "requires": [
+    {
+     "ki": "KI-DA-31",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-DA-32",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-DA-05",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-DA-21",
+   "outcome": "LO-M819",
+   "statement": "Chooses a scale for the axis of a bar graph so that the greatest value fits on the axis and the divisions are equal.",
+   "action": "chooses",
+   "content": "a scale for the value axis of a bar graph",
+   "conditions": "4 to 8 whole-number values from 5 to 500; axis of 10 to 20 cm or 10 to 20 squares of graph paper; scale of 1 division for 1, 2, 5, 10, 20, 50 or 100 units; written as, for example, 1 cm = 10 students",
+   "role": "step",
+   "example": "The values are 45, 30, 15, 20 and 10 and the axis is 10 cm long. Write a scale and say how long the bar for 45 is.",
+   "separation": {
+    "neighbour": "SK-DA-19",
+    "learner": "A learner writes the scale 1 cm = 5 students for the values 45, 30, 15, 20 and 10 but draws the bars 4.5 cm, 3 cm, 1.5 cm, 2 cm and 1 cm long, dividing each value by 10 instead of by 5."
+   },
+   "stopping": "Choosing the scale and stating the bar length it gives for one value can be practised apart from drawing the whole graph; a smaller part is only dividing a value by the scale, which gives no new task type.",
+   "requires": [
+    {
+     "ki": "KI-DA-33",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-DA-19",
+     "always": true
+    },
+    {
+     "skill": "SK-DA-20",
+     "always": true
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-DA-22",
+   "outcome": "LO-M819",
+   "statement": "Draws a pie chart of a data set from a table, with each sector drawn to its central angle using a protractor.",
+   "action": "draws",
+   "content": "a pie chart of one data set",
+   "conditions": "table of 3 to 6 categories with whole-number values whose total divides 360 (such as 12, 24, 30, 36, 40, 60, 72, 90), or with percentages that give whole-number central angles; contexts such as hours in a day, favourite colours, modes of travel to school; circle drawn with compasses, radius 4 to 6 cm, on plain paper; sectors labelled",
+   "role": "outcome task",
+   "example": "Priya spends the 24 hours of a day as follows: sleep 8, school 6, homework 4, play 2, other 4. Draw a pie chart.",
+   "separation": {
+    "neighbour": "SK-DA-23",
+    "learner": "A learner finds the angles 120°, 90°, 60°, 30° and 60° for Priya's day correctly but measures every angle from the same horizontal line, so the sectors overlap and part of the circle is left empty."
+   },
+   "stopping": "Drawing the circle, marking each sector from the end of the one before and labelling are done together in every chart; finding the angles is split off as SK-DA-23.",
+   "requires": [
+    {
+     "ki": "KI-DA-34",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-DA-38",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-DA-37",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-DA-23",
+   "outcome": "LO-M819",
+   "statement": "Finds the central angle of each sector of a pie chart from the values or percentages in a table.",
+   "action": "finds",
+   "content": "the central angle of a sector of a pie chart",
+   "conditions": "3 to 6 categories; whole-number values whose total divides 360 (such as 12, 24, 30, 36, 40, 60, 72, 90), or whole-number percentages that give whole-number angles; written working as a fraction of 360°; angles checked to add up to 360°",
+   "role": "step",
+   "example": "Priya spends 8 hours sleeping, 6 at school, 4 on homework, 2 at play and 4 on other things in a day of 24 hours. Find the central angle of each sector.",
+   "separation": {
+    "neighbour": "SK-DA-22",
+    "learner": "A learner finds 120°, 90°, 60°, 30° and 60° for Priya's day correctly but, drawing the chart, measures every angle from the same horizontal line, so the sectors overlap."
+   },
+   "stopping": "Writing a value as a fraction of the total and multiplying by 360° is one procedure; a smaller part is a single multiplication with no new task type.",
+   "requires": [
+    {
+     "ki": "KI-DA-35",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RP-22",
+     "basis": "instructional route"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-DA-22",
+     "always": true
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-DA-24",
+   "outcome": "LO-M819",
+   "statement": "Writes the share of the whole shown by a sector of a pie chart as a fraction or a percentage.",
+   "action": "writes",
+   "content": "the share of the whole shown by one sector of a pie chart",
+   "conditions": "pie chart of 3 to 6 sectors with the central angle of each sector given in degrees (multiples of 5), or the share given as a percentage; fraction in simplest form with denominator up to 36, or percentage up to one decimal place; written answer",
+   "role": "outcome task",
+   "example": "In a pie chart of Priya's day, the sector for school has a central angle of 90°. What fraction of the day is this, and what percentage?",
+   "separation": {
+    "neighbour": "SK-DA-25",
+    "learner": "A learner writes that the 80° sector of a pie chart of 540 marks shows 2/9 of the marks but, asked how many marks the sector shows, answers 80 marks, reading the angle as the quantity."
+   },
+   "stopping": "Writing the angle over 360, simplifying and, when asked, converting to a percentage are done together in every task.",
+   "requires": [
+    {
+     "ki": "KI-DA-39",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RP-10",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-13",
+     "basis": "mathematical necessity",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-DA-25",
+   "outcome": "LO-M819",
+   "statement": "Finds the quantity shown by a sector of a pie chart from the total of the data.",
+   "action": "finds",
+   "content": "the quantity shown by one sector of a pie chart",
+   "conditions": "pie chart of 3 to 6 sectors with the central angle of the sector given in degrees (multiples of 5), or its share given as a percentage; total from 100 to 1000 (marks, rupees, students, people) chosen so that the quantity is a whole number; written working and answer with its unit",
+   "role": "outcome task",
+   "example": "A pie chart shows how a student's 540 marks are divided over five subjects. The sector for Mathematics has a central angle of 80°. How many marks are shown for Mathematics?",
+   "separation": {
+    "neighbour": "SK-DA-24",
+    "learner": "A learner finds 540 × 80/360 = 120 marks for the 80° sector but, asked what fraction of the total the sector shows, writes 80/100 = 4/5, reading degrees as a percentage."
+   },
+   "stopping": "Taking the sector's share of the total is one calculation; the share and the multiplication are done together in every task.",
+   "requires": [
+    {
+     "ki": "KI-DA-39",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-32",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RP-22",
+     "basis": "instructional route"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-DA-26",
+   "outcome": "LO-M819",
+   "statement": "Answers questions about a bar graph or a double bar graph by reading the values of bars and comparing categories.",
+   "action": "answers",
+   "content": "questions about the values and categories of a bar graph or double bar graph",
+   "conditions": "graph of 4 to 8 categories on a scale marked in 1s, 2s, 5s, 10s, 20s, 50s or 100s, with values on marked divisions or halfway between them; questions ask for the value of a category, the greatest or least, the difference between two categories, or, in a double bar graph, the category with the greater value in one data set or the greatest difference between the two; contexts such as sales, marks, rainfall, population; written answers with units",
+   "role": "outcome task",
+   "example": "A bar graph with 1 division = 10 bicycles shows bicycles sold in six months: January 40, February 55, March 70, April 45, May 60, June 85. In which month were the most bicycles sold? How many more were sold in March than in January?",
+   "separation": {
+    "neighbour": "SK-DA-19",
+    "learner": "A learner draws a bar graph correctly from a table but, reading a given graph where 1 square = 20 vehicles and the bar for Tuesday ends at the 7th square, answers 7 vehicles instead of 140."
+   },
+   "stopping": "Reading a bar's value and comparing it with another bar are done together in the same question; a double bar graph differs only in the key.",
+   "requires": [
+    {
+     "ki": "KI-DA-31",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-DA-32",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-DA-40",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-PR-09",
+   "outcome": "LO-M820",
+   "statement": "Writes, as a fraction, the chance that an event happens in a further trial, using the recorded results of earlier trials of the same experiment.",
+   "action": "writes",
+   "content": "the chance of an event in a further trial, from earlier results",
+   "conditions": "records of 20 to 200 trials or observations in a tally or frequency table or a list: tosses of a coin, throws of a die, spins of a spinner, or daily-life records such as days of rain in a month or matches won; events of one outcome or of several outcomes (for example 'an even number'); fraction in simplest form, written as a sentence about the next trial",
+   "role": "outcome task",
+   "example": "A die was thrown 60 times and a 4 came up 12 times. Write the chance, as a fraction in simplest form, that a 4 comes up on the next throw.",
+   "separation": {
+    "neighbour": "SK-PR-08",
+    "learner": "A learner writes 22/100 = 11/50 as the fraction of 6s in 100 recorded throws but, asked for the chance of a 6 on the next throw, answers that nobody can say because the next throw has not happened yet."
+   },
+   "stopping": "Finding the fraction from the record (SK-PR-08) and stating it as the chance of the next trial are done together; the part that cannot be practised apart from the record is the statement about the next trial.",
+   "requires": [
+    {
+     "ki": "KI-PR-20",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-13",
+     "basis": "mathematical necessity",
+     "helpful": true
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-PR-10",
+     "always": true
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-PR-10",
+   "outcome": "LO-M820",
+   "statement": "Predicts how many times an event will happen in a stated number of further trials, using the chance found from earlier trials.",
+   "action": "predicts",
+   "content": "the number of times an event happens in further trials",
+   "conditions": "earlier results of 20 to 200 trials given in a table or list (coin, die, spinner, or a daily-life record); further trials from 100 to 1000, chosen so that the expected number is a whole number; answer written as 'about N times'",
+   "role": "outcome task",
+   "example": "In 50 tosses of a coin, heads came up 21 times. Using this record, how many heads do you expect in 200 more tosses?",
+   "separation": {
+    "neighbour": "SK-PR-09",
+    "learner": "A learner writes the chance of an event as 7/20 from 40 earlier trials but, asked how many times it will happen in 200 further trials, answers 1400 by multiplying 7 by 200."
+   },
+   "stopping": "Finding the chance and taking that fraction of the number of further trials are done together in every task.",
+   "requires": [
+    {
+     "ki": "KI-PR-21",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-PR-20",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-32",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-PR-11",
+   "outcome": "LO-M820",
+   "statement": "Says whether the recorded result of repeated trials of a coin, a die or a spinner is close to the result expected from the theoretical probability of the event.",
+   "action": "says",
+   "content": "whether a recorded result agrees with the theoretical probability",
+   "conditions": "40 to 200 trials of a fair coin, a six-faced die, a spinner with equal sectors, or a counter drawn at random from a bag and put back; one event of one or several outcomes; recorded count chosen to be clearly close to or clearly far from the expected count; the learner writes the two fractions or the expected and recorded counts, then a verdict with a reason in one sentence",
+   "role": "outcome task",
+   "example": "A coin is tossed 100 times and lands heads 46 times. Write the theoretical probability of heads, the number of heads expected in 100 tosses, and say whether 46 is close to what was expected.",
+   "separation": {
+    "neighbour": "SK-PR-09",
+    "learner": "A learner writes 28/50 = 14/25 as the fraction of heads in 50 tosses and 1/2 as the theoretical probability but says the coin is not fair because 14/25 is not 1/2, expecting the record to equal 1/2 exactly."
+   },
+   "stopping": "Finding the two fractions and judging their closeness are done together in every task; the judgement cannot be evidenced without both fractions.",
+   "requires": [
+    {
+     "ki": "KI-PR-22",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-PR-21",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-PR-18",
+     "basis": "instructional route",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  }
+ ],
+ "knowledge_items": [
+  {
+   "id": "KI-RN-07",
+   "statement": "A fraction a/b is a of the b equal parts into which a whole is divided.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 3,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-13",
+   "statement": "Multiplying or dividing the numerator and denominator of a fraction by the same non-zero number gives an equivalent fraction.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-32",
+   "statement": "A fraction of a quantity is that fraction multiplied by the quantity.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-09",
+   "statement": "A percentage is a fraction with denominator 100.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-10",
+   "statement": "A fraction or a decimal is written as a percentage by multiplying it by 100.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-22",
+   "statement": "R percent of a quantity Q is Q multiplied by R/100.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-23",
+   "statement": "A quantity A is written as a percentage of a quantity B by computing A/B × 100.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-DA-05",
+   "statement": "On a scale along a graph axis, equal distances stand for equal differences in value.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-PR-01",
+   "statement": "The probability of an event is a number from 0 to 1, and the greater the probability, the more likely the event is to happen.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-PR-05",
+   "statement": "An experiment is an action whose result is uncertain, each possible result is an outcome, and the sample space is the set of all possible outcomes.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-PR-06",
+   "statement": "An event is a set of outcomes from the sample space, and it happens when the result of the experiment is one of those outcomes.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-PR-11",
+   "statement": "Outcomes are equally likely when each has the same chance of happening, as for a fair coin, a fair die or a counter taken at random from a bag.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-PR-12",
+   "statement": "When all the outcomes of an experiment are equally likely, the theoretical probability of an event is the number of outcomes in the event divided by the total number of outcomes.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "Two kind readings: Principle (states what is true under equal likelihood) or Procedure (count and divide); Principle chosen, gate before attainment."
+  },
+  {
+   "id": "KI-PR-13",
+   "statement": "The probability that an event does not happen is 1 minus the probability that it happens.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-PR-17",
+   "statement": "The experimental probability of an event is the number of trials in which the event happens divided by the total number of trials.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "Also called relative frequency. Kind: a definition, classed as Concept like the mean (KI-DA-06); a Principle reading is possible."
+  },
+  {
+   "id": "KI-PR-18",
+   "statement": "As the number of trials increases, the experimental probability of an event tends to come closer to its theoretical probability.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-DA-31",
+   "statement": "A bar graph shows each category of a data set as a bar of the same width, with equal gaps between bars, and the length of a bar on a scale stands for the frequency or amount of that category.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-DA-32",
+   "statement": "A double bar graph shows two data sets for the same categories by drawing, for each category, two bars side by side in different shades, with a key that tells which shade stands for which data set.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-DA-33",
+   "statement": "To choose a scale for the axis of a bar graph, divide the length of the axis into equal divisions that each stand for a convenient number of units, such as 1, 2, 5, 10 or 100, so that the greatest value fits on the axis.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "Two kind readings: Procedure (choose, then check that the greatest value fits) or Principle (a scale is usable when its divisions are equal and the greatest value fits); Procedure chosen, gate before attainment."
+  },
+  {
+   "id": "KI-DA-34",
+   "statement": "A pie chart is a circle divided into sectors by radii, in which the whole circle stands for the total of the data and each sector shows the share of one category, with a central angle proportional to that share.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "Also called a circle graph in the NCERT Class 8 chapter."
+  },
+  {
+   "id": "KI-DA-35",
+   "statement": "To find the central angle of a sector of a pie chart, write the value of its category as a fraction of the total of the data, or its percentage as a fraction of 100, and multiply that fraction by 360°.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-DA-36",
+   "statement": "A full turn about a point, such as the centre of a circle, is 360°, so the angles between radii that together fill a circle add up to 360°.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "Geometry fact needed by pie charts; listed under cross_domain_kis."
+  },
+  {
+   "id": "KI-DA-37",
+   "statement": "To draw an angle of a given size with a protractor, place the centre of the protractor on the vertex and its zero line along one arm, mark the given size on the scale, and join the mark to the vertex.",
+   "kind": "Procedure",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "Geometry procedure needed by pie charts; listed under cross_domain_kis."
+  },
+  {
+   "id": "KI-DA-38",
+   "statement": "To draw a pie chart, draw a circle and one radius, then draw each sector's central angle in turn from the radius that ends the sector before it, so that the sectors fill the circle without overlapping.",
+   "kind": "Procedure",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-DA-39",
+   "statement": "A sector of a pie chart with a central angle of x degrees shows x/360 of the total of the data, which is x/360 × 100 percent of it.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-DA-40",
+   "statement": "To read the value of a bar, follow from the top of the bar across to the scale and read the value there; when the top lies between two marked divisions, use the equal parts between them to find the value.",
+   "kind": "Procedure",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-PR-19",
+   "statement": "A trial is one performance of an experiment, such as one toss of a coin or one throw of a die, and an event happens in a trial when the result is one of the outcomes of the event.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "The Class 8 chapter speaks of tossing a coin or throwing a die a number of times; the word trial is used in the Class 9 chapter. Replaces the simulation wording of MYP2 KI-PR-16, which is not copied."
+  },
+  {
+   "id": "KI-PR-20",
+   "statement": "When an experiment is repeated in the same way, the experimental probability of an event from earlier trials is an estimate of the probability that the event happens in a further trial, and the estimate is better the more earlier trials there are.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "Authored for the reading of M820 used here (a hypothesis about a future event from earlier occurrences); the Class 8 chapter does not state it in these words."
+  },
+  {
+   "id": "KI-PR-21",
+   "statement": "In n trials of an experiment, an event with probability p is expected to happen about n × p times.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "Authored for the reading of M820 used here; the Class 8 chapter does not state it in these words. The probability p may be experimental or theoretical."
+  },
+  {
+   "id": "KI-PR-22",
+   "statement": "In repeated trials of an experiment with equally likely outcomes, the number of times an event happens is usually close to, but seldom exactly equal to, the number of trials times the theoretical probability of the event.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "Authored for the reading of M820 used here; the Class 8 chapter does not state it in these words."
+  }
+ ],
+ "ki_requires": [
+  {
+   "from": "KI-RP-10",
+   "to": "KI-RP-09",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-22",
+   "to": "KI-RP-09",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-23",
+   "to": "KI-RP-10",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-09",
+   "to": "KI-RN-07",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-06",
+   "to": "KI-PR-05",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-12",
+   "to": "KI-PR-06",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-12",
+   "to": "KI-PR-11",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-12",
+   "to": "KI-PR-01",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-13",
+   "to": "KI-PR-06",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-17",
+   "to": "KI-PR-01",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-18",
+   "to": "KI-PR-17",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-18",
+   "to": "KI-PR-12",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-32",
+   "to": "KI-DA-31",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-33",
+   "to": "KI-DA-05",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-33",
+   "to": "KI-DA-31",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-35",
+   "to": "KI-DA-34",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-35",
+   "to": "KI-DA-36",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-35",
+   "to": "KI-RN-32",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-38",
+   "to": "KI-DA-34",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-38",
+   "to": "KI-DA-37",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-39",
+   "to": "KI-DA-34",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-39",
+   "to": "KI-DA-36",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-40",
+   "to": "KI-DA-31",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-DA-40",
+   "to": "KI-DA-05",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-17",
+   "to": "KI-PR-19",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-PR-20",
+   "to": "KI-PR-17",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-21",
+   "to": "KI-PR-17",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-21",
+   "to": "KI-PR-12",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-21",
+   "to": "KI-RN-32",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-22",
+   "to": "KI-PR-12",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-PR-22",
+   "to": "KI-PR-21",
+   "basis": "mathematical necessity"
+  }
+ ],
+ "links": [
+  {
+   "from": "SK-PR-05",
+   "to": "SK-PR-08",
+   "type": "contrasts with",
+   "reason": "Theoretical probability counts equally likely outcomes while experimental probability counts the results of trials, and learners give 1/3 for a three-sector spinner after 50 recorded spins."
+  },
+  {
+   "from": "KI-PR-12",
+   "to": "KI-PR-17",
+   "type": "contrasts with",
+   "reason": "The two definitions of probability are taught side by side so that learners can tell a count of possible outcomes from a count of trial results."
+  },
+  {
+   "from": "SK-DA-19",
+   "to": "SK-DA-20",
+   "type": "extends",
+   "reason": "From a bar graph of one data set to a double bar graph of two data sets for the same categories."
+  },
+  {
+   "from": "KI-DA-31",
+   "to": "KI-DA-32",
+   "type": "extends",
+   "reason": "From bars for one data set to pairs of bars with a key for two data sets."
+  },
+  {
+   "from": "SK-DA-19",
+   "to": "SK-DA-22",
+   "type": "is format of",
+   "reason": "A table of values for categories is shown as bar lengths on a scale in a bar graph and as central angles in a pie chart."
+  },
+  {
+   "from": "SK-DA-24",
+   "to": "SK-DA-25",
+   "type": "contrasts with",
+   "reason": "A sector shows a share of the whole and, with the total, an actual quantity, and learners give the angle in degrees as the quantity."
+  },
+  {
+   "from": "SK-PR-09",
+   "to": "SK-PR-11",
+   "type": "contrasts with",
+   "reason": "Both start from the same record of trials; one takes the recorded fraction as the chance of a further trial and the other tests the record against the theoretical probability, and learners treat 28/50 for heads as proof that a coin is unfair."
+  }
+ ],
+ "routes": [],
+ "findings": {
+  "DA": "- Reading used for M819: the outcome asks for two performances on two chart types, so there are outcome tasks for drawing a single bar graph (SK-DA-19), drawing a double bar graph (SK-DA-20), drawing a pie chart (SK-DA-22), and for interpreting: answering questions about a bar graph or double bar graph (SK-DA-26), writing the share shown by a pie-chart sector (SK-DA-24) and finding the quantity a sector shows (SK-DA-25). Interpreting means answering questions from a given chart in context, as in the Class 8 chapter's exercises on charts.\n- Single and double bar graphs are two drawing skills because a learner can draw a single bar graph and leave out the second bar and the key in a double one (separation in SK-DA-19). Reading single and double bar graphs is one skill, SK-DA-26, because the questions and the act of reading are the same and the double bar graph adds only the key.\n- Left out because the outcome says bar charts and pie charts: histograms and grouped frequency tables with class intervals; organising raw data into a tally and frequency table; line graphs and pictographs; mean, median and mode (MYP2 SK-DA-04 to 11 are Grade 7 level and M819 does not ask for them); choosing the more suitable chart for a data set (MYP2 SK-DA-13 and KI-DA-20 to 25); drawing a conclusion as a paragraph about the data.\n- Left out because the outcome does not ask for them: finding the total of a pie chart from the quantity of one sector; finding which sector shows a stated quantity; reading an unlabelled pie chart by measuring its angles with a protractor; pie charts whose central angles are not whole degrees (rounding to the nearest degree). A reviewer who wants any of these can add an outcome task.\n- MYP2 skills SK-DA-01 to 18 are not copied: they are about stem-and-leaf plots, scatter plots, box-and-whisker plots, averages and spread, none of which M819 asks for. MYP2 KI-DA-23 (a bar graph compares categories) and KI-DA-24 (a pie chart suits data that make up a total) are not copied because they serve the choice of chart; their requires links to KI-DA-18 are therefore not carried over. KI-DA-05 (scale) is copied for SK-DA-19, SK-DA-20 and the items that need it.\n- Step cases: SK-DA-21 (choosing a scale) is always part of SK-DA-19 and SK-DA-20, and SK-DA-23 (finding the central angles) is always part of SK-DA-22. Neither is absorbed: KI-DA-33 and KI-DA-35 are required only by the step skills.\n- Protractor and circle: the outcome does not state a representation, but a pie chart is drawn with compasses and a protractor, so SK-DA-22 states them as conditions of drawing and KI-DA-36 and KI-DA-37 hold the geometry. Both items are authored in the DA range and listed as cross_domain_kis; a geometry group may already hold the same mathematics.\n- Kind classifications with two readings: KI-DA-33 (choosing a scale) is a Procedure but could be a Principle about what makes a scale usable; KI-DA-35 and KI-DA-38 are Procedures; KI-DA-34 is a Concept (a definition that includes the proportion between angle and share).\n- Copied from the PAL graph, verbatim: KI-RN-07, KI-RN-13, KI-RN-32, KI-RP-09, KI-RP-10, KI-RP-22, KI-RP-23, with the ki_requires links among them (KI-RP-10 to 09, KI-RP-22 to 09, KI-RP-23 to 10, KI-RP-09 to RN-07). KI-RN-32 (a fraction of a quantity) is the item behind finding 80/360 of 540 marks. No DA skill requires KI-RP-23 directly; it is copied because the percentage route of KI-RP-10 leads to it in the PAL graph and the RN_RP fragment holds it.\n- No knowledge item fails a test.",
+  "PR": "- Reading used for M820: SLOF maps the outcome to a curricular goal about the history of mathematics, which looks wrong; the outcome and the Class 8 chapter Data Handling (chance and probability) are about the chance of an event, so this graph uses the outcome text. 'Makes hypotheses on chances of future events on the basis of earlier occurrences or available data' is read as stating, from recorded results of repeated trials, the chance of an event in a further trial (SK-PR-09), predicting how many times it will happen in a stated number of further trials (SK-PR-10), and judging whether a recorded result is as expected for equally likely outcomes (SK-PR-11).\n- SK-PR-10 and SK-PR-11 follow the scope note given with the task rather than words in the NCERT chapter: the chapter does not state the expected number n × p (KI-PR-21) or that recorded counts are near but seldom equal to expected counts (KI-PR-22). The NCERT text for these items is not confirmed; a reviewer should decide whether SK-PR-10 and SK-PR-11 belong to M820. SK-PR-11 has no threshold for 'close' in NCERT; the conditions set a clearly close or clearly far record.\n- Theoretical probability of an event with equally likely outcomes is in the chapter but the outcome does not ask for it as a task. It enters only as a step of SK-PR-11 (comparing needs the theoretical value), copied as SK-PR-05.\n- Copied from MYP2 (Grade 7 level): SK-PR-05 (theoretical probability, one stage) and SK-PR-08 (experimental probability), with outcome set to LO-M820 and source_outcome set to LO-MYP2-28 and LO-MYP2-29. Changes on the copies: (1) role changed from outcome task to step, with part_of added (SK-PR-05 always part of SK-PR-11; SK-PR-08 always part of SK-PR-09 and SK-PR-11), because M820 does not ask for either as a task; no part_of entry was dropped, since both had an empty part_of in MYP2. (2) SK-PR-05's separation neighbour was SK-PR-06 (two-stage probability, not in this graph); it is now SK-PR-08 with a learner who gives the experimental fraction 21/50 as the probability of blue worked out from equal sectors. SK-PR-08's wording 'from a simulation the learner has run' is MYP2 wording; the Grade 8 reading is a record of tosses, throws or spins.\n- Copied knowledge items (MYP2, verbatim): KI-PR-01, KI-PR-05, KI-PR-06, KI-PR-11, KI-PR-12, KI-PR-13, KI-PR-17, KI-PR-18, with the ki_requires links among them. Dropped link: KI-PR-17 requires KI-PR-16 (a trial in a simulation; KI-PR-16 and KI-PR-15 are about simulations, which M820 does not ask for). It is replaced by KI-PR-17 requires KI-PR-19 (a trial and an event happening in a trial), authored for this graph.\n- New items KI-PR-19 to KI-PR-22 are authored for this graph. KI-PR-20 (earlier trials give an estimate of the chance in a further trial) is the item the outcome's word 'hypotheses' rests on; it overlaps in subject with KI-PR-18 but states a use of the experimental probability, where KI-PR-18 states how it relates to the theoretical probability.\n- Kind classification with two readings: KI-PR-20 is a Principle (what is true of an estimate) and could be read as a Procedure (use the recorded fraction); Principle chosen, gate before attainment.\n- Not made separate skills: deciding which of two events is more likely in a further trial from a record; deciding whether a coin or die is fair as a yes or no with a stated test. M820 does not state them, and SK-PR-11 covers the comparison they use.\n- A recorded fraction for a coin can differ from the theoretical probability (46/100 against 1/2); SK-PR-09 asks the learner to write the chance from the record, and SK-PR-11 asks whether the record is as expected. A contrasts-with link places the two side by side so they are taught as different questions.\n- Step cases: SK-PR-08 is always part of SK-PR-09 (absorbed through KI-PR-20, which requires KI-PR-17) and of SK-PR-11 (absorbed through KI-PR-21 and KI-PR-22). SK-PR-09 is always part of SK-PR-10 (absorbed). SK-PR-05 is always part of SK-PR-11 and is not absorbed, because KI-RN-13 and KI-PR-13 are reached only through that step.\n- NCERT grades for copied items: see first_grade_notes. KI-PR-13 (the complement rule) and KI-PR-18 (experimental probability tends to the theoretical) appear in the Class 9 and Class 10 probability chapters; the Class 8 chapter counts 'not' events directly and does not state them. They stay in this graph as helpful requirements only (KI-PR-13 is helpful in SK-PR-05; KI-PR-18 is helpful in SK-PR-11). These grade placements come from memory of the textbooks and are not checked against the text.\n- No knowledge item fails a test."
+ },
+ "copied": {
+  "skills": [
+   "SK-PR-05",
+   "SK-PR-08"
+  ],
+  "knowledge_items": [
+   "KI-DA-05",
+   "KI-PR-01",
+   "KI-PR-05",
+   "KI-PR-06",
+   "KI-PR-11",
+   "KI-PR-12",
+   "KI-PR-13",
+   "KI-PR-17",
+   "KI-PR-18",
+   "KI-RN-07",
+   "KI-RN-13",
+   "KI-RN-32",
+   "KI-RP-09",
+   "KI-RP-10",
+   "KI-RP-22",
+   "KI-RP-23"
+  ]
+ },
+ "cross_domain_kis": [
+  {
+   "id": "KI-DA-36",
+   "statement": "A full turn about a point, such as the centre of a circle, is 360°, so the angles between radii that together fill a circle add up to 360°.",
+   "why": "Geometry fact (angle measure at a point) needed to find central angles of a pie chart; not found in the PAL, MYP2 or integers graphs."
+  },
+  {
+   "id": "KI-DA-37",
+   "statement": "To draw an angle of a given size with a protractor, place the centre of the protractor on the vertex and its zero line along one arm, mark the given size on the scale, and join the mark to the vertex.",
+   "why": "Geometry procedure needed to draw the sectors of a pie chart; not found in the PAL, MYP2 or integers graphs."
+  }
+ ],
+ "first_grade_notes": [
+  {
+   "id": "KI-PR-13",
+   "copied_first_grade": 7,
+   "ncert_first_grade": 9
+  },
+  {
+   "id": "KI-PR-18",
+   "copied_first_grade": 7,
+   "ncert_first_grade": 9
+  }
+ ]
+}

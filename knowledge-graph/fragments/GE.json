@@ -1,0 +1,2299 @@
+{
+ "group": "GE",
+ "built_domains": [
+  "GE"
+ ],
+ "skills": [
+  {
+   "id": "SK-GE-08",
+   "outcome": "LO-M811",
+   "statement": "Finds the fourth angle of a quadrilateral from its other three angles, each given in degrees.",
+   "action": "finds",
+   "content": "the fourth angle of a quadrilateral, using the angle sum property",
+   "conditions": "convex quadrilateral given as a figure or in words; three given angles whole numbers of degrees, each less than 180°, with a sum more than 180° and less than 360°; response: the fourth angle in degrees with the property stated as the reason",
+   "role": "outcome task",
+   "example": "Three angles of a quadrilateral are 75°, 90° and 105°. Find the fourth angle.",
+   "separation": {
+    "neighbour": "SK-GE-09",
+    "learner": "A learner finds the fourth angle of a quadrilateral with angles 80°, 95° and 110° correctly as 75°, but given angles x, 2x, 3x and 4x writes x + 2x + 3x + 4x = 9x and gives x = 40°."
+   },
+   "stopping": "Adding the three given angles and subtracting from 360° is one act; no smaller task can be set that shows the angle sum property used.",
+   "requires": [
+    {
+     "ki": "KI-GE-23",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-09",
+   "outcome": "LO-M811",
+   "statement": "Finds the angles of a quadrilateral from angles given as expressions in x.",
+   "action": "finds",
+   "content": "the angles of a quadrilateral whose angles are given as expressions in one variable",
+   "conditions": "four angles each a whole number of degrees or an expression ax + b with a from 1 to 4 and b from -20 to 40, at least two containing x; the equation has a whole-number solution; response: the value of x and each angle in degrees",
+   "role": "outcome task",
+   "example": "The angles of a quadrilateral are x°, (x + 20)°, (2x - 10)° and 90°. Find x and each angle.",
+   "separation": {
+    "neighbour": "SK-GE-10",
+    "learner": "A learner solves 2x + (3x + 5) + (4x - 15) + (x + 10) = 360 correctly to get x = 36, but for angles in the ratio 3 : 5 : 9 : 13 writes the angles as 3°, 5°, 9° and 13°."
+   },
+   "stopping": "Writing the equation from the angle sum and solving it are carried out together in every task; a task that shows one without the other is a different skill (solving an equation).",
+   "requires": [
+    {
+     "ki": "KI-GE-23",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-47",
+     "basis": "instructional route"
+    },
+    {
+     "ki": "KI-AG-11",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-20",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-10",
+   "outcome": "LO-M811",
+   "statement": "Finds the angles of a quadrilateral from angles given in a ratio.",
+   "action": "finds",
+   "content": "the angles of a quadrilateral whose angles are in a given ratio",
+   "conditions": "ratio of four whole numbers from 1 to 15 whose sum divides 360 exactly, each angle less than 180°; response: each angle in degrees",
+   "role": "outcome task",
+   "example": "The angles of a quadrilateral are in the ratio 3 : 5 : 9 : 13. Find all the angles.",
+   "separation": {
+    "neighbour": "SK-GE-09",
+    "learner": "A learner finds 36°, 60°, 108° and 156° for the ratio 3 : 5 : 9 : 13, but for angles x°, (x + 20)°, (2x - 10)° and 90° forgets the 20, -10 and 90, writes x + x + 2x = 360 and gives x = 90."
+   },
+   "stopping": "Sharing 360° in a ratio is one act; the sum of the ratio terms and the share of each angle are found in every task.",
+   "requires": [
+    {
+     "ki": "KI-GE-23",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RP-26",
+     "basis": "instructional route"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-11",
+   "outcome": "LO-M811",
+   "statement": "Finds an interior angle of a quadrilateral from the angle that makes a straight line with it at the same vertex.",
+   "action": "finds",
+   "content": "an interior angle of a quadrilateral from the exterior angle at the same vertex",
+   "conditions": "figure of a convex quadrilateral with one side extended beyond a vertex and the angle between the extension and the next side marked in whole degrees from 30° to 150°; response: the interior angle in degrees with the reason",
+   "role": "step",
+   "example": "One side of a quadrilateral is extended beyond vertex C. The angle between the extension and side CD is 70°. Find the interior angle at C.",
+   "separation": {
+    "neighbour": "SK-GE-08",
+    "learner": "A learner finds the fourth angle as 75° from interior angles 80°, 95° and 110°, but when the third angle is given as an exterior angle of 70° uses 70° as the interior angle and gives 115° for the fourth angle."
+   },
+   "stopping": "The interior angle comes from one fact about angles on a straight line; no smaller task can be set.",
+   "requires": [
+    {
+     "ki": "KI-GE-24",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-11",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-GE-08",
+     "always": false
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-12",
+   "outcome": "LO-M812",
+   "statement": "Verifies by measuring that a stated property holds for a drawn parallelogram, rhombus, rectangle or square.",
+   "action": "verifies",
+   "content": "a property of a parallelogram or of a special parallelogram, by measuring one drawn figure",
+   "conditions": "figure drawn on paper with sides from 3 cm to 8 cm; ruler read to the nearest millimetre and protractor to the nearest degree; properties: opposite sides equal, opposite angles equal, adjacent angles add up to 180°, diagonals bisect each other, diagonals of a rhombus meet at right angles, diagonals of a rectangle are equal; response: the measures recorded and a statement of whether the property holds within measuring error",
+   "role": "outcome task",
+   "example": "Measure the sides and angles of the drawn parallelogram ABCD. Does it have opposite angles equal?",
+   "separation": {
+    "neighbour": "SK-GE-13",
+    "learner": "A learner measures ∠A = 62° and ∠C = 62° in a drawn parallelogram and writes that opposite angles are equal, but asked why this must be so in every parallelogram writes 'because I measured them'."
+   },
+   "stopping": "Measuring the figure and comparing the measures with the stated property are done together in every task; no smaller task shows a verification.",
+   "requires": [
+    {
+     "ki": "KI-GE-26",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-25",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-29",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-40",
+     "basis": "instructional route",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-13",
+   "outcome": "LO-M812",
+   "statement": "Verifies by reasoning that a stated angle property holds for every parallelogram, using parallel lines and a transversal.",
+   "action": "verifies",
+   "content": "that opposite angles of a parallelogram are equal or that adjacent angles add up to 180°, by reasoning",
+   "conditions": "parallelogram ABCD with AB parallel to DC and AD parallel to BC drawn and not to scale; properties: adjacent angles add up to 180°, opposite angles are equal; reason from co-interior angles between parallel lines; response: a chain of statements, each with its reason",
+   "role": "outcome task",
+   "example": "ABCD is a parallelogram. Show that ∠A = ∠C, giving a reason for each step.",
+   "separation": {
+    "neighbour": "SK-GE-14",
+    "learner": "A learner shows ∠A + ∠B = 180° and ∠B + ∠C = 180°, so ∠A = ∠C, but asked why opposite sides of a parallelogram are equal writes 'AB and DC are parallel, so they are equal'."
+   },
+   "stopping": "The reason for the adjacent angles and the step to the opposite angles use the same parallel-line fact; no smaller task shows the reasoning.",
+   "requires": [
+    {
+     "ki": "KI-GE-09",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-26",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-08",
+     "basis": "instructional route",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-14",
+   "outcome": "LO-M812",
+   "statement": "Verifies by reasoning that a stated property of the sides or the diagonals holds for every parallelogram, using congruent triangles.",
+   "action": "verifies",
+   "content": "that opposite sides of a parallelogram are equal or that its diagonals bisect each other, by reasoning",
+   "conditions": "parallelogram ABCD with AB parallel to DC and AD parallel to BC drawn and not to scale; properties: opposite sides are equal, diagonals bisect each other; reasons: alternate angles between parallel lines, ASA congruence of two triangles formed by a diagonal, equal matching sides of congruent triangles; response: a chain of statements, each with its reason",
+   "role": "outcome task",
+   "example": "ABCD is a parallelogram. Draw the diagonal AC and show that AB = DC, giving a reason for each step.",
+   "separation": {
+    "neighbour": "SK-GE-13",
+    "learner": "A learner shows that the diagonal AC splits ABCD into two triangles that are congruent by ASA, so AB = DC, but asked why ∠A + ∠B = 180° writes ∠A = ∠B."
+   },
+   "stopping": "Choosing the two triangles, matching their angles and sides and reading off the equal sides or the equal halves of the diagonals use one congruence argument; no smaller task shows the reasoning.",
+   "requires": [
+    {
+     "ki": "KI-GE-08",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-42",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-41",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-26",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-29",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-15",
+   "outcome": "LO-M812",
+   "statement": "Finds an unknown angle of a parallelogram, rhombus or rectangle from given measures, using its properties.",
+   "action": "finds",
+   "content": "an unknown angle of a parallelogram, rhombus or rectangle",
+   "conditions": "one or two angles given in whole degrees, or the angle between the diagonals of a rhombus; unknown angles at the vertices or where the diagonals meet; response: the angle in degrees with the property used stated",
+   "role": "outcome task",
+   "example": "In parallelogram ABCD, ∠A = 65°. Find ∠B, ∠C and ∠D, giving the property used for each.",
+   "separation": {
+    "neighbour": "SK-GE-16",
+    "learner": "A learner gives ∠B = 115°, ∠C = 65° and ∠D = 115° for a parallelogram with ∠A = 65°, but with diagonal AC = 10 cm gives AO = 10 cm for the segment from A to the point O where the diagonals meet."
+   },
+   "stopping": "One angle property is applied to one given angle in every task; no smaller task can be set.",
+   "requires": [
+    {
+     "ki": "KI-GE-27",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-28",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-34",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-32",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-36",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-16",
+   "outcome": "LO-M812",
+   "statement": "Finds an unknown side or diagonal segment of a parallelogram, rhombus or rectangle from given lengths, using its properties.",
+   "action": "finds",
+   "content": "an unknown side or a segment of a diagonal of a parallelogram, rhombus or rectangle",
+   "conditions": "lengths given in whole or half centimetres from 2 cm to 12 cm; unknown sides, or the segments into which the diagonals cut each other; response: the length in centimetres with the property used stated",
+   "role": "outcome task",
+   "example": "The diagonals of rectangle ABCD meet at O. AC = 12 cm. Find BD and OB, giving the property used for each.",
+   "separation": {
+    "neighbour": "SK-GE-15",
+    "learner": "A learner gives AO = 5 cm for AC = 10 cm in a parallelogram, but with ∠A = 65° gives ∠B = 65°, treating adjacent angles as equal."
+   },
+   "stopping": "One length property is applied to one given length in every task; no smaller task can be set.",
+   "requires": [
+    {
+     "ki": "KI-GE-13",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-30",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-31",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-35",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-36",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-17",
+   "outcome": "LO-M812",
+   "statement": "Decides whether every figure of one of the kinds parallelogram, rhombus, rectangle and square is also a figure of another of these kinds, giving the reason.",
+   "action": "decides",
+   "content": "whether one kind of quadrilateral is a special case of another, from their definitions",
+   "conditions": "pairs taken from parallelogram, rhombus, rectangle and square; statement of the form 'Every X is a Y'; response: true or false with a reason from the definitions, and for a false statement a figure of kind X that is not of kind Y described",
+   "role": "outcome task",
+   "example": "Is every rectangle a square? Is every square a rectangle? Give a reason for each.",
+   "separation": {
+    "neighbour": "SK-GE-18",
+    "learner": "A learner decides correctly that 'every rectangle is a square' is false and 'every square is a rectangle' is true, but asked which of the four kinds have four equal sides lists only the rhombus."
+   },
+   "stopping": "Comparing the definitions of two kinds and stating whether the first is included in the second is one act; no smaller task shows the relationship.",
+   "requires": [
+    {
+     "ki": "KI-GE-26",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-31",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-32",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-33",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-36",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-37",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-38",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-39",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-18",
+   "outcome": "LO-M812",
+   "statement": "Identifies which of the parallelogram, rhombus, rectangle and square have a stated property.",
+   "action": "identifies",
+   "content": "the kinds of quadrilateral, among parallelogram, rhombus, rectangle and square, that have a given property",
+   "conditions": "properties: opposite sides parallel, four equal sides, four right angles, equal diagonals, diagonals that meet at right angles, diagonals that bisect each other; response: the list of all the kinds that have the property",
+   "role": "outcome task",
+   "example": "Which of the parallelogram, rhombus, rectangle and square have diagonals that are equal in length?",
+   "separation": {
+    "neighbour": "SK-GE-17",
+    "learner": "A learner lists the rhombus and the square for four equal sides and the rectangle and the square for four right angles, but decides that 'every parallelogram is a rectangle' is true because every rectangle is a parallelogram."
+   },
+   "stopping": "Checking each of the four kinds against the property is one act; the list is the evidence and no smaller task can be set.",
+   "requires": [
+    {
+     "ki": "KI-GE-26",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-31",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-32",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-33",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-34",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-35",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-30",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-36",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-37",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-19",
+   "outcome": "LO-M813",
+   "statement": "Draws the front view, the side view and the top view of a solid made of cubes.",
+   "action": "draws",
+   "content": "the three views of a solid made of unit cubes",
+   "conditions": "solid of 4 to 10 unit cubes, at most 3 cubes high, 3 wide and 3 deep, shown in a picture or as a model with the front marked; views drawn on a square grid with one square for each cube face seen; response: three drawings",
+   "role": "outcome task",
+   "example": "A solid is made of 5 cubes: in the front row three stacks of 2, 1 and 1 cubes from left to right, and one cube behind the left stack on the ground. Draw its front view, side view and top view.",
+   "separation": {
+    "neighbour": "SK-GE-20",
+    "learner": "A learner draws correct views for a solid of 5 cubes but draws the top view of a cone standing on its base as a triangle."
+   },
+   "stopping": "The three views come from the same solid read in three directions; each view is drawn from the same two facts about stacks, and no smaller task shows the representation.",
+   "requires": [
+    {
+     "ki": "KI-GE-44",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-45",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-20",
+   "outcome": "LO-M813",
+   "statement": "Draws the front view, the side view and the top view of a cuboid, a cylinder, a cone, a sphere or an object made of two of these solids.",
+   "action": "draws",
+   "content": "the three views of a simple solid or of an object made of two simple solids",
+   "conditions": "cuboid, cube, cylinder, cone, sphere, or an object with one of these standing on the top face of another and within it; each solid standing on a flat face or its base; response: three freehand drawings that show the shapes and the relative positions",
+   "role": "outcome task",
+   "example": "Draw the front view, side view and top view of a cylinder standing on a cuboid.",
+   "separation": {
+    "neighbour": "SK-GE-19",
+    "learner": "A learner draws a cylinder standing on its base as a rectangle from the front and the side and a circle from above, but draws the front view of the solid of 5 cubes (stacks of 2, 1 and 1 with one cube behind the left stack) as 5 squares, counting every cube."
+   },
+   "stopping": "Each view of a simple solid is one known figure or a combination of two; no smaller task shows the representation.",
+   "requires": [
+    {
+     "ki": "KI-GE-46",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-47",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-48",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-49",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-50",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-21",
+   "outcome": "LO-M813",
+   "statement": "Draws an oblique sketch of a cuboid or a cube from its length, breadth and height on squared paper.",
+   "action": "draws",
+   "content": "an oblique sketch of a cuboid or a cube",
+   "conditions": "length, breadth and height each a whole number of squares from 1 to 6; squared paper; response: a sketch with the twelve edges drawn",
+   "role": "outcome task",
+   "example": "Draw an oblique sketch of a cuboid with length 4 squares, breadth 3 squares and height 2 squares on squared paper.",
+   "separation": {
+    "neighbour": "SK-GE-22",
+    "learner": "A learner draws the oblique sketch of a 4 × 3 × 2 cuboid correctly, but on isometric dot paper draws the front face as a rectangle with a right angle at each corner."
+   },
+   "stopping": "The front face, the back face and the joining edges are drawn in one sequence; no smaller task shows the representation.",
+   "requires": [
+    {
+     "ki": "KI-GE-52",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-20",
+     "basis": "mathematical necessity",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-22",
+   "outcome": "LO-M813",
+   "statement": "Draws an isometric sketch of a cuboid or a cube from its length, breadth and height on isometric dot paper.",
+   "action": "draws",
+   "content": "an isometric sketch of a cuboid or a cube",
+   "conditions": "length, breadth and height each a whole number of dot spaces from 1 to 6; isometric dot paper; response: a sketch with the twelve edges drawn",
+   "role": "outcome task",
+   "example": "Draw an isometric sketch of a cuboid with length 5 units, breadth 3 units and height 2 units on isometric dot paper.",
+   "separation": {
+    "neighbour": "SK-GE-21",
+    "learner": "A learner draws the edges of a 5 × 3 × 2 cuboid along the vertical and slanting dot lines with the right number of dot spaces, but in an oblique sketch draws the front face as a parallelogram instead of a rectangle."
+   },
+   "stopping": "The three sets of edges are drawn along the dot lines in one sequence; no smaller task shows the representation.",
+   "requires": [
+    {
+     "ki": "KI-GE-53",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-20",
+     "basis": "mathematical necessity",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-23",
+   "outcome": "LO-M814",
+   "statement": "Counts the faces, vertices and edges of a prism or a pyramid.",
+   "action": "counts",
+   "content": "the faces, vertices and edges of a prism or a pyramid",
+   "conditions": "prism or pyramid with a base of 3 to 6 sides, including the cube and the cuboid as prisms, shown as a picture or a model; response: the three numbers",
+   "role": "step",
+   "example": "Count the faces, vertices and edges of a pentagonal prism.",
+   "separation": {
+    "neighbour": "SK-GE-24",
+    "learner": "A learner reads F + V − E = 2 from a table of counts but counts the edges of a hexagonal pyramid as 6, the edges of its base only."
+   },
+   "stopping": "Counting faces, vertices and edges of one solid uses the same three definitions; counting each separately does not give a separate task type.",
+   "requires": [
+    {
+     "ki": "KI-GE-55",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-56",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-57",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-58",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-59",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-60",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-GE-24",
+     "always": true
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-24",
+   "outcome": "LO-M814",
+   "statement": "Verifies Euler's relation, F + V − E = 2, for prisms and pyramids by completing a table of their faces, vertices and edges.",
+   "action": "verifies",
+   "content": "Euler's relation for a set of prisms and pyramids, through the pattern in a table",
+   "conditions": "at least four solids from the cube, the cuboid and prisms and pyramids with a base of 3 to 6 sides; table with columns F, V, E and F + V − E; response: the completed table and a written statement of the relation the last column shows",
+   "role": "outcome task",
+   "example": "Complete the table for a triangular prism, a cube, a square pyramid and a hexagonal pyramid. What do you notice about F + V − E?",
+   "separation": {
+    "neighbour": "SK-GE-23",
+    "learner": "A learner counts F, V and E correctly for a triangular prism (5, 6, 9), a cube (6, 8, 12) and a square pyramid (5, 5, 8) and finds F + V − E = 2 each time, but states the relation as F + V = E."
+   },
+   "stopping": "The counts, the value of F + V − E and the statement of what stays the same are read from one table; a table of one solid shows no pattern.",
+   "requires": [
+    {
+     "ki": "KI-GE-61",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-25",
+   "outcome": "LO-M815",
+   "statement": "Constructs a triangle from its three sides with compasses and a straight edge.",
+   "action": "constructs",
+   "content": "a triangle from three given side lengths",
+   "conditions": "side lengths from 2 cm to 8 cm to the nearest half centimetre that satisfy the triangle condition; compasses and a straight edge marked in centimetres; response: the construction with the arcs left visible",
+   "role": "step",
+   "example": "Construct triangle ABC with AB = 4.5 cm, BC = 5.5 cm and AC = 7 cm.",
+   "separation": {
+    "neighbour": "SK-GE-26",
+    "learner": "A learner constructs a triangle with sides 4.5 cm, 5.5 cm and 7 cm correctly, but for the quadrilateral ABCD with diagonal AC = 7 cm draws triangle ACD on the same side of AC as triangle ABC, so that the two triangles overlap."
+   },
+   "stopping": "The base, the two arcs and the joins make one construction; no smaller task shows a triangle constructed.",
+   "requires": [
+    {
+     "ki": "KI-GE-64",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-GE-26",
+     "always": true
+    },
+    {
+     "skill": "SK-GE-27",
+     "always": true
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-26",
+   "outcome": "LO-M815",
+   "statement": "Constructs a quadrilateral from its four sides and one diagonal with compasses and a straight edge.",
+   "action": "constructs",
+   "content": "a quadrilateral from four sides and a diagonal",
+   "conditions": "lengths from 2 cm to 8 cm to the nearest half centimetre, the five lengths forming two triangles that can be constructed on the diagonal; compasses and a straight edge marked in centimetres; response: the construction with the arcs left visible",
+   "role": "outcome task",
+   "example": "Construct quadrilateral ABCD with AB = 4.5 cm, BC = 5.5 cm, CD = 4 cm, AD = 6 cm and AC = 7 cm.",
+   "separation": {
+    "neighbour": "SK-GE-27",
+    "learner": "A learner constructs ABCD from four sides and a diagonal correctly, but for LIFT with LI = 4 cm, IF = 3 cm, TL = 2.5 cm, LF = 4.5 cm and IT = 4 cm uses IT as the distance of T from L, so that LT = 4 cm instead of 2.5 cm."
+   },
+   "stopping": "Constructing the two triangles on the diagonal is one sequence; no smaller task shows the quadrilateral constructed.",
+   "requires": [
+    {
+     "ki": "KI-GE-70",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-65",
+     "basis": "instructional route",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-27",
+   "outcome": "LO-M815",
+   "statement": "Constructs a quadrilateral from its two diagonals and three sides with compasses and a straight edge.",
+   "action": "constructs",
+   "content": "a quadrilateral from two diagonals and three sides",
+   "conditions": "lengths from 2 cm to 10 cm to the nearest half centimetre, the five lengths forming a first triangle from two sides and a diagonal and a fourth vertex that the remaining side and diagonal reach; compasses and a straight edge marked in centimetres; response: the construction with the arcs left visible",
+   "role": "outcome task",
+   "example": "Construct quadrilateral LIFT with LI = 4 cm, IF = 3 cm, TL = 2.5 cm, LF = 4.5 cm and IT = 4 cm.",
+   "separation": {
+    "neighbour": "SK-GE-26",
+    "learner": "A learner constructs LIFT from two diagonals and three sides correctly, but for ABCD with four sides and the diagonal AC draws AB, BC and CD as a chain and tries to place D by measuring AD = 6 cm along a direction chosen by eye."
+   },
+   "stopping": "Constructing the first triangle and locating the fourth vertex by two arcs is one sequence; no smaller task shows the quadrilateral constructed.",
+   "requires": [
+    {
+     "ki": "KI-GE-71",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-65",
+     "basis": "instructional route",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-28",
+   "outcome": "LO-M815",
+   "statement": "Constructs a quadrilateral from two adjacent sides and the angles at the three vertices of those sides with compasses and a straight edge.",
+   "action": "constructs",
+   "content": "a quadrilateral from two adjacent sides and three angles",
+   "conditions": "sides from 3 cm to 8 cm to the nearest half centimetre; the three angles whole numbers of degrees from 45° to 135° with the fourth angle less than 180°; compasses and a straight edge marked in centimetres, with a protractor used only to set the angles; response: the construction",
+   "role": "outcome task",
+   "example": "Construct quadrilateral MORE with MO = 6 cm, OR = 4.5 cm, ∠M = 60°, ∠O = 105° and ∠R = 105°.",
+   "separation": {
+    "neighbour": "SK-GE-29",
+    "learner": "A learner constructs MORE correctly from two sides and three angles, but for ABCD with AB = 4 cm, BC = 5 cm, CD = 6.5 cm, ∠B = 105° and ∠C = 80° draws the angles at A and D instead of at the ends of BC."
+   },
+   "stopping": "Drawing the two sides, then the three angle arms, then marking the fourth vertex is one sequence; no smaller task shows the quadrilateral constructed.",
+   "requires": [
+    {
+     "ki": "KI-GE-72",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-65",
+     "basis": "instructional route",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-29",
+   "outcome": "LO-M815",
+   "statement": "Constructs a quadrilateral from three sides and the two angles between them with compasses and a straight edge.",
+   "action": "constructs",
+   "content": "a quadrilateral from three sides and the two included angles",
+   "conditions": "sides from 3 cm to 8 cm to the nearest half centimetre; the two angles whole numbers of degrees from 45° to 135°; compasses and a straight edge marked in centimetres, with a protractor used only to set the angles; response: the construction",
+   "role": "outcome task",
+   "example": "Construct quadrilateral ABCD with AB = 4 cm, BC = 5 cm, CD = 6.5 cm, ∠B = 105° and ∠C = 80°.",
+   "separation": {
+    "neighbour": "SK-GE-28",
+    "learner": "A learner constructs ABCD from three sides and two included angles correctly, but for MORE with MO = 6 cm, OR = 4.5 cm, ∠M = 60°, ∠O = 105° and ∠R = 105° draws MO and OR with ∠O and joins M to R, without drawing the angles at M and R."
+   },
+   "stopping": "Drawing the middle side, the two angle arms, the two outer sides and the closing join is one sequence; no smaller task shows the quadrilateral constructed.",
+   "requires": [
+    {
+     "ki": "KI-GE-73",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-65",
+     "basis": "instructional route",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-30",
+   "outcome": "LO-M815",
+   "statement": "Constructs a parallelogram from two adjacent sides and the angle between them with compasses and a straight edge.",
+   "action": "constructs",
+   "content": "a parallelogram from two adjacent sides and the included angle",
+   "conditions": "sides from 3 cm to 8 cm to the nearest half centimetre; the angle a whole number of degrees from 45° to 135°; compasses and a straight edge marked in centimetres, with a protractor used only to set the angle; response: the construction",
+   "role": "outcome task",
+   "example": "Construct parallelogram ABCD with AB = 5 cm, AD = 3.5 cm and ∠A = 60°.",
+   "separation": {
+    "neighbour": "SK-GE-29",
+    "learner": "A learner constructs a quadrilateral from three sides and two included angles correctly, but for parallelogram ABCD with ∠A = 60° draws ∠B = 60° as well, treating adjacent angles as equal."
+   },
+   "stopping": "Drawing the angle, the two sides and finding the fourth vertex by two arcs is one sequence; no smaller task shows the parallelogram constructed.",
+   "requires": [
+    {
+     "ki": "KI-GE-74",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-31",
+   "outcome": "LO-M815",
+   "statement": "Constructs a rhombus from its two diagonals with compasses and a straight edge.",
+   "action": "constructs",
+   "content": "a rhombus from two diagonals",
+   "conditions": "diagonals from 4 cm to 10 cm to the nearest tenth of a centimetre; compasses and a straight edge marked in centimetres; response: the construction with the arcs of the perpendicular bisector left visible",
+   "role": "outcome task",
+   "example": "Construct a rhombus whose diagonals are 5.2 cm and 6.4 cm.",
+   "separation": {
+    "neighbour": "SK-GE-30",
+    "learner": "A learner constructs a parallelogram from two sides and an angle correctly, but for a rhombus with diagonals 5.2 cm and 6.4 cm draws the diagonals so that they cross at 60° instead of at right angles."
+   },
+   "stopping": "Drawing one diagonal, its perpendicular bisector and marking the other diagonal on it is one sequence; no smaller task shows the rhombus constructed.",
+   "requires": [
+    {
+     "ki": "KI-GE-75",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-GE-32",
+   "outcome": "LO-M815",
+   "statement": "Constructs a rectangle or a square from the lengths of two adjacent sides with compasses and a straight edge.",
+   "action": "constructs",
+   "content": "a rectangle, or a square when the two sides are equal, from two adjacent sides",
+   "conditions": "sides from 3 cm to 8 cm to the nearest half centimetre; compasses and a straight edge marked in centimetres; response: the construction with the arcs of the perpendiculars left visible",
+   "role": "outcome task",
+   "example": "Construct a rectangle with adjacent sides 5 cm and 4 cm. Construct a square of side 4.5 cm.",
+   "separation": {
+    "neighbour": "SK-GE-31",
+    "learner": "A learner constructs a rectangle with sides 5 cm and 4 cm correctly, but for a rhombus with diagonals 5.2 cm and 6.4 cm draws the diagonals so that they cross at right angles but are not bisected, so the four sides are not equal."
+   },
+   "stopping": "Drawing the base, the two perpendiculars and marking the opposite side is one sequence; a square is the same sequence with equal sides.",
+   "requires": [
+    {
+     "ki": "KI-GE-76",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  }
+ ],
+ "knowledge_items": [
+  {
+   "id": "KI-GE-21",
+   "statement": "A quadrilateral is a closed figure in a plane bounded by four line segments, and it has four sides, four vertices and four angles.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) places quadrilaterals in Grade 6 (Understanding Elementary Shapes); not checked against the textbook."
+  },
+  {
+   "id": "KI-GE-22",
+   "statement": "The three angles of a triangle add up to 180°.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) places the angle sum of a triangle in Grade 7."
+  },
+  {
+   "id": "KI-GE-23",
+   "statement": "The four angles of a quadrilateral add up to 360°.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason is part of the Grade 8 learning: a diagonal splits a convex quadrilateral into two triangles, each with angle sum 180°. The skills in this graph use convex quadrilaterals only."
+  },
+  {
+   "id": "KI-GE-24",
+   "statement": "An exterior angle of a quadrilateral at a vertex is the angle between one side at that vertex and the extension of the adjacent side, so it and the interior angle at that vertex together make a straight line.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 7 has the exterior angle of a triangle; Grade 8 extends the term to polygons."
+  },
+  {
+   "id": "KI-GE-25",
+   "statement": "A diagonal of a quadrilateral is a line segment that joins two opposite vertices.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 6 (Understanding Elementary Shapes) defines the diagonal of a polygon; not checked against the textbook."
+  },
+  {
+   "id": "KI-GE-26",
+   "statement": "A parallelogram is a quadrilateral in which both pairs of opposite sides are parallel.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 8 (Understanding Quadrilaterals) defines it."
+  },
+  {
+   "id": "KI-GE-27",
+   "statement": "Opposite angles of a parallelogram are equal.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason (adjacent angles add up to 180°, so each opposite pair is equal) is part of the intended learning for LO-M812."
+  },
+  {
+   "id": "KI-GE-28",
+   "statement": "Adjacent angles of a parallelogram add up to 180°.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason (co-interior angles between parallel lines add up to 180°) is part of the intended learning for LO-M812."
+  },
+  {
+   "id": "KI-GE-29",
+   "statement": "Two line segments bisect each other when they cross at a point that is the midpoint of each.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. First expected grade not checked against a source; Grade 6 Practical Geometry bisects a line segment, but the mutual form is used first in Grade 8."
+  },
+  {
+   "id": "KI-GE-30",
+   "statement": "The diagonals of a parallelogram bisect each other.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason (congruent triangles formed by the diagonals) is part of the intended learning for LO-M812."
+  },
+  {
+   "id": "KI-GE-31",
+   "statement": "A rhombus is a parallelogram whose four sides are equal in length.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Definition as in NCERT (2017) Grade 8."
+  },
+  {
+   "id": "KI-GE-32",
+   "statement": "A rectangle is a parallelogram whose four angles are right angles.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Definition as in NCERT (2017) Grade 8, where a rectangle is a parallelogram with equal angles."
+  },
+  {
+   "id": "KI-GE-33",
+   "statement": "A square is a rectangle whose four sides are equal in length.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Definition as in NCERT (2017) Grade 8."
+  },
+  {
+   "id": "KI-GE-34",
+   "statement": "The diagonals of a rhombus bisect each other at right angles.",
+   "kind": "Principle",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Verified by measuring in Grade 8; the reason is not part of the intended learning."
+  },
+  {
+   "id": "KI-GE-35",
+   "statement": "The diagonals of a rectangle are equal in length.",
+   "kind": "Principle",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Verified by measuring in Grade 8; the reason is not part of the intended learning."
+  },
+  {
+   "id": "KI-GE-36",
+   "statement": "Every rhombus, every rectangle and every square is a parallelogram, so each has every property of a parallelogram.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason is the definitions: a rhombus and a rectangle are each a parallelogram with one extra condition, and a square is a rectangle."
+  },
+  {
+   "id": "KI-GE-37",
+   "statement": "Every square is both a rectangle and a rhombus.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason: a square is a rectangle by definition, and it is a parallelogram with four equal sides, which is a rhombus."
+  },
+  {
+   "id": "KI-GE-38",
+   "statement": "A parallelogram is a rhombus exactly when two adjacent sides are equal in length, and it is a rectangle exactly when one angle is a right angle.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason: opposite sides of a parallelogram are equal, so two equal adjacent sides make all four equal; opposite angles are equal and adjacent angles add up to 180°, so one right angle makes all four right angles."
+  },
+  {
+   "id": "KI-GE-39",
+   "statement": "A rectangle is a square exactly when two adjacent sides are equal in length, and a rhombus is a square exactly when one angle is a right angle.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason follows from the definitions and from the properties of a parallelogram."
+  },
+  {
+   "id": "KI-GE-40",
+   "statement": "A ruler or a protractor gives a measure only to the nearest division, so two equal lengths or two equal angles can measure slightly differently.",
+   "kind": "Principle",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. First expected grade not checked against a source. Sits in measurement more than in geometry."
+  },
+  {
+   "id": "KI-GE-41",
+   "statement": "Two triangles are congruent when one fits exactly on the other, and then every pair of matching sides and every pair of matching angles are equal.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) places congruence of triangles in Grade 7."
+  },
+  {
+   "id": "KI-GE-42",
+   "statement": "If two angles and the side between them in one triangle are equal to two angles and the side between them in another triangle, the two triangles are congruent.",
+   "kind": "Principle",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. This is the ASA condition of NCERT (2017) Grade 7."
+  },
+  {
+   "id": "KI-GE-43",
+   "statement": "The front view, the side view and the top view of a solid are the plane figures seen when the solid is looked at from the front, from a side and from above.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) places views of solids in Grade 8 (Visualising Solid Shapes, removed from the textbook in 2023)."
+  },
+  {
+   "id": "KI-GE-44",
+   "statement": "In the top view of a solid made of cubes, there is one square for each stack of cubes, whatever the height of the stack.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason is that the top view shows only what is seen from above, which is the top of each stack."
+  },
+  {
+   "id": "KI-GE-45",
+   "statement": "In the front view or a side view of a solid made of cubes, each position across the view has a column with as many squares as there are cubes in the tallest stack in line with the viewer at that position.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason is that the cubes behind the tallest stack in line with the viewer are hidden by it."
+  },
+  {
+   "id": "KI-GE-46",
+   "statement": "A cuboid standing on one of its faces looks like a rectangle from the front, from the side and from above, and a cube looks like a square from each of these directions.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Stated as one fact about two solids; a reviewer may prefer one item for the cuboid and one for the cube."
+  },
+  {
+   "id": "KI-GE-47",
+   "statement": "A cylinder standing on its base looks like a rectangle from the front and from the side, and like a circle from above.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-GE-48",
+   "statement": "A cone standing on its base looks like a triangle from the front and from the side, and like a circle with a point at its centre for the tip from above.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-GE-49",
+   "statement": "A sphere looks like a circle from every direction.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-GE-50",
+   "statement": "In the front view and the side view of an object made of one solid standing on the top face of another, the view of the upper solid is drawn above the view of the lower solid, and in the top view the upper solid is drawn over the lower one.",
+   "kind": "Principle",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Holds when the upper solid rests within the top face of the lower one, which is the range used in the skills."
+  },
+  {
+   "id": "KI-GE-51",
+   "statement": "A cuboid is a solid with six rectangular faces.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) LO-G6-15 places cubes and cuboids in Grade 6. KI-GE-20 uses this term without defining it."
+  },
+  {
+   "id": "KI-GE-52",
+   "statement": "To draw an oblique sketch of a cuboid, draw its front face with its true length and height, draw an equal rectangle for the back face shifted up and to the right, and join the matching corners.",
+   "kind": "Procedure",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) places oblique sketches in Grade 7 (Visualising Solid Shapes); the chapter was removed from the textbook in 2023."
+  },
+  {
+   "id": "KI-GE-53",
+   "statement": "To draw an isometric sketch of a cuboid on isometric dot paper, draw its edges along the vertical dot lines and the two sets of slanting dot lines, each edge as many dot spaces long as the number of units in its length.",
+   "kind": "Procedure",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) places isometric sketches in Grade 7 (Visualising Solid Shapes); the chapter was removed from the textbook in 2023."
+  },
+  {
+   "id": "KI-GE-54",
+   "statement": "A polyhedron is a solid whose surface is made only of flat polygons.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 8 (Visualising Solid Shapes, removed from the textbook in 2023) defines it."
+  },
+  {
+   "id": "KI-GE-55",
+   "statement": "A face of a polyhedron is one of the flat polygons that make up its surface.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. First expected grade not checked against a source."
+  },
+  {
+   "id": "KI-GE-56",
+   "statement": "An edge of a polyhedron is a line segment where two of its faces meet.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. First expected grade not checked against a source."
+  },
+  {
+   "id": "KI-GE-57",
+   "statement": "A vertex of a polyhedron is a point where three or more of its edges meet.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. First expected grade not checked against a source."
+  },
+  {
+   "id": "KI-GE-58",
+   "statement": "A prism is a polyhedron that has two identical polygons in parallel planes as its bases and rectangles as its other faces.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Stated for right prisms, which are the prisms of the textbook; first expected grade not checked against a source."
+  },
+  {
+   "id": "KI-GE-59",
+   "statement": "A pyramid is a polyhedron that has a polygon as its base and triangles as its other faces, all meeting at one vertex.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. First expected grade not checked against a source."
+  },
+  {
+   "id": "KI-GE-60",
+   "statement": "A polygon with five sides is a pentagon and a polygon with six sides is a hexagon.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) places polygons in Grade 6."
+  },
+  {
+   "id": "KI-GE-61",
+   "statement": "For every polyhedron, the number of faces F, the number of vertices V and the number of edges E satisfy F + V − E = 2.",
+   "kind": "Principle",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Euler's relation as in NCERT (2017) Grade 8 (Visualising Solid Shapes, removed from the textbook in 2023). The textbook checks it on a table of solids; a proof is not part of the learning."
+  },
+  {
+   "id": "KI-GE-62",
+   "statement": "A pair of compasses set to a length r draws a circle or an arc whose radius is r.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 6 (Practical Geometry) introduces compasses."
+  },
+  {
+   "id": "KI-GE-63",
+   "statement": "A point at distance r from a point P and at distance s from a point Q lies on the circle with centre P and radius r and on the circle with centre Q and radius s, so it is a point where the two circles meet.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. This is the reason behind the arc method used in every construction in this graph."
+  },
+  {
+   "id": "KI-GE-64",
+   "statement": "To construct a triangle from its three sides, draw one side as the base, draw arcs from its two end points with radii equal to the other two sides, and join the point where the arcs meet to the two end points.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) places construction of triangles in Grade 7."
+  },
+  {
+   "id": "KI-GE-65",
+   "statement": "Four sides do not fix a quadrilateral, because the same four sides can be joined to give quadrilaterals of different shapes, so a fifth measurement such as a diagonal or an angle is needed.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 8 (Practical Geometry, removed from the textbook in 2023) gives this as the reason a diagonal or an angle is added."
+  },
+  {
+   "id": "KI-GE-66",
+   "statement": "A diagonal of a quadrilateral divides it into two triangles.",
+   "kind": "Principle",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Two readings of kind: principle, or concept because the result is always two triangles; recorded as a principle."
+  },
+  {
+   "id": "KI-GE-67",
+   "statement": "To draw an angle of a given measure at a point on a line with a protractor, place the centre of the protractor on the point and its base line along the line, mark the given measure on the scale, and draw the ray from the point through the mark.",
+   "kind": "Procedure",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 6 (Understanding Elementary Shapes) measures and draws angles with a protractor."
+  },
+  {
+   "id": "KI-GE-68",
+   "statement": "To construct the perpendicular bisector of a line segment, draw from each end point an arc of the same radius, longer than half the segment, so that the arcs cross on both sides of the segment, and join the two crossing points.",
+   "kind": "Procedure",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 6 (Practical Geometry)."
+  },
+  {
+   "id": "KI-GE-69",
+   "statement": "To construct a perpendicular to a line at a point on it, mark two points on the line at equal distances from that point, draw from each an arc of the same larger radius so that the arcs cross, and join the crossing point to the given point.",
+   "kind": "Procedure",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 6 (Practical Geometry)."
+  },
+  {
+   "id": "KI-GE-70",
+   "statement": "To construct a quadrilateral ABCD from sides AB, BC, CD and DA and diagonal AC, construct triangle ABC from AB, BC and AC, then construct triangle ACD from AC, CD and DA on the other side of AC.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 8 (Practical Geometry, removed from the textbook in 2023)."
+  },
+  {
+   "id": "KI-GE-71",
+   "statement": "To construct a quadrilateral ABCD from sides AB, BC and CD and diagonals AC and BD, construct triangle ABC from AB, BC and AC, then mark D as the point at distance CD from C and at distance BD from B.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 8 (Practical Geometry, removed from the textbook in 2023)."
+  },
+  {
+   "id": "KI-GE-72",
+   "statement": "To construct a quadrilateral ABCD from sides AB and BC and angles A, B and C, draw AB, draw angle B at B and mark C on its arm at distance BC, draw angle A at A and angle C at C, and mark D where the other arms of these two angles meet.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 8 (Practical Geometry, removed from the textbook in 2023)."
+  },
+  {
+   "id": "KI-GE-73",
+   "statement": "To construct a quadrilateral ABCD from sides AB, BC and CD and angles B and C, draw BC, draw angle B at B and mark A on its arm at distance AB, draw angle C at C and mark D on its arm at distance CD, then join A and D.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 8 (Practical Geometry, removed from the textbook in 2023)."
+  },
+  {
+   "id": "KI-GE-74",
+   "statement": "To construct a parallelogram ABCD from sides AB and AD and angle A, draw AB, draw angle A at A and mark D on its arm at distance AD, then mark C as the point at distance AD from B and at distance AB from D.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The step that finds C uses the equality of opposite sides (KI-GE-13). NCERT (2017) Grade 8 (Practical Geometry, removed from the textbook in 2023)."
+  },
+  {
+   "id": "KI-GE-75",
+   "statement": "To construct a rhombus ABCD from diagonals AC and BD, draw AC, construct its perpendicular bisector, mark B and D on the bisector on the two sides of AC at distance half of BD from the midpoint of AC, and join A, B, C and D.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 8 (Practical Geometry, removed from the textbook in 2023)."
+  },
+  {
+   "id": "KI-GE-76",
+   "statement": "To construct a rectangle ABCD from sides AB and BC, draw AB, construct perpendiculars to AB at A and at B, mark D on the perpendicular at A and C on the perpendicular at B, each at distance BC from AB on the same side of AB, and join C and D; when AB equals BC the rectangle is a square.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) Grade 8 (Practical Geometry, removed from the textbook in 2023)."
+  },
+  {
+   "id": "KI-GE-01",
+   "statement": "A transversal is a line that crosses two or more lines at different points.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-GE-02",
+   "statement": "Parallel lines are lines in the same plane that never meet, however far they are extended.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. First expected grade not checked against a source."
+  },
+  {
+   "id": "KI-GE-05",
+   "statement": "Alternate interior angles are a pair of angles, one at each point where a transversal crosses two lines, that lie between the two lines and on opposite sides of the transversal.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The topic hint says alternate (interior); alternate exterior angles are not included."
+  },
+  {
+   "id": "KI-GE-06",
+   "statement": "Co-interior angles are a pair of angles, one at each point where a transversal crosses two lines, that lie between the two lines and on the same side of the transversal.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) calls these interior angles on the same side of the transversal."
+  },
+  {
+   "id": "KI-GE-08",
+   "statement": "When a transversal crosses two parallel lines, each pair of alternate interior angles is equal.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-GE-09",
+   "statement": "When a transversal crosses two parallel lines, each pair of co-interior angles adds up to 180°.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-GE-11",
+   "statement": "Adjacent angles that together make a straight line add up to 180°.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) M711 places linear pairs in Grade 7."
+  },
+  {
+   "id": "KI-GE-13",
+   "statement": "Opposite sides of a parallelogram are equal in length.",
+   "kind": "Principle",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Classified as a principle (it holds for every parallelogram and the lengths change); a reader could take it as a fact about one shape. First expected grade not checked against a source."
+  },
+  {
+   "id": "KI-GE-20",
+   "statement": "A cube is a cuboid whose length, width and height are equal.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) LO-G6-15 places cubes and cuboids in Grade 6."
+  },
+  {
+   "id": "KI-ME-08",
+   "statement": "The radius of a circle is the distance from its centre to any point on the circle, and its diameter, a chord through the centre, is twice the radius.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. First expected grade not checked against a source."
+  },
+  {
+   "id": "KI-AG-11",
+   "statement": "Like terms are added or subtracted by adding or subtracting their coefficients and keeping the variable part unchanged.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason is the distributive property, 3x + 5x = (3 + 5)x."
+  },
+  {
+   "id": "KI-AG-20",
+   "statement": "To solve a linear equation in which the variable appears once, undo the operations applied to the variable in the reverse order of their application, doing the same to both sides.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-47",
+   "statement": "To write an equation for a situation, let a variable stand for one unknown quantity, write the other quantities in terms of it, and set equal two expressions for the same quantity.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-RP-26",
+   "statement": "When a quantity is divided in a given ratio, each share is the quantity multiplied by that share's term divided by the sum of the terms.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "Two readings of kind: as a statement of what each share is (principle) or as the steps divide by the sum of the terms, then multiply (procedure); recorded as principle."
+  }
+ ],
+ "ki_requires": [
+  {
+   "from": "KI-GE-23",
+   "to": "KI-GE-21",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-23",
+   "to": "KI-GE-22",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-GE-24",
+   "to": "KI-GE-21",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-25",
+   "to": "KI-GE-21",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-26",
+   "to": "KI-GE-21",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-26",
+   "to": "KI-GE-02",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-27",
+   "to": "KI-GE-26",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-27",
+   "to": "KI-GE-28",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-GE-28",
+   "to": "KI-GE-26",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-28",
+   "to": "KI-GE-09",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-GE-30",
+   "to": "KI-GE-26",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-30",
+   "to": "KI-GE-25",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-30",
+   "to": "KI-GE-29",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-30",
+   "to": "KI-GE-08",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-GE-30",
+   "to": "KI-GE-42",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-GE-31",
+   "to": "KI-GE-26",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-32",
+   "to": "KI-GE-26",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-33",
+   "to": "KI-GE-32",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-34",
+   "to": "KI-GE-31",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-34",
+   "to": "KI-GE-29",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-34",
+   "to": "KI-GE-25",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-35",
+   "to": "KI-GE-32",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-35",
+   "to": "KI-GE-25",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-36",
+   "to": "KI-GE-31",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-36",
+   "to": "KI-GE-32",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-36",
+   "to": "KI-GE-33",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-37",
+   "to": "KI-GE-33",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-37",
+   "to": "KI-GE-31",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-37",
+   "to": "KI-GE-36",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-38",
+   "to": "KI-GE-31",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-38",
+   "to": "KI-GE-32",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-38",
+   "to": "KI-GE-13",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-38",
+   "to": "KI-GE-27",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-38",
+   "to": "KI-GE-28",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-39",
+   "to": "KI-GE-33",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-39",
+   "to": "KI-GE-38",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-42",
+   "to": "KI-GE-41",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-44",
+   "to": "KI-GE-43",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-45",
+   "to": "KI-GE-43",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-46",
+   "to": "KI-GE-43",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-46",
+   "to": "KI-GE-51",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-47",
+   "to": "KI-GE-43",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-48",
+   "to": "KI-GE-43",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-49",
+   "to": "KI-GE-43",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-50",
+   "to": "KI-GE-43",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-52",
+   "to": "KI-GE-51",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-53",
+   "to": "KI-GE-51",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-55",
+   "to": "KI-GE-54",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-56",
+   "to": "KI-GE-55",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-57",
+   "to": "KI-GE-56",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-58",
+   "to": "KI-GE-54",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-58",
+   "to": "KI-GE-55",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-59",
+   "to": "KI-GE-54",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-59",
+   "to": "KI-GE-55",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-59",
+   "to": "KI-GE-57",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-61",
+   "to": "KI-GE-55",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-61",
+   "to": "KI-GE-56",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-61",
+   "to": "KI-GE-57",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-63",
+   "to": "KI-GE-62",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-63",
+   "to": "KI-ME-08",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-64",
+   "to": "KI-GE-63",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-65",
+   "to": "KI-GE-21",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-66",
+   "to": "KI-GE-25",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-68",
+   "to": "KI-GE-62",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-69",
+   "to": "KI-GE-62",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-70",
+   "to": "KI-GE-64",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-70",
+   "to": "KI-GE-66",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-71",
+   "to": "KI-GE-64",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-71",
+   "to": "KI-GE-63",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-71",
+   "to": "KI-GE-25",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-72",
+   "to": "KI-GE-67",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-73",
+   "to": "KI-GE-67",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-74",
+   "to": "KI-GE-67",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-74",
+   "to": "KI-GE-63",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-74",
+   "to": "KI-GE-13",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-74",
+   "to": "KI-GE-26",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-75",
+   "to": "KI-GE-68",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-75",
+   "to": "KI-GE-34",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-76",
+   "to": "KI-GE-69",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-76",
+   "to": "KI-GE-32",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-76",
+   "to": "KI-GE-33",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-05",
+   "to": "KI-GE-01",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-06",
+   "to": "KI-GE-01",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-08",
+   "to": "KI-GE-05",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-09",
+   "to": "KI-GE-06",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-08",
+   "to": "KI-GE-02",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-GE-09",
+   "to": "KI-GE-02",
+   "basis": "mathematical necessity"
+  }
+ ],
+ "links": [
+  {
+   "from": "SK-GE-08",
+   "to": "SK-GE-09",
+   "type": "extends",
+   "reason": "From finding the fourth angle of a quadrilateral from three angles in degrees to finding all four angles when they are given as expressions in x."
+  },
+  {
+   "from": "SK-GE-08",
+   "to": "SK-GE-10",
+   "type": "extends",
+   "reason": "From finding the fourth angle of a quadrilateral from three angles in degrees to finding all four angles when they are given in a ratio."
+  },
+  {
+   "from": "SK-GE-09",
+   "to": "SK-GE-10",
+   "type": "is format of",
+   "reason": "Angles in the ratio 3 : 5 : 9 : 13 and angles 3x, 5x, 9x and 13x state the same condition on the four angles."
+  },
+  {
+   "from": "SK-GE-12",
+   "to": "SK-GE-13",
+   "type": "extends",
+   "reason": "From checking an angle property on one drawn figure by measuring to showing by reasoning that it holds for every parallelogram."
+  },
+  {
+   "from": "SK-GE-12",
+   "to": "SK-GE-14",
+   "type": "extends",
+   "reason": "From checking a side or diagonal property on one drawn figure by measuring to showing by reasoning that it holds for every parallelogram."
+  },
+  {
+   "from": "SK-GE-21",
+   "to": "SK-GE-22",
+   "type": "contrasts with",
+   "reason": "An oblique sketch draws the front face in its true shape on squared paper, while an isometric sketch draws all three sets of edges along slanting dot lines, so a face is not drawn as a true rectangle."
+  },
+  {
+   "from": "SK-GE-28",
+   "to": "SK-GE-29",
+   "type": "contrasts with",
+   "reason": "In one the three angles sit at the ends of two adjacent sides and in the other the two angles sit at the ends of the middle one of three sides, so the same angle placed at the wrong vertex gives a different figure."
+  },
+  {
+   "from": "SK-GE-30",
+   "to": "SK-GE-29",
+   "type": "revisits",
+   "reason": "A parallelogram from two sides and an angle returns to a quadrilateral from three sides and two angles, with the properties of the parallelogram supplying the other side and angle."
+  },
+  {
+   "from": "KI-GE-22",
+   "to": "KI-GE-23",
+   "type": "extends",
+   "reason": "From three angles adding up to 180° in a triangle to four angles adding up to 360° in a quadrilateral."
+  },
+  {
+   "from": "KI-GE-27",
+   "to": "KI-GE-28",
+   "type": "contrasts with",
+   "reason": "Opposite angles of a parallelogram are equal, but adjacent angles add up to 180° and are equal only in a rectangle."
+  },
+  {
+   "from": "KI-GE-34",
+   "to": "KI-GE-35",
+   "type": "contrasts with",
+   "reason": "The diagonals of a rhombus meet at right angles but are not equal in general, and the diagonals of a rectangle are equal but do not meet at right angles in general."
+  },
+  {
+   "from": "KI-GE-36",
+   "to": "KI-GE-38",
+   "type": "contrasts with",
+   "reason": "Every rhombus is a parallelogram, but a parallelogram is a rhombus only when two adjacent sides are equal."
+  },
+  {
+   "from": "KI-GE-44",
+   "to": "KI-GE-45",
+   "type": "contrasts with",
+   "reason": "The top view shows one square for each stack whatever its height, while the front view shows the height of the tallest stack at each position."
+  },
+  {
+   "from": "KI-GE-08",
+   "to": "KI-GE-09",
+   "type": "contrasts with",
+   "reason": "Alternate interior and co-interior angles both lie between the parallel lines, but the first pair is equal and the second adds up to 180°."
+  }
+ ],
+ "routes": [],
+ "findings": {
+  "GE": "- Counts (authored by ConveGenius, 24 Oct 2026): 25 new skills, SK-GE-08 to SK-GE-32 (22 outcome tasks, 3 steps) for LO-M811 to LO-M815; no skill is copied. 56 new knowledge items, KI-GE-21 to KI-GE-76, and 14 knowledge items copied. Every new skill has review pending.\n- LO-M811, reading used (authored by ConveGenius): the outcome says \"problems related to angles of a quadrilateral using angle sum property\". Read as finding unknown angles of a convex quadrilateral by the angle sum of 360°, in three task types: the fourth angle from three angles in degrees (SK-GE-08), angles given as expressions in x (SK-GE-09) and angles given in a ratio (SK-GE-10). The three differ in what the learner must do before the angle sum is used (read off, write and solve an equation, share 360° in a ratio), and the NCERT Class 8 exercises on quadrilaterals include all three. SK-GE-09 and SK-GE-10 are linked as one condition in two forms (\"is format of\") but kept as two skills, because a learner can solve one and not the other.\n- LO-M811, step: SK-GE-11 finds an interior angle from an exterior angle at the same vertex, because NCERT figures give one angle of the quadrilateral as an angle on a straight line with a side extended. It is a step that is sometimes part of SK-GE-08. It is not absorbed (see below). It uses KI-GE-11 (copied) and KI-GE-24.\n- LO-M811, left out because the outcome does not ask for them: the angle sum of polygons with more than four sides, the sum of the exterior angles of a polygon, deriving or verifying the angle sum property of a quadrilateral (splitting it into two triangles is the reason inside KI-GE-23, with rationale, not a task), angles of non-convex quadrilaterals, deciding whether four given angles can be the angles of a quadrilateral, and problems that need a property of a kite or trapezium besides the angle sum.\n- LO-M812, reading used (authored by ConveGenius): \"verifies properties of parallelograms\" is read as two task types, verifying by measuring on one drawn figure (SK-GE-12) and verifying by reasoning for every parallelogram (SK-GE-13 for the angle properties from parallel lines, SK-GE-14 for the side and diagonal properties from congruent triangles). \"Properties of parallelograms\" is read to include the diagonal property of a rhombus and of a rectangle, which are verified by measuring only; their reasons are not part of the intended learning (rationale without). \"Establishes the relationship between them through reasoning\" is read as the relationships among parallelogram, rhombus, rectangle and square: which is a special case of which and why (SK-GE-17), and which of the four kinds have a stated property (SK-GE-18). The reason in each case comes from the definitions (KI-GE items KI-GE-31, KI-GE-32, KI-GE-33) and from KI-GE-36, KI-GE-37, KI-GE-38 and KI-GE-39.\n- LO-M812, judgment call for the reviewer: SK-GE-15 and SK-GE-16 (finding an unknown angle, side or diagonal segment from the properties) are applications of the properties, not verifications, and the outcome says \"verifies\". They are kept because the Class 8 exercises on parallelograms are almost wholly of this kind and the reason for each step is a property, so they show the properties used through reasoning. If the reviewer reads the outcome strictly, these two skills can be removed; the property items stay, because SK-GE-18 and the constructions (SK-GE-31) use them.\n- LO-M812, left out because the outcome does not ask for them: the converses (deciding whether a quadrilateral with equal opposite sides, or with diagonals that bisect each other, is a parallelogram), properties of the kite and the trapezium, reasons for the diagonal properties of the rhombus and the rectangle, and NCERT problems that give angles of a parallelogram as a ratio or as expressions in x.\n- LO-M812, separation steps considered and not authored: MYP2's SK-GE-01 (identifying alternate interior and co-interior angles) is the same performance as the step a learner carries out inside SK-GE-13 and SK-GE-14, but it is not copied. Copying it needs SK-GE-02, its separation neighbour, which is a different performance (finding an unknown angle in parallel-line diagrams) that no Grade 8 outcome asks for. The pairs of angles are required through KI-GE-08 and KI-GE-09 (copied) and their requirements KI-GE-05, KI-GE-06, KI-GE-01 and KI-GE-02 (copied).\n- LO-M813, reading used (authored by ConveGenius): \"represents 3D shapes on a plane surface such as sheet of paper, black board etc.\" is read as drawing: the plane surface is given by the outcome, so the response mode is a drawing. Four task types: the three views of a solid made of cubes (SK-GE-19), the three views of a simple solid or of an object made of two simple solids (SK-GE-20), an oblique sketch of a cuboid or a cube (SK-GE-21) and an isometric sketch of a cuboid or a cube (SK-GE-22).\n- LO-M813, judgment call for the reviewer: NCERT (2017) places oblique and isometric sketches in Grade 7 (Visualising Solid Shapes) and places views of solids and maps in Grade 8. They are included because they are the ways the textbook teaches a solid to be shown on paper, and the outcome states no particular way; KI-GE-52 and KI-GE-53 carry first grade 7. If the reviewer wants only the Class 8 content, remove SK-GE-21 and SK-GE-22.\n- LO-M813, left out: reading and drawing maps (it represents positions in space, not a 3D shape), matching a solid to its net and drawing a net (a net is a pattern that folds into a solid, not a drawing of the solid as it appears; matching is a choice, not a drawing), choosing the solid that gives stated views, matching views to solids, cross-sections of a solid, and drawing views from a verbal description of a solid.\n- LO-M814, reading used (authored by ConveGenius): \"through pattern\" is read as a table of several solids whose last column, F + V − E, shows the same value, as in the textbook; it is not read as a proof. One outcome task (SK-GE-24) and one step, counting faces, vertices and edges (SK-GE-23, always part of SK-GE-24). The step is not absorbed (see below).\n- LO-M814, left out: the counts as formulas in the number of sides n of the base (n + 2 faces, 2n vertices and 3n edges for a prism; n + 1, n + 1 and 2n for a pyramid), using Euler's relation to find a missing number of faces, vertices or edges, checking that the relation does not apply to a cone, a cylinder or a sphere, polyhedra other than prisms and pyramids, and a proof of the relation.\n- LO-M815, reading used (authored by ConveGenius): the outcome states \"compasses and straight edge\", so they are the form of every construction and appear in the conditions. The straight edge is read as the ruler marked in centimetres of the textbook geometry box, used to draw lines and to set lengths. Eight skills: a triangle from three sides (step, SK-GE-25), then the four constructions of the chapter: four sides and a diagonal (SK-GE-26), two diagonals and three sides (SK-GE-27), two adjacent sides and three angles (SK-GE-28), three sides and two included angles (SK-GE-29), and the special quadrilaterals from fewer measurements: a parallelogram (SK-GE-30), a rhombus (SK-GE-31), and a rectangle or a square (SK-GE-32).\n- LO-M815, judgment call for the reviewer: SK-GE-28, SK-GE-29 and SK-GE-30 need angles in degrees, and the textbook sets them with a protractor, which the outcome does not list. The conditions say the protractor is used only to set angles. If the reviewer reads the outcome as compasses and a straight edge only, these three skills and KI-GE-67, KI-GE-72, KI-GE-73 and KI-GE-74 are removed, and the remaining constructions still cover the outcome.\n- LO-M815, left out: deciding whether a set of measurements fixes a quadrilateral or whether it can be constructed (the outcome asks for constructing, not deciding; KI-GE-65 is helpful for the constructions, not required), constructing a kite or a trapezium, a rhombus from a side and a diagonal, a square from a diagonal, a rectangle from a side and a diagonal, a parallelogram from a diagonal, checking a construction by measuring, and writing the steps of a construction as a justification.\n- Source note: LO-M813, LO-M814 and LO-M815 carry the note that their chapters (Visualising Solid Shapes, Practical Geometry) were removed from the NCERT Class 8 textbook in the 2023 rationalisation. The outcomes are authored as they stand. The conditions and examples follow the pre-2023 NCERT Class 8 text as the author recalls it (the ratio 3 : 5 : 9 : 13, quadrilaterals MORE and LIFT, the rhombus with diagonals 5.2 cm and 6.4 cm). The grade placements in the knowledge item notes are from the same recall. None was checked against the book in this run; the notes marked 'not checked' are the least certain.\n- Source note: LO-M814 carries NCF goal CG-6 and competency C-6.1, while LO-M811, LO-M812, LO-M813 and LO-M815 carry CG-3. The skeleton quotes them as recorded; a reviewer may check whether CG-6 is right for Euler's relation.\n- Copied records (authored by ConveGenius in the MYP2 graph, copied unchanged): KI-GE-01, KI-GE-02, KI-GE-05, KI-GE-06, KI-GE-08, KI-GE-09, KI-GE-11, KI-GE-13, KI-GE-20 (geometry), KI-ME-08 (radius of a circle, needed for KI-GE-63), KI-AG-11, KI-AG-20, KI-AG-47 (combining like terms, solving a linear equation and writing an equation, needed for SK-GE-09) and KI-RP-26 (dividing a quantity in a ratio, needed for SK-GE-10). The ki_requires links among the copied geometry items are copied. No skill is copied: PAL has no geometry skills and the MYP2 geometry skills are about parallel lines and reflection, which no outcome of this group asks for.\n- Dropped ki_requires on copied items, because the target is not in this fragment (the algebra and ratio targets sit in other groups and the merger takes them from the group that copies them): KI-RP-26 to KI-RP-01 and KI-RN-32; KI-AG-11 to KI-AG-10, KI-AG-06 and KI-RN-57; KI-AG-20 to KI-AG-19 and KI-AG-21; KI-AG-47 to KI-AG-18.\n- Rationale label to check: KI-GE-13 (opposite sides of a parallelogram are equal, copied) has rationale without and first grade 6 in MYP2. For LO-M812 the reason for this property is part of the intended learning (SK-GE-14 verifies it by reasoning), and NCERT (2017) first places it in Grade 8. It stays as copied; the merger sets the first grade (see first_grade_notes) and the reviewer decides the label.\n- Step cases (is part of), absorbed or not: SK-GE-25 to SK-GE-26 and SK-GE-27 are absorbed, because KI-GE-70 and KI-GE-71 both require KI-GE-64. SK-GE-23 to SK-GE-24 is not absorbed: KI-GE-58, KI-GE-59 and KI-GE-60 (the terms for the solids in the table) are reached only through the step; the pattern is knowledge about the solids themselves. SK-GE-11 to SK-GE-08 is not absorbed: KI-GE-24 and KI-GE-11 are reached only through the step; the pattern is the reading of an angle given outside the quadrilateral.\n- Knowledge items that fail a test: none. Borderline on the sentence test: KI-GE-46 states the views of two solids in one sentence, and KI-GE-38 and KI-GE-39 each state two conditions; they are one sentence each with one truth value, so they pass, and a reviewer may split them.\n- Kind classifications where two readings are possible: KI-GE-66 (principle, or concept because the result is always two triangles); the property items KI-GE-27, KI-GE-28, KI-GE-30, KI-GE-34, KI-GE-35 are principles because the lengths and angles change from figure to figure, and a reader could take each as a fact about one shape; the terms KI-GE-25, KI-GE-29, KI-GE-55, KI-GE-56, KI-GE-57 are facts or terms, while the definitions of kinds of shape (KI-GE-26, KI-GE-31, KI-GE-32, KI-GE-33, KI-GE-58, KI-GE-59, KI-GE-54) are concepts, and a reviewer may take the terms as concepts too; the view facts (KI-GE-47, KI-GE-48, KI-GE-49, KI-GE-46) are facts or terms because the solid and the response stay the same; the constructions (KI-GE-70 to KI-GE-76, KI-GE-52, KI-GE-53) are procedures, which gates the skills that require them before attainment.\n- Gates: the skills that require procedures (SK-GE-26 to SK-GE-32, SK-GE-21, SK-GE-22, SK-GE-09) are attained only once the procedures are held; the skills that require principles about parallelograms (SK-GE-15, SK-GE-16) likewise; the skills that require concepts and terms need them before teaching.\n- Not authored: no route is written for GE; the order in the group is the order of the outcomes.\n"
+ },
+ "copied": {
+  "skills": [],
+  "knowledge_items": [
+   "KI-GE-01",
+   "KI-GE-02",
+   "KI-GE-05",
+   "KI-GE-06",
+   "KI-GE-08",
+   "KI-GE-09",
+   "KI-GE-11",
+   "KI-GE-13",
+   "KI-GE-20",
+   "KI-ME-08",
+   "KI-AG-11",
+   "KI-AG-20",
+   "KI-AG-47",
+   "KI-RP-26"
+  ]
+ },
+ "cross_domain_kis": [
+  {
+   "id": "KI-GE-40",
+   "statement": "A ruler or a protractor gives a measure only to the nearest division, so two equal lengths or two equal angles can measure slightly differently.",
+   "why": "A measurement fact about rulers and protractors; the ME group may state the same fact for measuring lengths and angles."
+  },
+  {
+   "id": "KI-GE-51",
+   "statement": "A cuboid is a solid with six rectangular faces.",
+   "why": "A cuboid is defined here for the oblique and isometric sketches; the ME group's volume and surface area skills for a cuboid may need the same definition."
+  }
+ ],
+ "first_grade_notes": [
+  {
+   "id": "KI-GE-13",
+   "copied_first_grade": 6,
+   "ncert_first_grade": 8
+  }
+ ]
+}

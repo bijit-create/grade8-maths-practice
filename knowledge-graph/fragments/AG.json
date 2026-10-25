@@ -1,0 +1,1671 @@
+{
+ "group": "AG",
+ "built_domains": [
+  "AG"
+ ],
+ "skills": [
+  {
+   "id": "SK-AG-25",
+   "outcome": "LO-M806",
+   "statement": "Solves a word problem about numbers, ages, money or perimeter by writing and solving a linear equation in one variable.",
+   "action": "solves",
+   "content": "a word problem whose equation has the variable on one side only",
+   "conditions": "one unknown; situations of consecutive numbers or consecutive multiples, a number compared with a multiple or a fraction of itself, present ages and ages after some years, quantities in a ratio, the perimeter of a rectangle or triangle, and money in coins or notes; numbers in the situation are whole numbers, or fractions or decimals with denominator up to 10; the equation, after any bracket is expanded, has the variable terms on one side only and needs up to four steps; the equation is not given; answer stated as the quantity asked for, with its unit",
+   "role": "outcome task",
+   "example": "The perimeter of a rectangle is 13 cm and its width is 2¾ cm. Find its length.   The sum of three consecutive multiples of 8 is 888. Find the multiples.",
+   "separation": {
+    "neighbour": "SK-AG-30",
+    "learner": "A learner solves the given equation 3(x − 4) = x + 6 correctly as x = 9, but for 'the sum of three consecutive multiples of 8 is 888' writes the multiples as 8x, 8x + 1 and 8x + 2."
+   },
+   "stopping": "The equation is written and solved in one task; splitting by situation (numbers, ages, money, perimeter) gives parts that practise the same writing and solving, and the two moves are also recorded as steps (SK-AG-29, SK-AG-30).",
+   "requires": [
+    {
+     "ki": "KI-AG-48",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-20",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-62",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-59",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-60",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-ME-01",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-13",
+     "basis": "mathematical necessity",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-26",
+   "outcome": "LO-M806",
+   "statement": "Solves a puzzle about the digits of a two-digit number by writing and solving a linear equation in one variable.",
+   "action": "solves",
+   "content": "a puzzle about the digits of a two-digit number and the number made by interchanging them",
+   "conditions": "two-digit numbers; the puzzle gives the sum or the difference of the digits, or one digit as a multiple of the other, and the sum or the difference of the number and the number made by interchanging the digits; one unknown digit, the other digit written from it; the equation is not given and may have the variable on one or both sides; answer is the number, checked against the puzzle",
+   "role": "outcome task",
+   "example": "The sum of the digits of a two-digit number is 9. When the digits are interchanged, the new number is 27 greater than the original number. Find the number.",
+   "separation": {
+    "neighbour": "SK-AG-25",
+    "learner": "A learner solves 'the sum of three consecutive multiples of 8 is 888' correctly as 288, 296 and 304, but for 'the digits of a two-digit number add up to 9' writes the number as x + (9 − x) and the number with its digits interchanged as (9 − x) + x, adding the digits instead of using their place values."
+   },
+   "stopping": "Writing the number from its digits and solving the equation are done together; the textbook gives digit puzzles one set of worked examples, and the stated range keeps them to two-digit numbers.",
+   "requires": [
+    {
+     "ki": "KI-AG-58",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-48",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-20",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-27",
+   "outcome": "LO-M806",
+   "statement": "Solves a word problem by writing and solving a linear equation in one variable that has the variable on both sides.",
+   "action": "solves",
+   "content": "a word problem whose equation has the variable on both sides",
+   "conditions": "one unknown; two expressions in the unknown for the same quantity, as in ages at two different times (years ago, years later), quantities in a ratio with a stated difference, or a number compared with an expression in itself; whole numbers or fractions with denominator up to 10; the equation is not given and, after any bracket is expanded, has variable terms on both sides, in the forms ax + b = cx + d or a(x + b) = c(x + d) with integer coefficients from −20 to 20; answer stated as the quantity asked for, with its unit",
+   "role": "outcome task",
+   "example": "Arjun is twice as old as Shriya. Five years ago his age was three times Shriya's age. Find their present ages.   The number of boys and girls in a class are in the ratio 7 : 5. The number of boys is 8 more than the number of girls. What is the total class strength?",
+   "separation": {
+    "neighbour": "SK-AG-25",
+    "learner": "A learner solves 'the sum of three consecutive multiples of 8 is 888' correctly, but for Arjun and Shriya writes 2x − 5 = 3x, taking the five years away from Arjun's age only."
+   },
+   "stopping": "The unknown appears in two expressions that are set equal; splitting by situation gives parts that practise the same two-sided equation.",
+   "requires": [
+    {
+     "ki": "KI-AG-48",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-59",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-60",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-28",
+   "outcome": "LO-M806",
+   "statement": "Solves a word problem by writing and solving a linear equation in one variable that has fractions or has the variable in a denominator.",
+   "action": "solves",
+   "content": "a word problem whose equation has fractions and reduces to a linear equation",
+   "conditions": "one unknown; situations of a fraction of a quantity and of what remains, a ratio of two quantities after the same change, and a rational number whose numerator and denominator are changed; denominators up to 12; the equation has the variable in numerators over number denominators, or in the numerator and denominator of a fraction equal to another fraction; the equation is not given; answer stated as the quantity asked for, with its unit, or as a rational number",
+   "role": "outcome task",
+   "example": "Half of a herd of deer are grazing in the field and three-fourths of the remaining are playing nearby. The rest 9 are drinking water from the pond. Find the number of deer in the herd.   The denominator of a rational number is greater than its numerator by 8. If the numerator is increased by 17 and the denominator is decreased by 1, the number obtained is 3/2. Find the rational number.",
+   "separation": {
+    "neighbour": "SK-AG-27",
+    "learner": "A learner solves Arjun and Shriya's ages correctly as 20 and 10, but writes the herd of deer as x/2 + 3x/4 + 9 = x, taking three-fourths of the whole herd instead of three-fourths of the remaining half."
+   },
+   "stopping": "Reading the fractions in the situation and clearing them from the equation are done in one task; splitting by situation gives parts that practise the same two moves.",
+   "requires": [
+    {
+     "ki": "KI-AG-48",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-32",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RP-04",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-60",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-29",
+   "outcome": "LO-M806",
+   "statement": "Writes a linear equation in one variable for a word problem about numbers, ages, digits, money, perimeter or fractions of a quantity.",
+   "action": "writes",
+   "content": "a linear equation in one variable for a word problem",
+   "conditions": "one unknown, the letter given or chosen by the learner; situations of consecutive numbers, ages now and after or before some years, digits of a two-digit number, quantities in a ratio, perimeter, money in coins or notes and fractions of a quantity; the equation may have the variable on both sides, a bracket or fractions; the equation is not solved; response as an equation",
+   "role": "step",
+   "example": "The present age of Sahil's mother is three times the present age of Sahil. After 5 years their ages will add to 66 years. Write an equation for Sahil's present age x.",
+   "separation": {
+    "neighbour": "SK-AG-30",
+    "learner": "A learner solves 3(x − 4) = x + 6 correctly as x = 9, but for Sahil and his mother writes 3x + x + 5 = 66, adding the five years once instead of to each age."
+   },
+   "stopping": "Setting up the equation is practised with nothing to solve; the solving is the neighbouring step.",
+   "requires": [
+    {
+     "ki": "KI-AG-47",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-18",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-62",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-58",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-59",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-60",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-AG-25",
+     "always": true
+    },
+    {
+     "skill": "SK-AG-26",
+     "always": true
+    },
+    {
+     "skill": "SK-AG-27",
+     "always": true
+    },
+    {
+     "skill": "SK-AG-28",
+     "always": true
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-30",
+   "outcome": "LO-M806",
+   "statement": "Solves a linear equation in one variable that has the variable on both sides or inside a bracket.",
+   "action": "solves",
+   "content": "a linear equation with variable terms on both sides",
+   "conditions": "forms ax + b = cx + d, a(x + b) = cx + d and a(x + b) = c(x + d); integer coefficients from −20 to 20; solution an integer or a fraction with denominator up to 10, possibly negative; written working; solution stated as x = …",
+   "role": "step",
+   "example": "Solve 5x − 7 = 2x + 8.   Solve 3(x − 4) = x + 6.",
+   "separation": {
+    "neighbour": "SK-AG-25",
+    "learner": "A learner solves 'the perimeter of a rectangle is 13 cm and its width is 2¾ cm' with 2(l + 2¾) = 13 as l = 3¾ cm, but turns 5x − 7 = 2x + 8 into 7x − 7 = 8, moving 2x to the left side without changing its sign."
+   },
+   "stopping": "Moving the variable terms to one side and then solving is one procedure; splitting it gives parts that cannot be evidenced apart.",
+   "requires": [
+    {
+     "ki": "KI-AG-24",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-19",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-AG-27",
+     "always": true
+    },
+    {
+     "skill": "SK-AG-26",
+     "always": false
+    },
+    {
+     "skill": "SK-AG-31",
+     "always": true
+    },
+    {
+     "skill": "SK-AG-32",
+     "always": true
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-31",
+   "outcome": "LO-M806",
+   "statement": "Solves a linear equation in one variable that has fractions with whole-number denominators.",
+   "action": "solves",
+   "content": "a linear equation whose terms are fractions with whole-number denominators",
+   "conditions": "forms such as x/2 − 1/5 = x/3 + 1/4, (3t − 2)/4 − (2t + 3)/3 = 2/3 − t and m − (m − 1)/2 = 1 − (m − 2)/3; denominators from 2 to 12 with a common multiple up to 60; a numerator may be a linear expression, the fraction line acting as a bracket; solution an integer or a fraction with denominator up to 12, possibly negative; written working",
+   "role": "step",
+   "example": "Solve x/2 − 1/5 = x/3 + 1/4.   Solve m − (m − 1)/2 = 1 − (m − 2)/3.",
+   "separation": {
+    "neighbour": "SK-AG-30",
+    "learner": "A learner solves 5x − 7 = 2x + 8 correctly as x = 5, but multiplies x/2 − 1/5 = x/3 + 1/4 by 60 on the terms with x only, writing 30x − 1/5 = 20x + 1/4."
+   },
+   "stopping": "Clearing the fractions and solving the cleared equation are one procedure; the cleared equation is the neighbouring step.",
+   "requires": [
+    {
+     "ki": "KI-AG-61",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-19",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-AG-28",
+     "always": false
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-32",
+   "outcome": "LO-M806",
+   "statement": "Solves an equation in which a fraction with the variable in its numerator and denominator equals a number or another fraction, reducing it to a linear equation.",
+   "action": "solves",
+   "content": "an equation with the variable in the numerator and denominator of a fraction",
+   "conditions": "forms (ax + b)/(cx + d) = p/q and (ax + b)/(cx) = p, with a, b, c, d, p and q integers from −20 to 20; solution an integer or a fraction with denominator up to 10, possibly negative, that does not make a denominator zero; written working; solution stated as x = …",
+   "role": "step",
+   "example": "Solve (x + 1)/(2x + 3) = 3/8.   Solve (7y + 4)/(y + 2) = −4/3.",
+   "separation": {
+    "neighbour": "SK-AG-30",
+    "learner": "A learner solves 3(x − 4) = x + 6 correctly as x = 9, but for (x + 1)/(2x + 3) = 3/8 equates the numerators and the denominators separately, writing x + 1 = 3 and 2x + 3 = 8."
+   },
+   "stopping": "Cross-multiplying and solving the linear equation that results are one procedure; the linear equation is the neighbouring step.",
+   "requires": [
+    {
+     "ki": "KI-RP-07",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-29",
+     "basis": "mathematical necessity",
+     "helpful": true
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-AG-28",
+     "always": false
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-33",
+   "outcome": "LO-M807",
+   "statement": "Multiplies two or more monomials.",
+   "action": "multiplies",
+   "content": "monomials in one to three variables",
+   "conditions": "two to four monomials; each a number multiplied by powers of one to three variables, with powers up to 4, as in 5x, 4x², x²y and pq³; numerical coefficients integers from −20 to 20 or fractions with denominator up to 10, positive or negative; written symbols; answer a single monomial",
+   "role": "outcome task",
+   "example": "Find the product of 5x and 4x².   (2/3 xy) × (−9/10 x²y²) = ?   x × x² × x³ × x⁴ = ?",
+   "separation": {
+    "neighbour": "SK-AG-34",
+    "learner": "A learner expands 3x(2x − 5) correctly as 6x² − 15x, but finds x² × x³ as x⁶, multiplying the exponents instead of adding them."
+   },
+   "stopping": "The coefficients and the powers of each variable are multiplied in one pass; splitting them gives parts that cannot be evidenced apart.",
+   "requires": [
+    {
+     "ki": "KI-AG-51",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-74",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-31",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-AG-34",
+     "always": true
+    },
+    {
+     "skill": "SK-AG-35",
+     "always": true
+    },
+    {
+     "skill": "SK-AG-36",
+     "always": true
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-34",
+   "outcome": "LO-M807",
+   "statement": "Expands the product of a monomial and a polynomial.",
+   "action": "expands",
+   "content": "a monomial times a polynomial of two to four terms",
+   "conditions": "monomial with a coefficient and up to two variables, such as 3x, −4ab and 2x²y; polynomial of two to four terms in one to three variables with powers up to 3; coefficients integers from −20 to 20 or fractions with denominator up to 10; a single product, not a sum of products; written symbols; answer written as a sum of terms",
+   "role": "outcome task",
+   "example": "Expand 2x(3x + 5xy).   Expand −4ab(a² − 3b + 5).",
+   "separation": {
+    "neighbour": "SK-AG-33",
+    "learner": "A learner finds 5x × 4x² = 20x³, but expands 3x(2x − 5) as 6x² − 5, multiplying the first term only."
+   },
+   "stopping": "Multiplying the monomial by each term and writing the sum is one procedure; the products of single terms are the neighbouring skill.",
+   "requires": [
+    {
+     "ki": "KI-AG-13",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-AG-35",
+     "always": false
+    },
+    {
+     "skill": "SK-AG-36",
+     "always": false
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-35",
+   "outcome": "LO-M807",
+   "statement": "Expands the product of two binomials.",
+   "action": "expands",
+   "content": "the product of two binomials",
+   "conditions": "each binomial has two terms in one or two variables, each term a number, a variable or a product with powers up to 2, as in (2x − 5)(3x + 7), (a + 3b)(x + 5) and (p² − q²)(2p + q); coefficients integers from −20 to 20 or fractions with denominator up to 10; written symbols; answer with like terms collected",
+   "role": "outcome task",
+   "example": "Expand (2x − 5)(3x + 7).   Expand (a + 3b)(x + 5).",
+   "separation": {
+    "neighbour": "SK-AG-34",
+    "learner": "A learner expands 3x(2x − 5) correctly as 6x² − 15x, but expands (2x − 5)(3x + 7) as 6x² − 35, multiplying the first terms and the last terms only."
+   },
+   "stopping": "All four products are formed and written together; splitting by product gives parts that cannot be evidenced apart, and the collecting of like terms is recorded as a step.",
+   "requires": [
+    {
+     "ki": "KI-AG-52",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-36",
+   "outcome": "LO-M807",
+   "statement": "Expands the product of a binomial and a trinomial.",
+   "action": "expands",
+   "content": "the product of a binomial and a trinomial",
+   "conditions": "a binomial and a trinomial in one or two variables with powers up to 2 in the trinomial, as in (a + 7)(a² + 3a + 5) and (x + y)(x² − xy + y²); coefficients integers from −20 to 20 or fractions with denominator up to 10; written symbols; answer with like terms collected",
+   "role": "outcome task",
+   "example": "Expand (a + 7)(a² + 3a + 5).   Expand (x + y)(x² − xy + y²).",
+   "separation": {
+    "neighbour": "SK-AG-35",
+    "learner": "A learner expands (a + 7)(b − 5) correctly as ab − 5a + 7b − 35, but expands (a + 7)(a² + 3a + 5) as a³ + 7a² + 5a + 35, using the first, outer, inner and last terms only."
+   },
+   "stopping": "All six products are formed and written together; splitting by product gives parts that cannot be evidenced apart.",
+   "requires": [
+    {
+     "ki": "KI-AG-52",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-37",
+   "outcome": "LO-M807",
+   "statement": "Collects the like terms in the terms obtained by expanding a product of two polynomials.",
+   "action": "collects",
+   "content": "the like terms of an expanded product",
+   "conditions": "four to nine terms in one or two variables with powers up to 3, as in 6x² + 14x − 15x − 35 and a³ + 3a² + 5a + 7a² + 21a + 35; coefficients integers from −45 to 45 or fractions with denominator up to 10; includes like terms written in a different order, as xy and yx, and pairs that cancel to zero; written symbols; answer with no like terms left",
+   "role": "step",
+   "example": "Collect the like terms in 6x² + 14x − 15x − 35.   Collect the like terms in x³ − x²y + xy² + x²y − xy² + y³.",
+   "separation": {
+    "neighbour": "SK-AG-34",
+    "learner": "A learner expands 3x(2x − 5) correctly as 6x² − 15x, but collects 6x² + 14x − 15x − 35 as 6x² + 29x − 35, adding the sizes of 14x and 15x and dropping the minus sign."
+   },
+   "stopping": "Grouping the like terms and adding their coefficients are done in one pass; the grouping alone gives a part that cannot be evidenced apart from the adding.",
+   "requires": [
+    {
+     "ki": "KI-AG-11",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-12",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-AG-35",
+     "always": false
+    },
+    {
+     "skill": "SK-AG-36",
+     "always": true
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-38",
+   "outcome": "LO-M808",
+   "statement": "Finds the square of a number near a multiple of ten or a hundred using the identity for (a + b)² or (a − b)².",
+   "action": "finds",
+   "content": "the square of a whole number or a decimal near a multiple of 10 or 100",
+   "conditions": "whole numbers from 20 to 1000 that are 1, 2 or 3 more or less than a multiple of 10 or of 100, as 71, 99, 102 and 998; decimals with one decimal place that are 0.1 to 0.3 more or less than a whole number, as 5.2 and 8.9; the number written as a sum or a difference and squared by the identity; written working; numerical answer",
+   "role": "outcome task",
+   "example": "Find 103² using an identity.   Find 98².   Find 8.9².",
+   "separation": {
+    "neighbour": "SK-AG-39",
+    "learner": "A learner finds 98 × 102 = 9996 correctly by (100 − 2)(100 + 2), but finds 98² as 100² − 2² = 9996, using the identity for a sum times a difference."
+   },
+   "stopping": "Choosing the split and squaring with the identity are done in one pass; splitting them gives parts that cannot be evidenced apart.",
+   "requires": [
+    {
+     "ki": "KI-AG-54",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-AG-55",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-37",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-24",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-39",
+   "outcome": "LO-M808",
+   "statement": "Finds the product of two numbers equally far from a multiple of ten on either side using the identity for (a + b)(a − b).",
+   "action": "finds",
+   "content": "the product of two whole numbers a − b and a + b",
+   "conditions": "two whole numbers a − b and a + b, where a is a multiple of 10 from 50 to 300 and b is 1, 2 or 3, as 98 × 102, 51 × 49, 78 × 82 and 297 × 303; written working; numerical answer",
+   "role": "outcome task",
+   "example": "Find 98 × 102 using an identity.   Find 51 × 49.   Find 297 × 303.",
+   "separation": {
+    "neighbour": "SK-AG-38",
+    "learner": "A learner finds 103² = 10609 and 98² = 9604 correctly by the identities for (a + b)² and (a − b)², but finds 98 × 102 as 100² + 2² = 10004."
+   },
+   "stopping": "Seeing the pair as a − b and a + b and writing the difference of squares are done in one pass; splitting them gives parts that cannot be evidenced apart.",
+   "requires": [
+    {
+     "ki": "KI-AG-56",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-40",
+   "outcome": "LO-M808",
+   "statement": "Finds the product of two numbers near the same base using the identity for (x + a)(x + b).",
+   "action": "finds",
+   "content": "the product of two numbers that differ from a common base by small amounts",
+   "conditions": "whole numbers or decimals with one decimal place; the base x is a multiple of 5 from 5 to 100 and each number differs from x by a whole number from 1 to 5, or by 0.1 to 0.3 for decimals; a and b may be positive or negative and are not equal in size, as in 103 × 104, 103 × 98, 5.1 × 5.2 and 9.7 × 9.8; written working; numerical answer",
+   "role": "outcome task",
+   "example": "Find 103 × 104 using an identity.   Find 9.7 × 9.8.",
+   "separation": {
+    "neighbour": "SK-AG-39",
+    "learner": "A learner finds 98 × 102 = 9996 correctly by (a + b)(a − b), but finds 103 × 104 as 100² + 3 × 4 = 10012, leaving out the middle term (3 + 4) × 100."
+   },
+   "stopping": "Choosing the base and applying the identity are done in one pass; splitting them gives parts that cannot be evidenced apart.",
+   "requires": [
+    {
+     "ki": "KI-AG-57",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-37",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-24",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-AG-41",
+   "outcome": "LO-M808",
+   "statement": "Finds the difference of the squares of two numbers using the identity for a² − b².",
+   "action": "finds",
+   "content": "the difference of two squares of numbers whose sum or difference is easy to use",
+   "conditions": "two whole numbers from 40 to 200, or two decimals with up to two decimal places, whose sum is 2 or a multiple of 10, as in 51² − 49², 153² − 147², (1.02)² − (0.98)² and 12.1² − 7.9²; written working; numerical answer",
+   "role": "outcome task",
+   "example": "Find 51² − 49² using an identity.   Find 153² − 147².   Find (1.02)² − (0.98)².",
+   "separation": {
+    "neighbour": "SK-AG-39",
+    "learner": "A learner finds 98 × 102 = 9996 correctly by writing (100 − 2)(100 + 2), but finds 51² − 49² as (51 − 49)² = 4."
+   },
+   "stopping": "Writing the difference of squares as a product and multiplying are done in one pass; splitting them gives parts that cannot be evidenced apart.",
+   "requires": [
+    {
+     "ki": "KI-AG-56",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-37",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-24",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  }
+ ],
+ "knowledge_items": [
+  {
+   "id": "KI-AG-01",
+   "statement": "A variable is a letter that stands for a number that can take different values.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-02",
+   "statement": "A number written directly before a letter is multiplied by it, so 3x means 3 × x, x means 1 × x, -x means -1 × x and xy means x × y.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. A convention of algebraic notation."
+  },
+  {
+   "id": "KI-AG-03",
+   "statement": "An algebraic expression is a combination of numbers and variables joined by operation signs, and it contains no equals sign.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-04",
+   "statement": "A term of an algebraic expression is a number, a variable, or a product of numbers and variables, and the terms of an expression are joined by + or − signs.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-06",
+   "statement": "In a term, the number that multiplies the variables is the coefficient, and a term with no variable is a constant term.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-10",
+   "statement": "Like terms have the same variables raised to the same powers, so 3x²y and −5x²y are like terms but 3x² and 3x are not.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-11",
+   "statement": "Like terms are added or subtracted by adding or subtracting their coefficients and keeping the variable part unchanged.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason is the distributive property, 3x + 5x = (3 + 5)x."
+  },
+  {
+   "id": "KI-AG-12",
+   "statement": "Unlike terms cannot be combined into a single term, so a sum of unlike terms such as 3x + 2y stays as two terms.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-13",
+   "statement": "To expand a bracket multiplied by a number or a term, multiply every term inside the bracket by that number or term, keeping track of each sign.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-18",
+   "statement": "An equation states that two expressions have the same value, and a solution of an equation is a value of the variable that makes the two sides equal.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-19",
+   "statement": "Adding or subtracting the same number or term on both sides of an equation, or multiplying or dividing both sides by the same non-zero number, gives an equation with the same solutions.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-20",
+   "statement": "To solve a linear equation in which the variable appears once, undo the operations applied to the variable in the reverse order of their application, doing the same to both sides.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-21",
+   "statement": "A chain of operations is undone by applying the inverse of each operation in the reverse order.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Shared by solving equations, changing the subject of a formula and working backwards through a flowchart. Could also be read as a Principle; see findings."
+  },
+  {
+   "id": "KI-AG-22",
+   "statement": "Subtracting a number undoes adding that number, and adding a number undoes subtracting it.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 3,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Arithmetic item outside AG (cross-domain); the PAL graph holds only the multiplication and division case (KI-RN-27). First expected grade not checked against a source."
+  },
+  {
+   "id": "KI-AG-23",
+   "statement": "Multiplying by a non-zero number undoes dividing by that number.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 3,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The converse of KI-RN-27 (cross-domain). First expected grade not checked against a source."
+  },
+  {
+   "id": "KI-AG-24",
+   "statement": "To solve a linear equation with the variable on both sides, add or subtract a variable term on both sides so that the variable appears on one side only.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-47",
+   "statement": "To write an equation for a situation, let a variable stand for one unknown quantity, write the other quantities in terms of it, and set equal two expressions for the same quantity.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-48",
+   "statement": "The solution of an equation written for a situation answers the question only when it is read as the quantity the variable stands for and fits the conditions of the situation.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-ME-01",
+   "statement": "The perimeter of a closed shape is the total length of its boundary, measured in units of length.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) LO-G6-17 places perimeter in Grade 6."
+  },
+  {
+   "id": "KI-NN-01",
+   "statement": "The square of a number n, written n², is n × n.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Kind recorded as Concept, as for the definitions KI-RN-32 and KI-RN-34; a Procedure reading is possible because it also tells what to do. NCERT (2017) places squares in Grade 8 (LO-M804); Grade 7 follows the MYP2 overview."
+  },
+  {
+   "id": "KI-RN-19",
+   "statement": "A common denominator of two fractions is a common multiple of their denominators.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-20",
+   "statement": "In a decimal, each place has one-tenth the value of the place to its left.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-21",
+   "statement": "A decimal with n digits after the decimal point is a fraction with denominator 10 to the power n, written in place-value notation.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-24",
+   "statement": "To add or subtract decimals, line up digits of the same place value, including the decimal points.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-25",
+   "statement": "The product of two integers with the same sign is positive, and the product of two integers with different signs is negative.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-27",
+   "statement": "Dividing by a non-zero number undoes multiplying by that number.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 3,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-29",
+   "statement": "Division by zero is not defined.",
+   "kind": "Fact or term",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-31",
+   "statement": "The product of two fractions has the product of the numerators as its numerator and the product of the denominators as its denominator.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-32",
+   "statement": "A fraction of a quantity is that fraction multiplied by the quantity.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-37",
+   "statement": "To multiply two decimals, multiply them as whole numbers and give the product as many decimal places as the two factors have together.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-74",
+   "statement": "The product or quotient of two rational numbers with the same sign is positive, and with different signs is negative.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-01",
+   "statement": "The ratio a : b of two quantities of the same kind compares them by division and has no unit.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-03",
+   "statement": "Multiplying or dividing both terms of a ratio by the same non-zero number gives an equivalent ratio.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-04",
+   "statement": "The ratio a : b is equal to the fraction a/b, so two ratios are compared by comparing their fractions.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-07",
+   "statement": "The ratios a : b and c : d are equal exactly when a × d = b × c.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-AG-49",
+   "statement": "In xⁿ, where n is a positive whole number, x is the base, n is the exponent, and xⁿ is x multiplied by itself n times.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Cross-domain (exponents); the PAL, MYP2 and integers graphs have only the square and cube (KI-NN-01, KI-NN-02)."
+  },
+  {
+   "id": "KI-AG-50",
+   "statement": "When powers of the same base are multiplied, the exponents are added, so xᵐ × xⁿ = xᵐ⁺ⁿ for positive whole numbers m and n.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Cross-domain (exponents). The reason is counting the factors of x."
+  },
+  {
+   "id": "KI-AG-51",
+   "statement": "To multiply monomials, multiply their numerical coefficients, multiply the powers of each variable by adding the exponents of that variable, and write the results together as one monomial.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-52",
+   "statement": "To multiply two polynomials, multiply every term of the first by every term of the second, keeping each sign, and add the products.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. The reason is the distributive property applied to each term of the first polynomial in turn. The sum of the products is collected by KI-AG-11 and KI-AG-12."
+  },
+  {
+   "id": "KI-AG-53",
+   "statement": "An identity is an equation that is true for every value of the variables in it, whereas an equation that is not an identity is true only for some values.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Contrast with an equation (KI-AG-18) is part of the statement."
+  },
+  {
+   "id": "KI-AG-54",
+   "statement": "For all numbers a and b, (a + b)² = a² + 2ab + b².",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT shows the reason by multiplying (a + b)(a + b) and by areas."
+  },
+  {
+   "id": "KI-AG-55",
+   "statement": "For all numbers a and b, (a − b)² = a² − 2ab + b².",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-56",
+   "statement": "For all numbers a and b, (a + b)(a − b) = a² − b².",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Read from right to left, it is the factorisation of a difference of two squares; the numerical use in SK-AG-41 is the only right-to-left use in this graph."
+  },
+  {
+   "id": "KI-AG-57",
+   "statement": "For all numbers x, a and b, (x + a)(x + b) = x² + (a + b)x + ab.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  },
+  {
+   "id": "KI-AG-58",
+   "statement": "A two-digit number with tens digit t and units digit u has the value 10t + u, so the number with its digits interchanged has the value 10u + t.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Cross-domain (whole-number place value). Two readings are possible: a Principle, because it states what is true of every two-digit number. Recorded as a Concept because the response is the same form 10t + u in every case. First grade is that of the textbook's digit puzzles; place value of two-digit numbers is taught earlier."
+  },
+  {
+   "id": "KI-AG-59",
+   "statement": "After k years a person's age is the present age plus k, and k years ago it was the present age minus k, so the ages of two people change by the same number of years.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Two readings are possible: a Fact or term, because the statement is a convention of how ages are counted. Recorded as a Principle because the response changes with the case."
+  },
+  {
+   "id": "KI-AG-60",
+   "statement": "If two quantities are in the ratio a : b, then they can be written as ax and bx for one number x.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Cross-domain (ratio and proportion); KI-RP-03 gives equivalent ratios but not this converse, and KI-RP-26 gives shares of a total only."
+  },
+  {
+   "id": "KI-AG-62",
+   "statement": "Consecutive numbers follow one another with the same difference: 1 for consecutive whole numbers, 2 for consecutive even numbers or consecutive odd numbers, and k for consecutive multiples of k.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026. Learners write consecutive multiples of 8 as n, n + 1 and n + 2 (the separation learner of SK-AG-25). Cross-domain (number patterns); NCERT Grade 8 Chapter 2 uses it in worked examples."
+  },
+  {
+   "id": "KI-AG-61",
+   "statement": "To solve a linear equation with fractions whose denominators are numbers, multiply every term on both sides by a common multiple of the denominators, so that the equation has no fractions.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": "authored by ConveGenius, 24 Oct 2026."
+  }
+ ],
+ "ki_requires": [
+  {
+   "from": "KI-RN-21",
+   "to": "KI-RN-20",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RN-24",
+   "to": "KI-RN-20",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RN-37",
+   "to": "KI-RN-21",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-RN-74",
+   "to": "KI-RN-25",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-03",
+   "to": "KI-RN-13",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-RP-04",
+   "to": "KI-RP-01",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-07",
+   "to": "KI-RP-04",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-03",
+   "to": "KI-AG-01",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-04",
+   "to": "KI-AG-03",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-06",
+   "to": "KI-AG-04",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-10",
+   "to": "KI-AG-04",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-11",
+   "to": "KI-AG-10",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-11",
+   "to": "KI-AG-06",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-11",
+   "to": "KI-RN-57",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-12",
+   "to": "KI-AG-10",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-13",
+   "to": "KI-RN-57",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-18",
+   "to": "KI-AG-03",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-19",
+   "to": "KI-AG-18",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-20",
+   "to": "KI-AG-19",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-20",
+   "to": "KI-AG-21",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-AG-21",
+   "to": "KI-AG-22",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-21",
+   "to": "KI-AG-23",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-21",
+   "to": "KI-RN-27",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-24",
+   "to": "KI-AG-19",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-24",
+   "to": "KI-AG-11",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-47",
+   "to": "KI-AG-18",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-48",
+   "to": "KI-AG-18",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-50",
+   "to": "KI-AG-49",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-51",
+   "to": "KI-AG-50",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-51",
+   "to": "KI-AG-06",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-51",
+   "to": "KI-AG-02",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-52",
+   "to": "KI-AG-13",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-52",
+   "to": "KI-AG-51",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-53",
+   "to": "KI-AG-18",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-54",
+   "to": "KI-AG-53",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-54",
+   "to": "KI-AG-52",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-AG-54",
+   "to": "KI-NN-01",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-55",
+   "to": "KI-AG-53",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-55",
+   "to": "KI-AG-52",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-AG-55",
+   "to": "KI-NN-01",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-56",
+   "to": "KI-AG-53",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-56",
+   "to": "KI-AG-52",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-AG-56",
+   "to": "KI-NN-01",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-57",
+   "to": "KI-AG-53",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-57",
+   "to": "KI-AG-52",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-AG-57",
+   "to": "KI-NN-01",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-60",
+   "to": "KI-RP-03",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-61",
+   "to": "KI-AG-19",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-AG-61",
+   "to": "KI-RN-19",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-AG-61",
+   "to": "KI-RN-57",
+   "basis": "mathematical necessity"
+  }
+ ],
+ "links": [
+  {
+   "from": "SK-AG-25",
+   "to": "SK-AG-26",
+   "type": "extends",
+   "reason": "From puzzles about numbers to puzzles about the digits of a number, which need place value."
+  },
+  {
+   "from": "SK-AG-25",
+   "to": "SK-AG-27",
+   "type": "extends",
+   "reason": "From equations with the variable on one side to equations with the variable on both sides."
+  },
+  {
+   "from": "SK-AG-27",
+   "to": "SK-AG-28",
+   "type": "extends",
+   "reason": "From equations with whole-number coefficients to equations with fractions or the variable in a denominator."
+  },
+  {
+   "from": "SK-AG-30",
+   "to": "SK-AG-31",
+   "type": "extends",
+   "reason": "From integer coefficients to fractions with whole-number denominators, cleared by a common multiple."
+  },
+  {
+   "from": "SK-AG-30",
+   "to": "SK-AG-32",
+   "type": "extends",
+   "reason": "From the variable in the numerator only to the variable in the numerator and denominator of a fraction."
+  },
+  {
+   "from": "SK-AG-33",
+   "to": "SK-AG-34",
+   "type": "extends",
+   "reason": "From the product of two monomials to the product of a monomial and every term of a polynomial."
+  },
+  {
+   "from": "SK-AG-34",
+   "to": "SK-AG-35",
+   "type": "extends",
+   "reason": "From one multiplying term to a binomial, whose every term multiplies every term of the second binomial."
+  },
+  {
+   "from": "SK-AG-35",
+   "to": "SK-AG-36",
+   "type": "extends",
+   "reason": "From a binomial second factor to a trinomial second factor, which gives six products instead of four."
+  },
+  {
+   "from": "SK-AG-39",
+   "to": "SK-AG-40",
+   "type": "extends",
+   "reason": "From two numbers equally far from the base on opposite sides to two numbers at any small distances from the base."
+  },
+  {
+   "from": "SK-AG-38",
+   "to": "SK-AG-39",
+   "type": "contrasts with",
+   "reason": "Squaring a number near a hundred keeps the middle term 2ab, while the product of numbers on either side of it has none, and learners give 98 × 102 as 100² + 2²."
+  },
+  {
+   "from": "SK-AG-39",
+   "to": "SK-AG-41",
+   "type": "is format of",
+   "reason": "Both use a² − b² = (a + b)(a − b); one reads it from a product of numbers to a difference of squares and the other from a difference of squares to a product."
+  },
+  {
+   "from": "KI-AG-54",
+   "to": "KI-AG-55",
+   "type": "contrasts with",
+   "reason": "The two squares differ in the sign of the middle term, +2ab for a sum and −2ab for a difference."
+  },
+  {
+   "from": "KI-AG-54",
+   "to": "KI-AG-56",
+   "type": "contrasts with",
+   "reason": "Squaring a sum has the middle term 2ab, while a sum times a difference has no middle term, and (a + b)² is not a² + b²."
+  },
+  {
+   "from": "KI-AG-56",
+   "to": "KI-AG-57",
+   "type": "extends",
+   "reason": "From (x + a)(x − a) to (x + a)(x + b), where a and b may be any two numbers."
+  },
+  {
+   "from": "KI-AG-53",
+   "to": "KI-AG-18",
+   "type": "contrasts with",
+   "reason": "An identity is true for every value of its variables, while an equation to be solved is true only for some values."
+  }
+ ],
+ "routes": [],
+ "findings": {
+  "AG": "- Counts: 17 new skills (12 outcome tasks: SK-AG-25 to 28, 33 to 36 and 38 to 41; 5 steps: SK-AG-29 to 32 and 37), 14 new and 35 copied knowledge items, no skill copied. Review stays pending.\n- M806, reading used: 'using variables' is read as writing and solving a linear equation in one variable for a problem, because NCERT Class 8 Chapter 2 (Linear Equations in One Variable) is the only Grade 8 chapter that sets puzzles and daily-life problems with a variable. 'Puzzles' and 'daily life problems' are not two skills, since both are written and solved the same way; the situation is a condition of SK-AG-25 (numbers, consecutive numbers, ages, ratio, perimeter, money). Digit puzzles (SK-AG-26), equations with the variable on both sides (SK-AG-27) and equations with fractions or the variable in a denominator (SK-AG-28) each get an outcome task because the chapter gives each its own worked examples and a learner can pass one and fail another.\n- M806 steps: writing the equation (SK-AG-29) and solving it with the variable on both sides (SK-AG-30), with fractions (SK-AG-31) or with the variable in a denominator (SK-AG-32) are steps, because the outcome does not ask for equation solving outside a problem. SK-AG-30 is always part of SK-AG-27, SK-AG-31 and SK-AG-32 and sometimes part of SK-AG-26; SK-AG-31 and SK-AG-32 are sometimes part of SK-AG-28 (the herd of deer needs SK-AG-31, the rational number and the ratio of ages need SK-AG-32). SK-AG-29 is always part of SK-AG-25 to 28.\n- M806, MYP2 skills reviewed and not copied: SK-AG-07, 08, 11 and 16. Reasons: (a) the separation neighbour chain of SK-AG-11 runs to SK-AG-08, 16 and 24, and SK-AG-07 points to SK-AG-05; SK-AG-24 (flowchart) and SK-AG-05 (expression from words) are not asked by any Grade 8 outcome, so copying them would put them under LO-M806; (b) in MYP2 SK-AG-07, 08 and 16 are outcome tasks of LO-MYP2-15 and LO-MYP2-19, while here the same performances are steps. The Grade 8 versions are new records with Grade 8 conditions: SK-AG-29 for SK-AG-07, SK-AG-30 for SK-AG-08, and SK-AG-25 to 28 for SK-AG-11. The merger may add extends links from SK-AG-07 to SK-AG-29, from SK-AG-08 to SK-AG-30 and from SK-AG-11 to SK-AG-25, 26, 27 and 28. SK-AG-16 (one or two inverse operations, variable on one side) has no Grade 8 counterpart; SK-AG-25 and SK-AG-26 require KI-AG-20 directly instead.\n- M806, left out because the outcome does not ask for them: solving an equation with the variable on one side outside a problem (Grade 7), checking a solution by substituting it, linear inequalities (MYP2 SK-AG-09 and 10), and formulas as equations (MYP2 SK-AG-17). Money problems have no knowledge item of their own: the value of coins or notes is the number multiplied by the value of one, which KI-RN-76 in the PAL graph states in general, and no skill of this group requires it.\n- M807, reading used: 'multiplies algebraic expressions' is the products of NCERT Class 8 Chapter 9: monomial by monomial (two to four monomials), monomial by polynomial, binomial by binomial and binomial by trinomial. The example clause, expands (2x−5)(3x+7), is SK-AG-35. Coefficients are integers or fractions with denominator up to 10, as in Exercises 9.2 to 9.4. Examples are modelled on those exercises as the author recalls them and were not checked against the printed textbook.\n- M807, judgment: SK-AG-33 (monomials) is an outcome task, since a product of two monomials is a product of algebraic expressions, and it is also always part of SK-AG-34, 35 and 36, the same pattern as MYP2 SK-AG-07. A reviewer may prefer to record it as a step. SK-AG-34 is sometimes part of SK-AG-35 and 36, because a learner may expand by one term of a binomial at a time or by every term at once. SK-AG-37 (collecting the like terms of the expanded product) is sometimes part of SK-AG-35, since products such as (a + 3b)(x + 5) have no like terms, and always part of SK-AG-36. MYP2 SK-AG-04 (collects like terms) and SK-AG-06 (expands a bracket by an integer or a single variable) are Grade 7 skills of other outcomes and were not copied; their knowledge items KI-AG-10 to 13 are copied and used.\n- M807, left out because the outcome does not ask for them: adding and subtracting expressions (MYP2 SK-AG-15, taught in Grade 7 and revisited in Chapter 9), simplifying a sum of products (Exercise 9.3 Question 3, Exercise 9.4 Question 3), finding the value of a product for given values of the variables, the area of a rectangle and the volume of a box from sides given as monomials or binomials, the product of a trinomial by a trinomial such as (a + b + c)(a + b − c), classifying expressions as monomials, binomials and trinomials (MYP2 SK-AG-01; the terms are used in the conditions only), and factorisation (Chapter 14).\n- M808, reading used for 'problems of daily life': numerical evaluations of squares, products and differences of squares of numbers near a ten or a hundred (103², 98 × 102, 51 × 49, 9.7 × 9.8, 51² − 49²), which are the applications of identities in NCERT Class 8 Chapter 9. The chapter has no worded situation that needs an identity, so no skill uses a context such as the area of a square plot; if M808 is meant to reach such contexts, the situation can be added to the conditions of SK-AG-38 to 41. The four outcome tasks differ by the identity the learner has to choose, because the task does not give it. There is no step: writing a number as a multiple of ten or a hundred plus or minus a small number is done inside each task and has no separate practice in the textbook.\n- M808, factorisation: factorising with the identities (Chapter 14: a² + 2ab + b², a² − b², x² + (a + b)x + ab) is left out, since factorising an expression is not a problem of daily life. The one right-to-left use kept is the numerical difference of squares in SK-AG-41.\n- M808, left out because the outcome does not ask for them: expanding the square or product of algebraic binomials with an identity as a task in itself (Exercise 9.5 Questions 1 and 3), simplifying and 'show that' items with identities (Exercise 9.5 Questions 4 and 5), verifying an identity for given values of the variables, deriving an identity by multiplying or by areas, and products such as 1.05 × 9.5 that need rescaling by powers of ten. The numbers in the conditions follow Exercise 9.5 as the author recalls it and were not checked against the printed textbook.\n- Copied knowledge items (35): KI-AG-01 to 04, 06, 10 to 13, 18 to 24, 47 and 48 from the MYP2 graph; KI-ME-01, KI-NN-01, KI-RN-19 to 21, 24, 25, 27, 29, 31, 32, 37, 74, KI-RP-01, 03, 04 and 07 from the PAL and MYP2 graphs (identical in both). KI-RN-13 and KI-RN-57 are already in the RN_RP fragment and are used by id, not repeated. No copied item was changed. The ki_requires links among the copied items were copied; KI-RN-25 is kept because KI-RN-74 requires it.\n- Knowledge items with a different NCERT grade: KI-AG-13 (copied as 7, NCERT 8, Chapter 9), KI-AG-24 (copied as 7, NCERT 8, Chapter 2) and KI-NN-01 (copied as 7, NCERT 8, as the MYP2 note says).\n- KI-RP-07 (ratios a : b and c : d are equal exactly when a × d = b × c) is used for SK-AG-32 instead of a second item for cross-multiplication. Its letters are read as numbers, including the values of expressions in the variable for one value of the variable; KI-RP-04 supplies the step from a ratio to a fraction.\n- No knowledge item fails a test.\n- Kind classifications with two readings: KI-AG-58 (digits of a two-digit number; Concept or Principle), KI-AG-59 (ages after or before k years; Principle or Fact or term), KI-AG-60 (quantities in the ratio a : b; Principle or Concept) and KI-AG-62 (consecutive numbers; Concept or Fact or term). KI-AG-13 as copied states a bracket multiplied by 'a number or a term', so it covers a monomial multiplier with no change.\n- Cross-domain items authored here: KI-AG-49 and KI-AG-50 (exponents), KI-AG-58 (whole-number place value), KI-AG-60 (ratio) and KI-AG-62 (number patterns); none was found in the PAL, MYP2, integers or RN_RP graphs.\n- Step cases: 17 is part of links, 2 absorbed and 15 not absorbed. The not absorbed cases fall in four patterns: writing the equation (KI-AG-47 and the situation items KI-AG-58, 59, 60 and 62 sit only on SK-AG-29), solving the equation (KI-AG-24, 19, 61 and KI-RP-07 sit only on the steps SK-AG-30 to 32), the signs and fractions of coefficients (KI-RN-74 and KI-RN-31 sit only on SK-AG-33) and collecting like terms (KI-AG-11 and 12 sit only on SK-AG-37).\n- Source notes: the SLOF text of M806 says 'using variables' and does not mention equations, and M808 has no end punctuation and no list of identities; both were read through the Chapter 2 and Chapter 9 content above. The M807 example has no multiplication sign between the two brackets."
+ },
+ "copied": {
+  "skills": [],
+  "knowledge_items": [
+   "KI-AG-01",
+   "KI-AG-02",
+   "KI-AG-03",
+   "KI-AG-04",
+   "KI-AG-06",
+   "KI-AG-10",
+   "KI-AG-11",
+   "KI-AG-12",
+   "KI-AG-13",
+   "KI-AG-18",
+   "KI-AG-19",
+   "KI-AG-20",
+   "KI-AG-21",
+   "KI-AG-22",
+   "KI-AG-23",
+   "KI-AG-24",
+   "KI-AG-47",
+   "KI-AG-48",
+   "KI-ME-01",
+   "KI-NN-01",
+   "KI-RN-19",
+   "KI-RN-20",
+   "KI-RN-21",
+   "KI-RN-24",
+   "KI-RN-25",
+   "KI-RN-27",
+   "KI-RN-29",
+   "KI-RN-31",
+   "KI-RN-32",
+   "KI-RN-37",
+   "KI-RN-74",
+   "KI-RP-01",
+   "KI-RP-03",
+   "KI-RP-04",
+   "KI-RP-07"
+  ]
+ },
+ "cross_domain_kis": [
+  {
+   "id": "KI-AG-49",
+   "statement": "In xⁿ, where n is a positive whole number, x is the base, n is the exponent, and xⁿ is x multiplied by itself n times.",
+   "why": "Exponent term (NA domain) used by KI-AG-50 and the monomial product SK-AG-33; the PAL, MYP2 and integers graphs have only the square and cube."
+  },
+  {
+   "id": "KI-AG-50",
+   "statement": "When powers of the same base are multiplied, the exponents are added, so xᵐ × xⁿ = xᵐ⁺ⁿ for positive whole numbers m and n.",
+   "why": "Exponent law (NA domain) used by KI-AG-51; not found in the PAL, MYP2 or integers graphs."
+  },
+  {
+   "id": "KI-AG-58",
+   "statement": "A two-digit number with tens digit t and units digit u has the value 10t + u, so the number with its digits interchanged has the value 10u + t.",
+   "why": "Whole-number place value (NA domain) used by the digit puzzles SK-AG-26; not found in the PAL, MYP2 or integers graphs."
+  },
+  {
+   "id": "KI-AG-60",
+   "statement": "If two quantities are in the ratio a : b, then they can be written as ax and bx for one number x.",
+   "why": "Ratio fact (RP domain) used by SK-AG-25, 27 and 28; KI-RP-03 and KI-RP-26 do not state it."
+  },
+  {
+   "id": "KI-AG-62",
+   "statement": "Consecutive numbers follow one another with the same difference: 1 for consecutive whole numbers, 2 for consecutive even numbers or consecutive odd numbers, and k for consecutive multiples of k.",
+   "why": "Number pattern (NA domain) used by SK-AG-25 and SK-AG-29; not found in the PAL, MYP2 or integers graphs."
+  }
+ ],
+ "first_grade_notes": [
+  {
+   "id": "KI-AG-13",
+   "copied_first_grade": 7,
+   "ncert_first_grade": 8
+  },
+  {
+   "id": "KI-AG-24",
+   "copied_first_grade": 7,
+   "ncert_first_grade": 8
+  },
+  {
+   "id": "KI-NN-01",
+   "copied_first_grade": 7,
+   "ncert_first_grade": 8
+  }
+ ]
+}

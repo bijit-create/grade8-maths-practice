@@ -1,0 +1,891 @@
+{
+ "group": "RN_RP",
+ "built_domains": [
+  "RN",
+  "RP"
+ ],
+ "skills": [
+  {
+   "id": "SK-RN-38",
+   "outcome": "LO-M801",
+   "statement": "States in words or with letters the general property shown by a set of worked examples with rational numbers.",
+   "action": "states",
+   "content": "a general property from examples",
+   "conditions": "three to five worked examples given; properties: closure, commutativity, associativity, identity, inverse, distributivity",
+   "role": "outcome task",
+   "example": "(-2/3) + 1/5 = 1/5 + (-2/3); 3/4 + (-1/2) = (-1/2) + 3/4; ... What is true in general?",
+   "separation": {
+    "neighbour": "SK-RN-40",
+    "learner": "A learner states a + b = b + a from examples but cannot show that a - b = b - a fails."
+   },
+   "stopping": "One act of generalising; properties differ only in content.",
+   "requires": [
+    {
+     "ki": "KI-RN-54",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-56",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-57",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-58",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-59",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RN-39",
+   "outcome": "LO-M801",
+   "statement": "Decides whether a stated property holds for a stated operation on rational numbers.",
+   "action": "decides",
+   "content": "whether a property holds for an operation",
+   "conditions": "operations: addition, subtraction, multiplication, division; properties: closure, commutativity, associativity; response yes or no with a reason",
+   "role": "outcome task",
+   "example": "Is division of rational numbers commutative?",
+   "separation": {
+    "neighbour": "SK-RN-40",
+    "learner": "A learner answers 'no' correctly from memory but cannot give a case that shows it."
+   },
+   "stopping": "One judgement per task.",
+   "requires": [
+    {
+     "ki": "KI-RN-54",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-55",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-56",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RN-40",
+   "outcome": "LO-M801",
+   "statement": "Gives a counterexample that shows a stated property does not hold for a stated operation on rational numbers.",
+   "action": "gives",
+   "content": "a counterexample",
+   "conditions": "subtraction or division; commutativity, associativity, or closure under division by zero",
+   "role": "outcome task",
+   "example": "Show with one example that subtraction of rational numbers is not associative.",
+   "separation": {
+    "neighbour": "SK-RN-39",
+    "learner": "A learner who is told that subtraction is not associative can show it with 5 - (3 - 1) and (5 - 3) - 1, but answers 'yes' when asked unprompted whether subtraction is associative."
+   },
+   "stopping": "One act.",
+   "requires": [
+    {
+     "ki": "KI-RN-63",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RN-55",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RN-41",
+   "outcome": "LO-M802",
+   "statement": "Finds one rational number between two given rational numbers.",
+   "action": "finds",
+   "content": "one rational number between two",
+   "conditions": "fractions with denominators up to 12, possibly negative, including neighbours such as 1/3 and 1/2",
+   "role": "outcome task",
+   "example": "Find a rational number between -1/3 and -1/4.",
+   "separation": {
+    "neighbour": "SK-RN-42",
+    "learner": "A learner finds the mean of 1/3 and 1/2 but cannot list five numbers between them."
+   },
+   "stopping": "One act.",
+   "requires": [
+    {
+     "ki": "KI-RN-61",
+     "basis": "instructional route"
+    },
+    {
+     "ki": "KI-RN-60",
+     "basis": "mathematical necessity",
+     "helpful": true
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RN-42",
+   "outcome": "LO-M802",
+   "statement": "Finds a stated number of rational numbers between two given rational numbers.",
+   "action": "finds",
+   "content": "several rational numbers between two",
+   "conditions": "up to ten numbers; fractions with denominators up to 12, possibly negative",
+   "role": "outcome task",
+   "example": "Write five rational numbers between 1/3 and 1/2.",
+   "separation": {
+    "neighbour": "SK-RN-41",
+    "learner": "A learner finds the mean of 1/3 and 1/2 but cannot list five numbers between them, because they do not rewrite both with a larger common denominator."
+   },
+   "stopping": "One procedure (KI-RN-62).",
+   "requires": [
+    {
+     "ki": "KI-RN-62",
+     "basis": "instructional route"
+    },
+    {
+     "ki": "KI-RN-13",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RP-14",
+   "outcome": "LO-M809",
+   "statement": "Calculates the discount percent from a marked price and the discount.",
+   "action": "calculates",
+   "content": "discount percent",
+   "conditions": "marked price up to ₹50,000; discount in rupees; answer up to one decimal place",
+   "role": "outcome task",
+   "example": "A shirt marked ₹1,250 is sold at a discount of ₹200. Find the discount percent.",
+   "separation": {
+    "neighbour": "SK-RP-15",
+    "learner": "A learner finds the price after a 16% discount but gives the discount percent as 200 ÷ 1050 × 100."
+   },
+   "stopping": "One calculation.",
+   "requires": [
+    {
+     "ki": "KI-RP-15",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RP-15",
+   "outcome": "LO-M809",
+   "statement": "Calculates the selling price after a given discount percent on a marked price.",
+   "action": "calculates",
+   "content": "the price after a discount",
+   "conditions": "marked price up to ₹50,000; discount a whole-number percent",
+   "role": "outcome task",
+   "example": "A fan marked ₹2,400 is sold at 15% discount. Find the selling price.",
+   "separation": {
+    "neighbour": "SK-RP-14",
+    "learner": "A learner finds the 15% discount of ₹360 and gives it as the selling price."
+   },
+   "stopping": "One subtraction after one percentage.",
+   "requires": [
+    {
+     "ki": "KI-RP-15",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RP-16",
+   "outcome": "LO-M809",
+   "statement": "Calculates the price a buyer pays when a stated percentage of sales tax is added to a price.",
+   "action": "calculates",
+   "content": "price including sales tax",
+   "conditions": "price up to ₹50,000; tax rate a whole-number percent, called VAT in the outcome and GST in current use",
+   "role": "outcome task",
+   "example": "A bag costs ₹1,800 and VAT is 12%. How much does the buyer pay?",
+   "separation": {
+    "neighbour": "SK-RP-15",
+    "learner": "A learner subtracts a 15% discount correctly but also subtracts 12% VAT instead of adding it."
+   },
+   "stopping": "One addition after one percentage.",
+   "requires": [
+    {
+     "ki": "KI-RP-16",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RP-17",
+   "outcome": "LO-M809",
+   "statement": "Finds the selling price from a cost price and a profit or loss percent.",
+   "action": "finds",
+   "content": "the selling price",
+   "conditions": "whole-rupee cost price up to ₹50,000; whole-number percent",
+   "role": "outcome task",
+   "example": "A shopkeeper buys a watch for ₹1,200 and sells it at 15% profit. Find the selling price.",
+   "separation": {
+    "neighbour": "SK-RP-18",
+    "learner": "A learner finds the selling price as ₹1,380 but, told that ₹1,380 includes 15% profit, gives the cost price as ₹1,380 − 15% of ₹1,380."
+   },
+   "stopping": "One calculation.",
+   "requires": [
+    {
+     "ki": "KI-RP-12",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RP-11",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RP-18",
+   "outcome": "LO-M809",
+   "statement": "Finds the cost price from a selling price and a profit or loss percent.",
+   "action": "finds",
+   "content": "the cost price",
+   "conditions": "whole-rupee selling price up to ₹50,000; whole-number percent",
+   "role": "outcome task",
+   "example": "A watch is sold for ₹1,380 at a profit of 15%. Find the cost price.",
+   "separation": {
+    "neighbour": "SK-RP-17",
+    "learner": "A learner finds a selling price from a cost price correctly but gives the cost price of a watch sold for ₹1,380 at 15% profit as ₹1,173, taking 15% of the selling price."
+   },
+   "stopping": "One rearrangement (KI-RP-25).",
+   "requires": [
+    {
+     "ki": "KI-RP-25",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RP-12",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RP-19",
+   "outcome": "LO-M809",
+   "statement": "Calculates the compound interest for a principal at an annual rate compounded annually for up to three years.",
+   "action": "calculates",
+   "content": "compound interest compounded annually",
+   "conditions": "principal up to ₹1,00,000; rate a whole-number percent; one to three years; by formula or year by year",
+   "role": "outcome task",
+   "example": "Find the compound interest on ₹10,000 at 8% per year for 2 years, compounded annually.",
+   "separation": {
+    "neighbour": "SK-RP-20",
+    "learner": "A learner finds the compound interest on ₹10,000 at 8% per year for 2 years as ₹1,664 but, for ₹10,000 at 10% per year for 1 year compounded half-yearly, gives ₹2,100, using 10% for each half-year."
+   },
+   "stopping": "Annual compounding is one procedure; half-yearly is a separate skill.",
+   "requires": [
+    {
+     "ki": "KI-RP-17",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RP-14",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RP-20",
+   "outcome": "LO-M809",
+   "statement": "Calculates the compound interest for a principal at an annual rate compounded half-yearly.",
+   "action": "calculates",
+   "content": "compound interest compounded half-yearly",
+   "conditions": "principal up to ₹1,00,000; rate a whole-number percent per year; time up to 2 years",
+   "role": "outcome task",
+   "example": "Find the compound interest on ₹10,000 at 10% per year for 1 year, compounded half-yearly.",
+   "separation": {
+    "neighbour": "SK-RP-19",
+    "learner": "A learner compounds annually correctly but uses 10% for each half-year."
+   },
+   "stopping": "One adjustment of rate and periods.",
+   "requires": [
+    {
+     "ki": "KI-RP-18",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RP-17",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RP-21",
+   "outcome": "LO-M810",
+   "statement": "Decides whether two quantities in a situation are in direct proportion, in inverse proportion, or neither.",
+   "action": "decides",
+   "content": "the kind of variation between two quantities",
+   "conditions": "situation in words or a table of three to five pairs; response with a reason",
+   "role": "step",
+   "example": "The number of workers and the days to build a wall: direct, inverse, or neither?",
+   "separation": {
+    "neighbour": "SK-RP-22",
+    "learner": "A learner solves 'if 6 workers take 10 days' correctly once told it is inverse, but calls it direct when not told."
+   },
+   "stopping": "One judgement per situation.",
+   "requires": [
+    {
+     "ki": "KI-RP-08",
+     "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-RP-19",
+     "basis": "mathematical necessity"
+    }
+   ],
+   "part_of": [
+    {
+     "skill": "SK-RP-22",
+     "always": true
+    },
+    {
+     "skill": "SK-RP-23",
+     "always": true
+    }
+   ],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RP-22",
+   "outcome": "LO-M810",
+   "statement": "Solves a word problem in which two quantities are in direct proportion, finding a missing value.",
+   "action": "solves",
+   "content": "a direct proportion problem",
+   "conditions": "situation in words or a table; whole numbers or decimals up to two places; one missing value",
+   "role": "outcome task",
+   "example": "A car uses 8 litres of petrol for 120 km. How far does it go on 30 litres?",
+   "separation": {
+    "neighbour": "SK-RP-23",
+    "learner": "A learner finds 450 km correctly but, for '6 workers take 10 days, how long for 4 workers', gives 10 × 4 ÷ 6."
+   },
+   "stopping": "One missing value per task.",
+   "requires": [
+    {
+     "ki": "KI-RP-20",
+     "basis": "instructional route"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  },
+  {
+   "id": "SK-RP-23",
+   "outcome": "LO-M810",
+   "statement": "Solves a word problem in which two quantities are in inverse proportion, finding a missing value.",
+   "action": "solves",
+   "content": "an inverse proportion problem",
+   "conditions": "situation in words or a table; whole numbers; one missing value",
+   "role": "outcome task",
+   "example": "6 workers take 10 days to build a wall. How long will 4 workers take?",
+   "separation": {
+    "neighbour": "SK-RP-22",
+    "learner": "A learner solves the petrol problem correctly but gives 6 2/3 days for 4 workers, treating the situation as direct."
+   },
+   "stopping": "One missing value per task.",
+   "requires": [
+    {
+     "ki": "KI-RP-21",
+     "basis": "instructional route"
+    }
+   ],
+   "part_of": [],
+   "review": "pending"
+  }
+ ],
+ "knowledge_items": [
+  {
+   "id": "KI-RN-07",
+   "statement": "A fraction a/b is a of the b equal parts into which a whole is divided.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 3,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-13",
+   "statement": "Multiplying or dividing the numerator and denominator of a fraction by the same non-zero number gives an equivalent fraction.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 6,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-54",
+   "statement": "Addition and multiplication of rational numbers are commutative and associative.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-55",
+   "statement": "Subtraction and division of rational numbers are neither commutative nor associative.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-56",
+   "statement": "The sum, difference and product of two rational numbers is a rational number, and so is the quotient when the divisor is not zero.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-57",
+   "statement": "For rational numbers a, b and c, a(b + c) = ab + ac.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-58",
+   "statement": "For every rational number a, a + 0 = a and a × 1 = a.",
+   "kind": "Principle",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-59",
+   "statement": "Every rational number a has an additive inverse -a, and a + (-a) = 0.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-60",
+   "statement": "Between any two different rational numbers there is another rational number.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-61",
+   "statement": "The mean of two different rational numbers lies between them.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-62",
+   "statement": "To find n rational numbers between two rational numbers, rewrite both with a common denominator large enough that at least n integers lie strictly between the two numerators.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RN-63",
+   "statement": "A statement about all rational numbers is shown false by one case in which it fails.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-08",
+   "statement": "Two quantities are in direct proportion when the ratio of corresponding values is the same for every pair.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-09",
+   "statement": "A percentage is a fraction with denominator 100.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-10",
+   "statement": "A fraction or a decimal is written as a percentage by multiplying it by 100.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-11",
+   "statement": "Profit is selling price minus cost price when the selling price is higher, and loss is cost price minus selling price when the cost price is higher.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-12",
+   "statement": "Profit percent and loss percent are the profit or loss written as a percentage of the cost price.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-14",
+   "statement": "The amount is the principal plus the interest.",
+   "kind": "Fact or term",
+   "rationale": "without",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-15",
+   "statement": "Discount is the marked price minus the selling price, and discount percent is the discount written as a percentage of the marked price.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-16",
+   "statement": "Sales tax is a stated percentage of the price, added to the price the buyer pays.",
+   "kind": "Concept",
+   "rationale": "without",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-17",
+   "statement": "When interest is compounded annually at R percent per year, the amount after n years is P(1 + R/100) to the power n.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-18",
+   "statement": "When interest is compounded half-yearly, the rate for each period is half the annual rate and the number of periods is twice the number of years.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-19",
+   "statement": "Two quantities are in inverse proportion when the product of corresponding values is the same for every pair.",
+   "kind": "Concept",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-20",
+   "statement": "If x and y are in direct proportion, x1/y1 = x2/y2 for any two pairs of values.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-21",
+   "statement": "If x and y are in inverse proportion, x1 × y1 = x2 × y2 for any two pairs of values.",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-23",
+   "statement": "A quantity A is written as a percentage of a quantity B by computing A/B × 100.",
+   "kind": "Procedure",
+   "rationale": "with",
+   "first_grade": 7,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  },
+  {
+   "id": "KI-RP-25",
+   "statement": "When the selling price is (100 + p) percent of the cost price, the cost price is the selling price × 100 / (100 + p).",
+   "kind": "Principle",
+   "rationale": "with",
+   "first_grade": 8,
+   "tests": {
+    "sentence": "pass",
+    "subject": "pass",
+    "truth": "pass"
+   },
+   "note": ""
+  }
+ ],
+ "ki_requires": [
+  {
+   "from": "KI-RN-59",
+   "to": "KI-RN-58",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RN-60",
+   "to": "KI-RN-61",
+   "basis": "mathematical necessity",
+   "helpful": true
+  },
+  {
+   "from": "KI-RN-62",
+   "to": "KI-RN-13",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-10",
+   "to": "KI-RP-09",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-23",
+   "to": "KI-RP-10",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-12",
+   "to": "KI-RP-23",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-RP-15",
+   "to": "KI-RP-23",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-RP-20",
+   "to": "KI-RP-08",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-21",
+   "to": "KI-RP-19",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-25",
+   "to": "KI-RP-12",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-17",
+   "to": "KI-RP-14",
+   "basis": "mathematical necessity"
+  },
+  {
+   "from": "KI-RP-09",
+   "to": "KI-RN-07",
+   "basis": "mathematical necessity"
+  }
+ ],
+ "links": [],
+ "routes": [],
+ "findings": {
+  "RN": "- M801 and M802: 5 outcome-task skills (SK-RN-38 to 42) and 12 knowledge items (KI-RN-07, 13, 54 to 63) copied verbatim from the PAL Maths Grades 6-10 graph (6 Oct 2026), where they were authored for these same outcomes. Review stays pending.\n- The PAL findings for RN apply: no Grade 8 outcome asks for calculating with rational numbers as such; M801 asks for the properties, so bare addition, subtraction, multiplication and division of rational numbers (PAL SK-RN-34 to 36, Grade 7) are not copied. A reviewer who wants them in this learner's graph can copy them from the PAL graph.\n- Route route-rn-v2 (V2 §4.2) is not copied: its mapped steps are Grade 6 and 7 skills.",
+  "RP": "- M809 and M810: 10 skills (9 outcome tasks, 1 step: SK-RP-14 to 23) and 15 knowledge items (KI-RP-08 to 12, 14 to 21, 23, 25) copied verbatim from the PAL Maths Grades 6-10 graph (6 Oct 2026). Review stays pending.\n- Changed on the copy in this graph only: SK-RP-19's separation neighbour was SK-RP-12 (Grade 7, simple interest), which is not in this graph; it is now SK-RP-20 with a learner who compounds annually but uses the annual rate for each half-year.\n- Links left out because their other end is a Grade 6 or 7 skill not in this graph: SK-RP-04 extends SK-RP-22; SK-RP-06 extends SK-RP-21; SK-RP-11 extends SK-RP-17; SK-RP-12 contrasts with SK-RP-19.\n- Step case: SK-RP-21 (decides direct, inverse or neither) is always part of SK-RP-22 and SK-RP-23.\n- Left out because M809 does not ask for them (as in the PAL build): compound interest compounded quarterly; interest compounded for a fraction of a year; successive discounts."
+ },
+ "copied": {
+  "skills": [
+   "SK-RN-38",
+   "SK-RN-39",
+   "SK-RN-40",
+   "SK-RN-41",
+   "SK-RN-42",
+   "SK-RP-14",
+   "SK-RP-15",
+   "SK-RP-16",
+   "SK-RP-17",
+   "SK-RP-18",
+   "SK-RP-19",
+   "SK-RP-20",
+   "SK-RP-21",
+   "SK-RP-22",
+   "SK-RP-23"
+  ],
+  "knowledge_items": [
+   "KI-RN-07",
+   "KI-RN-13",
+   "KI-RN-54",
+   "KI-RN-55",
+   "KI-RN-56",
+   "KI-RN-57",
+   "KI-RN-58",
+   "KI-RN-59",
+   "KI-RN-60",
+   "KI-RN-61",
+   "KI-RN-62",
+   "KI-RN-63",
+   "KI-RP-08",
+   "KI-RP-09",
+   "KI-RP-10",
+   "KI-RP-11",
+   "KI-RP-12",
+   "KI-RP-14",
+   "KI-RP-15",
+   "KI-RP-16",
+   "KI-RP-17",
+   "KI-RP-18",
+   "KI-RP-19",
+   "KI-RP-20",
+   "KI-RP-21",
+   "KI-RP-23",
+   "KI-RP-25"
+  ]
+ },
+ "cross_domain_kis": []
+}

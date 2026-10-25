@@ -1,0 +1,13 @@
+# Details about the learner stay off GitHub.
+profile.md
+data/
+plan/
+
+# Local noise
+.DS_Store
+Thumbs.db
+__pycache__/
+.vercel/
+
+# Student 1 material (names a school and a learner detail). Stays local.
+templates-from-student-1/

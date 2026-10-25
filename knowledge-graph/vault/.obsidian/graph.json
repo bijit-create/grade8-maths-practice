@@ -1,0 +1,35 @@
+{
+  "showTags": false,
+  "hideUnresolved": true,
+  "showArrow": true,
+  "colorGroups": [
+    {
+      "query": "path:\"2 Learning outcomes\"",
+      "color": {
+        "a": 1,
+        "rgb": 15237946
+      }
+    },
+    {
+      "query": "path:\"3 Skills\"",
+      "color": {
+        "a": 1,
+        "rgb": 3832789
+      }
+    },
+    {
+      "query": "path:\"4 Knowledge items\"",
+      "color": {
+        "a": 1,
+        "rgb": 3908956
+      }
+    },
+    {
+      "query": "path:\"1 Canvas/Domains\"",
+      "color": {
+        "a": 1,
+        "rgb": 9329621
+      }
+    }
+  ]
+}
