@@ -10,13 +10,25 @@ courtyard.innerHTML = `
 
 const Billi = (()=>{
  const traveller=courtyard.querySelector('.cat-traveller');
- let active=false,running=false,progress=0,right=0,attempts=0,lastActive=Date.now(),nudged=false,reaction=null,celebrationTimer=null;
+ let active=false,running=false,progress=0,right=0,attempts=0,lastActive=Date.now(),nudged=false,reaction=null,walkTimer=null,celebrationTimer=null;
  const live=courtyard.querySelector('.journey-live');
  function state(value){traveller.dataset.state=value;}
  function message(text,announce=false){if(announce)live.textContent=text;}
- function position(p){progress=Math.max(progress,Math.min(.96,p));traveller.style.left=`calc(${4+progress*78}% - ${progress*64}px)`;courtyard.querySelectorAll('.journey-track i').forEach((dot,i)=>dot.classList.toggle('reached',i<Math.floor(progress*10)));}
+ function position(p){
+   progress=Math.max(progress,Math.min(.96,p));
+   const target=courtyard.clientWidth*(.04+progress*.78)-progress*64;
+   const distance=Math.abs(target-traveller.offsetLeft);
+   // One stride covers roughly 28% of the sprite box. Match translation to the
+   // fixed twelve-frame gait instead of playing fast steps over a slow glide.
+   const duration=distance<.5?0:Math.max(240,Math.min(2500,distance/(traveller.offsetWidth*.28)*960));
+   clearTimeout(walkTimer);traveller.style.setProperty('--travel-duration',`${duration}ms`);
+   traveller.style.left=`calc(${4+progress*78}% - ${progress*64}px)`;
+   if(active&&duration){state('walk');walkTimer=setTimeout(()=>{if(traveller.dataset.state==='walk')state('rest');},duration);}
+   courtyard.querySelectorAll('.journey-track i').forEach((dot,i)=>dot.classList.toggle('reached',i<Math.floor(progress*10)));
+   return duration;
+ }
  function activity(){lastActive=Date.now();if(nudged){cancelReaction();nudged=false;message('');state('rest');}}
- function cancelReaction(){clearTimeout(reaction);reaction=null;}
+ function cancelReaction(){clearTimeout(reaction);reaction=null;clearTimeout(walkTimer);if(traveller.dataset.state==='walk'){const left=traveller.offsetLeft;traveller.style.setProperty('--travel-duration','0ms');traveller.style.left=`${left}px`;}}
  function celebrate(final=false){cancelReaction();clearTimeout(celebrationTimer);state(final?'home':'celebrate');message(final?'Home at last. Well done!':'A little closer to home!',true);
    const confetti=courtyard.querySelector('.celebration');confetti.replaceChildren();
    for(let i=0;i<(final?38:12);i++){const bit=document.createElement('i');bit.style.cssText=`--x:${(i*37)%100}%;--c:${['#d29b42','#3e8585','#c87561','#fff0ca'][i%4]};--delay:${(i%6)*.06}s`;confetti.append(bit);}
@@ -25,7 +37,7 @@ const Billi = (()=>{
  }
  function reset(){cancelReaction();clearTimeout(celebrationTimer);active=running=false;progress=right=attempts=0;nudged=false;traveller.dataset.paused='false';traveller.style.left='4%';courtyard.querySelector('.home-door').classList.remove('open');courtyard.querySelector('.celebration').replaceChildren();state('rest');message('');activity();}
  function answer(ok){if(!active)return;cancelReaction();clearTimeout(celebrationTimer);courtyard.querySelector('.celebration').replaceChildren();activity();attempts++;
-   if(ok){right++;position(progress+Math.max(.004,(1-progress)*.025));state('walk');message('');if(right%5===0){reaction=setTimeout(()=>celebrate(),650);}else reaction=setTimeout(()=>state('rest'),1200);}
+   if(ok){right++;const duration=position(progress+Math.max(.004,(1-progress)*.025));message('');if(right%5===0)reaction=setTimeout(()=>celebrate(),Math.max(650,duration));}
    else{state('sit');message('Take your time.');}
 
  }

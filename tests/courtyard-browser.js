@@ -46,11 +46,15 @@ async function checkBilliBehaviour(){
  const sprite=cat.querySelector('.cat-sprite');
  const atlas=new Image();atlas.src=new URL('assets/cats/cat-sprites.webp',location.href).href;await atlas.decode();
  assert('Sprite image loads with the expected 6 by 4 grid',atlas.naturalWidth===1536&&atlas.naturalHeight===1024);
+ const walkImage=new Image();walkImage.src=new URL('assets/cats/walk-sprites-v2.webp',location.href).href;await walkImage.decode();
+ assert('Dedicated twelve-pose walk atlas loads',walkImage.naturalWidth===1024&&walkImage.naturalHeight===768);
  Billi.start();Billi.answer(true);assert('Correct answer walks',cat.dataset.state==='walk');
  const first=getComputedStyle(sprite).backgroundPositionX;await wait(180);
  assert('Walking advances actual image frames',first!==getComputedStyle(sprite).backgroundPositionX&&getComputedStyle(sprite).backgroundPositionY==='0%');
- const earned=cat.style.left;Billi.answer(false);assert('Mistake sits without losing distance',cat.dataset.state==='sit'&&cat.style.left===earned);
- Billi.answer(true);Billi.answer(true);Billi.answer(true);Billi.answer(true);await wait(750);
+ assert('Walking duration follows actual journey distance',parseFloat(cat.style.getPropertyValue('--travel-duration'))>=240);
+ const earned=cat.getBoundingClientRect().left;Billi.answer(false);assert('Mistake sits without losing distance',cat.dataset.state==='sit'&&cat.getBoundingClientRect().left>=earned-1);
+ const stopped=cat.offsetLeft;await wait(250);assert('Seated cat no longer glides along the path',cat.offsetLeft===stopped);
+ Billi.answer(true);Billi.answer(true);Billi.answer(true);Billi.answer(true);await wait(Math.max(650,parseFloat(cat.style.getPropertyValue('--travel-duration')))+100);
  assert('Five successes celebrate',cat.dataset.state==='celebrate'&&courtyard.querySelectorAll('.celebration i').length>0);
  Billi.answer(false);await wait(1200);assert('Mistake cancels prior celebration',cat.dataset.state==='sit');
  const clock=Date.now;try{const now=clock();Date.now=()=>now+91000;await wait(1100);assert('Inactivity triggers knock',cat.dataset.state==='knock');}
@@ -60,6 +64,7 @@ async function checkBilliBehaviour(){
  assert('Pause freezes sprite playback',getComputedStyle(sprite).animationPlayState==='paused');
  document.getElementById('pauseCat').click();Billi.finish();assert('Homecoming opens door and celebrates',cat.dataset.state==='home'&&courtyard.querySelector('.home-door').classList.contains('open'));
  Billi.reset();assert('New session clears celebration',courtyard.querySelectorAll('.celebration i').length===0&&!courtyard.querySelector('.home-door').classList.contains('open'));
+ Billi.start();Billi.block(1,4);assert('Block progress also walks rather than sliding while seated',cat.dataset.state==='walk');Billi.reset();
  return checks;
 }
 

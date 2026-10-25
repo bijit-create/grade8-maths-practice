@@ -4,6 +4,7 @@ from collections import deque
 import json
 import shutil
 import sys
+import subprocess
 from PIL import Image
 
 root = Path(__file__).resolve().parents[1]
@@ -82,3 +83,5 @@ packed.save(out / 'cat-sprites.webp', lossless=True, method=6)
 (out / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 shutil.copytree(out, root / 'site/assets/cats', dirs_exist_ok=True)
 print(f'Packaged 24 transparent {cell}x{cell} frames, four animated previews and a shared atlas.')
+if (root / 'artwork/cat-walk-v2.png').exists():
+    subprocess.run([sys.executable, str(root / 'scripts/prepare-walk-cycle.py')], check=True)
