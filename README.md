@@ -15,7 +15,7 @@ Work for one learner, set up the same way as the Student 1 folder. Student 2 is 
 ## Online
 
 - Site for students: https://grade8-maths-practice.vercel.app (index), https://grade8-maths-practice.vercel.app/equations-practice and https://grade8-maths-practice.vercel.app/knowledge-graph.
-- Source: https://github.com/bijit-create/grade8-maths-practice (public). Vercel project `grade8-maths-practice`, root directory `site/`, deploys `main` on every push.
+- Source: https://github.com/bijit-create/grade8-maths-practice (public). Vercel project `grade8-maths-practice` (account bijits-projects-ec8c6e30), root directory `site/`. The project is not yet connected to the GitHub repo, so a push does not deploy by itself: either connect it once in the Vercel dashboard (project Settings, Git, Connect, pick this repo) or ask Claude to redeploy `main` after a push.
 - Kept off GitHub by `.gitignore`: `profile.md`, `data/`, `plan/` and `templates-from-student-1/` (that folder names a school and a learner detail). They stay on this machine only.
 
 ## About the templates
