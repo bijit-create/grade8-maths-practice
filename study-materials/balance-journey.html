@@ -76,6 +76,8 @@ h1{font-size:1.15rem;margin:0}
   <div class="teacher hide" id="teacher"></div>
 </div>
 <div class="overlay hide" id="overlay"><div><p class="story"><b>Paused.</b> Your place is kept.</p><button class="btn primary" id="goOn">Go on</button></div></div>
+<script src="assets/sheet-config.js"></script>
+<script src="assets/sheetlog.js"></script>
 <script>
 /* ===================== Numbers and words (no screen code) ===================== */
 const M="−";
@@ -130,7 +132,14 @@ let K=kiStore.get()||{};
 function prOf(id){if(SETS[id].ki)return K[id]||(K[id]={ki:SETS[id].ki,res:[],passed:false});return S.pr[id]||(S.pr[id]={res:[],passed:false});}
 function saveAll(){store.set(S);kiStore.set(K);}
 let role="practice",curSet=null;
-function recordEvent(name,detail){S.events.push({t:new Date().toISOString(),event:name,set:curSet,...detail});store.set(S);}
+const HAS_SHEET=typeof SheetLog!=="undefined";
+/* Every record also goes to her Google Sheet (Activity tab) when the page is served with assets/sheetlog.js. */
+function recordEvent(name,detail){const e={t:new Date().toISOString(),event:name,set:curSet,...detail};S.events.push(e);store.set(S);
+ if(HAS_SHEET)SheetLog.activity({event:name,set:e.set||"",role:e.role||"",eq:e.item?e.item.eq:"",x:e.item?e.item.x:"",answer:e.answer||"",
+  right:e.right===undefined?"":e.right?1:0,own:e.own===undefined?"":e.own?1:0,support:e.support||"",checks:(e.checks||[]).join(" "),detail:JSON.stringify(e)});}
+/* A practice set's latest state goes to the Now tab. */
+function sendState(id,status){if(!HAS_SHEET)return;const p=prOf(id),set=SETS[id];
+ SheetLog.state({set:id,ki:set.ki||set.skill,teacher:set.teacher,status,stage:p.stage||"",own_right:p.res.filter(r=>r.first).length,items:p.res.length});}
 function decision(action,reason){recordEvent("teaching decision",{action,reason});}
 /* One row per answer: the item, the support given, her answer, right or not, and whether it was her own first answer. */
 function log(it,answer,right,extra={}){const set=SETS[it.kind]||{};
@@ -340,17 +349,17 @@ async function practise(id){curSet=id;const p=prOf(id),conds=SETS[id].conds;let 
   let guided=false;
   if(!shown&&(p.res.length===0||p.stopped)){await workedExample(id);shown=guided=true;delete p.stopped;saveAll();}
   role=guided?"guided_practice":"practice";const it=makeItem(id,p.res);let right=await RUN[id](it);
-  if(right==="stop"){p.stopped=true;saveAll();return "stop";}
+  if(right==="stop"){p.stopped=true;saveAll();sendState(id,"saved stop");return "stop";}
   p.res.push(guided?{first:false,supported:right,conds:it.conds}:{first:right,conds:it.conds});S.today[id]={day,n:done+1};miss=right?0:miss+1;
-  p.passed=passedNow(p.res,conds);if(p.passed){p.day=day;p.stage="contrast";recordEvent("set holds",{set:id});}saveAll();
-  if(!p.passed&&miss>=2){p.stopped=true;saveAll();decision("practice stop",`${id}: two items in a row not right; worked example again next session.`);return endToday();}
+  p.passed=passedNow(p.res,conds);if(p.passed){p.day=day;p.stage="contrast";recordEvent("set holds",{set:id});}saveAll();sendState(id,p.passed?"holds":"working on it");
+  if(!p.passed&&miss>=2){p.stopped=true;saveAll();sendState(id,"stopped for today");decision("practice stop",`${id}: two items in a row not right; worked example again next session.`);return endToday();}
  }}
 async function endToday(){task(["We stop this practice here for today. Your place is kept. Next time it starts again with new questions."]);noPicture();await button("Finish for now");return "later";}
 /* After a gap: one item of every set already passed, before anything new. One that is not right goes back to practice. */
 async function retrieval(){const passed=PRACTICE_ORDER.filter(id=>prOf(id).passed);if(!passed.length)return;
  decision("retrieval","new day: one item of each set already passed.");
  for(const id of passed){curSet=id;role="retrieval";const ok=await RUN[id](makeItem(id,[]));
-  if(ok===true){prOf(id).stage="retained";}else{if(SETS[id].ki)K[id]={ki:SETS[id].ki,res:[],passed:false};else S.pr[id]={res:[],passed:false};const ti=TASKS_IDS.indexOf(id);if(ti>=0&&ti<S.task)S.task=ti;decision("retrieval not right",`${id} goes back to practice.`);}
+  if(ok===true){prOf(id).stage="retained";sendState(id,"held after a gap");}else{sendState(id,"back to practice after a gap");if(SETS[id].ki)K[id]={ki:SETS[id].ki,res:[],passed:false};else S.pr[id]={res:[],passed:false};const ti=TASKS_IDS.indexOf(id);if(ti>=0&&ti<S.task)S.task=ti;decision("retrieval not right",`${id} goes back to practice.`);}
   saveAll();}}
 async function intro(){curSet="intro";role="explanation";const it={L:{b:2,c:9},R:{b:5,c:3},x:2,kind:"whole"};await wholeDemo(it);
  await button("Next");task(["To check, put 2 counters in every bag."]);setPicture(it);P.showX=2;setEq(eqText(it));
@@ -366,19 +375,19 @@ async function later(){curSet="later";role="delayed";
 const TASKS_IDS=["intro",...PRACTICE_ORDER,"delay","later"];
 const TASKS=TASKS_IDS.map(id=>id==="intro"?intro:id==="later"?later:id==="delay"?null:()=>practise(id));
 const DELAY_INDEX=TASKS_IDS.indexOf("delay");
-async function run(){recordEvent("session start",{task:S.task,version:JOURNEY.version});
+async function run(){if(HAS_SHEET)SheetLog.setSession(JOURNEY.prefix+"-"+Date.now().toString(36));recordEvent("session start",{task:S.task,version:JOURNEY.version});
  const day=todayKey(),newDay=S.lastDay&&S.lastDay!==day;S.lastDay=day;store.set(S);
  if(newDay&&S.task>0&&S.task!==DELAY_INDEX)await retrieval();
  while(S.task<TASKS.length){
   if(S.task===DELAY_INDEX){if(!S.reviewDue){S.reviewDue=Date.now()+DELAY_DAYS*86400000;store.set(S);}
-   if(Date.now()<S.reviewDue){task([`That is the end for today. The next part is ready in ${DELAY_DAYS} days.`]);noPicture();recordEvent("session end",{reason:"gap before the later check",due:new Date(S.reviewDue).toISOString()});return;}
+   if(Date.now()<S.reviewDue){task([`That is the end for today. The next part is ready in ${DELAY_DAYS} days.`]);noPicture();(HAS_SHEET&&setTimeout(()=>SheetLog.flush(),50)),recordEvent("session end",{reason:"gap before the later check",due:new Date(S.reviewDue).toISOString()});return;}
    S.task++;store.set(S);await retrieval();continue;}
   const r=await TASKS[S.task]();
-  if(r==="stop"||r==="later"){recordEvent("session end",{reason:r==="stop"?"saved stop":"continues next time"});
+  if(r==="stop"||r==="later"){(HAS_SHEET&&setTimeout(()=>SheetLog.flush(),50)),recordEvent("session end",{reason:r==="stop"?"saved stop":"continues next time"});
    if(r==="stop"){task(["We stop here for today. Your place is kept. Next time there are new examples."]);noPicture();await button("Finish for now");}
    task(["Your place is kept. Next time there are new examples."]);noPicture();return;}
   S.task++;store.set(S);}
- task(["That is the end of this part. Your work is kept."]);noPicture();recordEvent("session end",{reason:"journey complete"});}
+ task(["That is the end of this part. Your work is kept."]);noPicture();(HAS_SHEET&&setTimeout(()=>SheetLog.flush(),50)),recordEvent("session end",{reason:"journey complete"});}
 
 /* ===================== Header buttons and the teacher strip (only with ?teacher=1) ===================== */
 $("pauseBtn").onclick=()=>{recordEvent("pause",{});if("speechSynthesis" in window)speechSynthesis.cancel();$("overlay").classList.remove("hide");};
@@ -389,7 +398,7 @@ $("readBtn").onclick=()=>{if(!("speechSynthesis" in window))return;recordEvent("
  speechSynthesis.speak(new SpeechSynthesisUtterance(parts.join(". ")));};
 if(new URLSearchParams(location.search).get("teacher")==="1"){const t=$("teacher");t.classList.remove("hide");
  const refresh=()=>{const sets=PRACTICE_ORDER.map(id=>{const p=prOf(id);return `${id} (${SETS[id].ki||SETS[id].skill}): ${p.passed?"holds, stage "+(p.stage||""):p.stopped?"stopped for today":p.res.length+" items"}`;}).join(" · ");
-  t.innerHTML=`<b>For the teacher.</b> Step ${S.task+1} of ${TASKS.length} (${TASKS_IDS[S.task]||"done"}). ${esc(sets)}. ${S.events.length} records. <button class="btn small" id="dl">Download the records (CSV)</button> <button class="btn small" id="restart">Start again (clears this journey)</button>`;
+  t.innerHTML=`<b>For the teacher.</b> Step ${S.task+1} of ${TASKS.length} (${TASKS_IDS[S.task]||"done"}). ${esc(sets)}. ${S.events.length} records${HAS_SHEET?", "+SheetLog.pending()+" still to send to the Sheet":", not connected to the Sheet"}. <button class="btn small" id="dl">Download the records (CSV)</button> <button class="btn small" id="restart">Start again (clears this journey)</button>`;
   $("dl").onclick=()=>{const cols=["t","event","set","role","eq","x","answer","right","own","support","checks","detail"];
    const rows=S.events.map(e=>[e.t,e.event,e.set||"",e.role||"",e.item?e.item.eq:"",e.item?e.item.x:"",e.answer||"",e.right===undefined?"":e.right?1:0,e.own===undefined?"":e.own?1:0,e.support||"",(e.checks||[]).join(" "),e.reason||e.action||""]);
    const csv=[cols,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
