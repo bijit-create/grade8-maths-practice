@@ -1,10 +1,10 @@
 # Student 2: design for independent learning
 
-Student 2 is one Grade 8 CBSE learner (NCERT textbook; outcomes M801 to M820 in `knowledge-graph/`). Read `profile.md` before designing anything. It is still mostly blank: there is no record of her work yet, and it is not yet known whether an adult sits with her.
+Student 2 is one Grade 8 CBSE learner (NCERT textbook; outcomes M801 to M820 in `knowledge-graph/`). Read `profile.md` before designing anything. It is still mostly blank: there is no record of her work yet. No adult will sit with her (Bijit, 9 Nov 2026). Her answers are to go to a Google Sheet, as Student 1's do.
 
 These rules are copied from Student 1's `CLAUDE.md` (7 to 9 Nov 2026), where Bijit set them after many rounds of correction. They are written for Student 2 here. Student 1's evidence (his answers, dates, counts) is not hers. Where a rule rested on his record, it is kept as a starting design choice and marked "provisional", to be revised from her own record.
 
-Until Bijit says otherwise, design so that she can learn without an adult beside her. Every essential path (instructions, feedback, help, pause and resume, paper submission) must work without one. The goal is connected knowledge and increasingly capable, retained, independent performance, including written mathematics.
+Design so that she can learn without an adult beside her. Every essential path (instructions, feedback, help, pause and resume, paper submission) must work without one. The goal is connected knowledge and increasingly capable, retained, independent performance, including written mathematics.
 
 ## Start with the smallest complete lesson
 
