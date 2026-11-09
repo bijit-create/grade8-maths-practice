@@ -24,6 +24,32 @@ From the research read on 9 Nov (sources at the end). Each point is a design cho
 
 A right answer after a reply counts as helped. Two items in a row not right on her own end that practice for the day. A chosen reason (a two-choice question) never counts on its own; it is always paired with a value or a written answer about the same case.
 
+## How each item is taught (both items)
+
+From a second round of reading on 9 Nov, plus Student 1's `principles-layer.md` (2 Nov), which already grounds most of this. Each line says the source's claim, then what it decides here.
+
+1. **Small steps, each followed by her own step.** Rosenshine: present new material in small steps, with practice after each step. Sweller and colleagues: a worked example is studied reliably only when the learner completes part of it (completion problems). **Here:** every worked example (W1, W2, W3) ends with one step she does herself, never with a Next button alone. The step she completes varies across examples, so that "fill the last box" cannot score.
+2. **Vary what does not matter, keep the deciding feature.** Engelmann: positives vary every irrelevant feature; a negative differs from its positive only in the deciding feature; test on new examples. **Here:**
+   - the letter varies (x, y, n, a), so "a variable is x" cannot form;
+   - the numbers vary, and so does the story (pens, then books, then a bus fare);
+   - each near miss sits beside its positive: x + 4 beside 4 + 4, the number of pens beside the pens, 3x + 2 beside 3x + 2 = 11.
+   - Yes and No answers do not alternate, and right options are not always in the same place.
+3. **The letter is always a number, never an abbreviation.** Küchemann's letter-as-object reading, and the advice against "3a means 3 apples" (the "fruit salad algebra" that teachers' guides warn about). **Here:** a letter is never the first letter of the thing counted (no p for pens). Every story that uses a letter says what number it stands for ("x is the number of pens Asha buys").
+4. **Correct examples first, then incorrect ones, each with a short explanation.** Booth and colleagues 2013, and Barbieri & Booth 2020: explaining incorrect examples helped middle-school algebra more than solving problems. Combining two extra supports (signals and written prompts) did not add to either alone, in a study of 202 middle-schoolers. **Here:**
+   - the incorrect worked answers (S7, T5) come only after her own items on the same signal have been right;
+   - each has one explanation prompt, given as a choice of reasons;
+   - each is followed by a value she works out, so the chosen reason is never the only evidence;
+   - there is one support at a time.
+5. **Feedback after her attempt: the correct answer, the reason, one idea.** Shute 2008: feedback is specific, comes after the learner's own attempt, and is kept short; complex feedback can hurt. Metcalfe (in Student 1's notes): an error helps only when the feedback gives the correct answer. **Here:** every reply says what her answer is, if that can be told, then the right relation in one or two sentences. There is never a bare "not quite", and never the answer before she has tried.
+6. **Fade guidance on evidence.** Expertise reversal (Kalyuga and colleagues 2003): guidance that helps a beginner slows down someone who already knows. **Here:** if her completion steps in W1–W3 are all right at the first try, the supported item is skipped and her own items start. This is recorded, so it is visible. *Choice for you: keep this, or always show the supported item.*
+7. **Mixed practice, judged later.** Rohrer and colleagues 2020, 54 Grade 7 classes, randomised: the same problems, mixed instead of blocked, scored 61% against 38% on an unannounced test a month later (d = 0.83). Mixed practice took longer. **Here:** once both items hold, they are practised mixed, together with later items. An item counts as held only after the fresh set after the gap, never on the day it was learned.
+8. **Review at the start of every session.** Rosenshine: daily review, then weekly and monthly. **Here:** each session opens with one item of every item already held. A wrong one sends that item back to its practice (the Student 1 rule).
+9. **High success, but on her own.** Rosenshine's rule of thumb is about 80% right in practice; it is a classroom heuristic, not a finding. Bjork: a difficulty is desirable only if she can meet it. **Here:** no percentage is set. The two-misses stop and the worked example at the next session keep her from repeated failure.
+10. **Without an adult.**
+    - Every screen has Read it and Pause.
+    - Replies are short.
+    - A stopped practice is a saved stop, and nothing waits for a teacher.
+
 ---
 
 ## KI-AG-01
@@ -54,24 +80,28 @@ A small table is the picture here, and it is the only one in this item:
 | 3 | 3 + 4 = 7 |
 | 10 | 10 + 4 = 14 |
 | 0 | 0 + 4 = 4 |
+| 8 | ▢ |
 
 "The number that x stands for can be different each time. When x is 0, x + 4 is 4."
+Her step: "When x is 8, what is x + 4?" (12). Then, with a new letter: "In n + 4, the letter n stands for a number too. When n is 8, what is n + 4?" (12).
 
 **W2. x stands for the number of things, not for the things.** Positive and near miss together:
 "A pen costs ₹5. Asha buys x pens."
 "x stands for the number of pens Asha buys. x does not stand for the pens."
 "The cost of the pens in rupees is 5 × x. We write this as 5x."
 "If Asha buys 4 pens, x is 4, and the cost is 5 × 4 = ₹20."
+Her step: "A book costs ₹30. Ravi buys y books. What does y stand for?" Choices: "the books" / "the number of books Ravi buys" / "the cost of the books". Then "Ravi buys 2 books. What is 30y?" (60).
 
 **W3. The same letter is the same number. Different letters can be different numbers, or the same number.**
 "In x + x, both x's stand for the same number. If x is 4, x + x is 4 + 4 = 8."
 "x and y can stand for different numbers, like 2 and 7. They can also stand for the same number, like 5 and 5."
+Her step: "If a is 6, what is a + a?" (12).
 
 **Supported item, straight after W1–W3:** "If x is 6, what is x + 4?" (answer 10; recorded as supported).
 
 ### Her items, by signal
 
-Numbers are drawn fresh for each item; the examples show one draw. Numbers are chosen so that the usual wrong answers differ from each other and from the right answer.
+Numbers are drawn fresh for each item; the examples show one draw. Numbers are chosen so that the usual wrong answers differ from each other and from the right answer. The letter changes between items (x, y, n, a), and so does the story.
 
 **S1 Value.**
 - "If x is 6, what is x + 4?" Answer 10.
@@ -160,10 +190,12 @@ Numbers are drawn fresh for each item; the examples show one draw. Numbers are c
 | 3x + | no | the + joins nothing on the right |
 
 "An expression is made of numbers and letters joined by +, −, × or ÷. An expression has no equals sign."
+Her step: "Is 2y + 1 = 7 an expression?" (no), then "Is 2y + 1 an expression?" (yes).
 
 **W2. What 3x + 2 says.**
 "3x + 2 tells you to take the number x, multiply it by 3, then add 2."
 "If x is 5, 3x + 2 is 3 × 5 + 2 = 15 + 2 = 17."
+Her step: "If n is 6, what is 2n + 1?" (13).
 
 **W3. Same value every time, or not.**
 
@@ -173,6 +205,7 @@ Numbers are drawn fresh for each item; the examples show one draw. Numbers are c
 | 4 | 14 | 14 | 11 |
 
 "3x + 2 and 2 + 3x have the same value for every x. 2x + 3 gives 5 when x is 1, but 11 when x is 4, so it is a different expression."
+Her step: "When x is 6, what is 3x + 2? What is 2x + 3?" (20 and 15).
 
 **Supported item:** "If x is 4, what is 3x + 2?" (answer 14).
 
@@ -249,5 +282,13 @@ Numbers are drawn fresh for each item; the examples show one draw. Numbers are c
 - Watson & Mason, personal example spaces: [paper](https://www.academia.edu/79218816/The_structuring_of_personal_example_spaces)
 - Lesh translation model: [IJLTER](https://ijlter.org/index.php/ijlter/article/download/1976/pdf); understanding as connections: [Frontiers 2021](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.525493/pdf)
 - Subramaniam (HBCSE), arithmetic to algebra transition (conjoining 5 + 2x = 7x): [slides](https://mathedu.hbcse.tifr.res.in/wp-content/uploads/arith-algebra-transition-KSCSTE-talk-jan-2021.pdf); Adonis-Maarman, conjoining in Grade 8: [thesis](https://open.uct.ac.za/bitstreams/045bdccd-abdd-483d-a593-d5f66f125eea/download)
+
+Instruction (second round, 9 Nov):
+- Rosenshine, *Principles of Instruction* (IAE 2010; *American Educator* 2012): [summary](https://www.reonline.org.uk/research/10-principles-of-instruction), [Chartered College on primary maths](https://my.chartered.college/?p=5335)
+- Rohrer, Dedrick, Hartwig & Cheung (2020), interleaved practice, *Journal of Educational Psychology* 112(1): [PDF](https://Www.Gwern.net/doc/psychology/spaced-repetition/2019-rohrer.pdf), [IES project](https://ies.ed.gov/use-work/awards/efficacy-study-interleaved-mathematics-practice?ID=1790)
+- Shute (2008), *Focus on formative feedback*: [PDF](https://myweb.fsu.edu/vshute/pdf/shute%202008_b.pdf), [ETS report](https://www.ets.org/research/policy_research_reports/publications/report/2007/hslv.html)
+- Worked examples with self-explanation in middle-school algebra: [Instructional Science 2021](https://springerlink.bibliotecabuap.elogim.com/10.1007/s11251-021-09545-6), [eScholarship](https://www.escholarship.org/content/qt2pf6n9jk/qt2pf6n9jk.pdf?t=recjpl)
+- Letter as object and "fruit salad algebra": [Chick, MERGA 2009](https://merga.net.au/wp-content/uploads/DOCS/common/Uploaded%20files/Annual%20Conference%20Proceedings/2009%20Annual%20Conference%20Proceedings/Chick_RP09.pdf), [Haylock, chapter 20 teaching points](https://studysites.uk.sagepub.com/haylock/Learning%20and%20Teaching%20Points/Chapter-20.pdf)
+- Student 1's `integers-plan/principles-layer.md` (2 Nov), for worked examples, completion problems, fading, expertise reversal, desirable difficulties and errorful learning, with its own sources.
 
 Most sources were read through summaries and abstracts on 9 Nov, not in full. The wrong-answer replies are designs to test with her, not findings.
