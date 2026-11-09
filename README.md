@@ -4,7 +4,7 @@ Work for one learner, set up the same way as the Student 1 folder. Student 2 is 
 
 ## How lessons are designed (from 9 Nov 2026)
 
-`CLAUDE.md` holds the design rules, copied from Student 1's rules of 7–9 Nov (success first, journeys with probes chosen by the wrong answer, manipulatives she moves, practice that defeats shortcuts, wording checked with `instruction-language`). The first journey built to them is designed in `study-materials/equations-journey-1.md`. Student 1's current reference files are in `templates-from-student-1/2026-11-09/`.
+`CLAUDE.md` holds the design rules, copied from Student 1's rules of 7–9 Nov (success first, journeys with probes chosen by the wrong answer, manipulatives she moves, practice that defeats shortcuts, wording checked with `instruction-language`). The first journey built to them is designed in `study-materials/equations-journey-1.md` and built as `study-materials/balance-journey.html` (copied to `site/balance-equations.html`; tests: `node study-materials/balance-journey-test.cjs` with NODE_PATH set to HTML-TOOL/agentic-generator/node_modules). Its records stay on the device; open it with `?teacher=1` to download them. Student 1's current reference files are in `templates-from-student-1/2026-11-09/`.
 
 ## Folders
 - `profile.md` — who Student 2 is. Fill this in first.
