@@ -15,7 +15,8 @@
      PAGE = { set:"q1-make", ki:"KI-GE-21", teacher:"exact name and rule in symbols", title:"Her title",
               version:"q1 1.0 (11 Nov 2026)",
               worked:[task, task], sup:task, gen:{kind:task, ...}, plan:[kind, ...],
-              contrasts:["name", ...], contrastKind:{name:kind}, gates:{kind:[kind needed first]} }
+              contrasts:["name", ...], contrastKind:{name:kind}, gates:{kind:[kind needed first]},
+              supSupport:"optional: what the supported item writes for her, for the support column" }
    A task is a function (ctx, it) that draws one item and calls ctx.done(...) exactly once, when she says it is finished.
    gen tasks also get ctx.kind and ctx.contrast; set ctx.contrast = "name" inside the task if the item is a contrast case.
    ctx gives:
@@ -126,7 +127,7 @@ function workedExample(st){
     nextButton(()=>{st.w++;if(st.w>=PAGE.worked.length){st.phase=st.resumed?"own":"supported";st.resumed=false;}go();});});}
 function supportedItem(st){
   runTask(PAGE.sup,"supported","sup",(r)=>{
-    record("answer",{role:"supported",eq:r.eq||"",answer:r.answer||"",right:r.right?1:0,own:0,support:"worked lines on screen",checks:PAGE.ki,detail:{tag:r.tag||""}});
+    record("answer",{role:"supported",eq:r.eq||"",answer:r.answer||"",right:r.right?1:0,own:0,support:PAGE.supSupport||"worked lines on screen",checks:PAGE.ki,detail:{tag:r.tag||""}});
     kiOf().stage="own items";nextButton(()=>{st.phase="own";go();});});}
 function heldNow(st){const own=st.res.filter(r=>r.own&&r.right),last=st.res[st.res.length-1],kinds=new Set(own.map(r=>r.kind));
   const missing=PAGE.contrasts.filter(c=>!own.some(r=>r.contrast===c));

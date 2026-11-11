@@ -1,6 +1,6 @@
 # Handover: seven quadrilateral pages (11 Nov 2026)
 
-Branch `claude/funny-gates-6c0b8e` (worktree `.claude/worktrees/funny-gates-6c0b8e`). Nothing deployed.
+Branch `claude/funny-gates-6c0b8e` (worktree `.claude/worktrees/funny-gates-6c0b8e`). Deployed to production 11 Nov on Bijit's word (see Status).
 
 ## Bijit's decisions, 11 Nov 2026 (this chat)
 - Seven experiences, each its own page that records to her Sheet: (1) make a quadrilateral from points, (2) yes/no on near
@@ -38,7 +38,7 @@ that branch first, or ask Bijit. Vercel prod deploys need Bijit's go-ahead (he a
 | 1 make | this chat | 474 passed | FIX (5 points with one on a side), fixed |
 | 2 near misses | agent | 692 passed | READY |
 | 3 diagonals | agent | 528 passed | READY; side/diagonal/neither made random (rule), fixed |
-| 4 angle sum 360° | agent | 615 passed | READY (note: every number answer there is 360; only the "possible or not" items defeat typing 360) |
+| 4 angle sum 360° | agent | 615 passed | READY (note: every item asking for the total of all four interior angles, or all six triangle angles, has answer 360°. Items finding one angle from its two parts have varying answers. The "possible or not" items require a different response.) |
 | 5 fourth angle | agent | 921 passed | READY (built from the unapproved SK-GE-08 draft) |
 | 6 angle beside it | agent | 806 passed | FIX (two angles drawn as one arc, invisible tap targets), fixed |
 | 7 angles with x | agent | 576 passed | READY; title made plainer |
@@ -46,3 +46,9 @@ that branch first, or ask Bijit. Vercel prod deploys need Bijit's go-ahead (he a
 Deployed to production on Bijit's word ("Production now", 11 Nov) from this branch: the quadrilateral pages are reachable
 by URL (/quadrilaterals-1 ... /quadrilaterals-7); the home page has no links yet, and the equations session's pages are
 not in this deploy. Next deploy must come from the merged branches.
+
+## 11 Nov, later: local edits, not committed, not deployed
+- Page 4 teacher comment and teacher string (`?teacher=1`) now name KI-GE-66 (an interior diagonal divides a
+  quadrilateral into two triangles) and KI-GE-22 (triangle angle sum); the old text gave KI-GE-66 the triangle's
+  meaning. Nothing she sees changed; test 615 passed. `site/knowledge-graph.html` carries the three graph decisions and
+  the KI-GE-66 repair. Both go live only with the next deploy, on Bijit's yes. Review: ChatGPT bridge request cd28102b.

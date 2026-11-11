@@ -7,8 +7,9 @@
 <!-- Student 2, quadrilaterals experience 4 of 7. 11 Nov 2026.
      KI-GE-23 (Principle): the four angles of a quadrilateral add up to 360 degrees.
      Teacher name: angle sum of a quadrilateral, ∠A + ∠B + ∠C + ∠D = 360°.
-     Taught through KI-GE-66 (angle sum of a triangle, 180°), as Bijit decided on 11 Nov 2026: a diagonal cuts the
-     quadrilateral into 2 triangles, so 180° + 180° = 360°.
+     Taught through KI-GE-66 (an interior diagonal divides a quadrilateral into two triangles) and KI-GE-22 (the
+     interior angles of a triangle sum to 180°), following Bijit's instructional-route decision on 11 Nov 2026:
+     180° + 180° = 360°.
      Source for the dragging and the angle labels: study-materials/quadrilaterals/sk-ge-08-screen.html part 1 (drag a
      vertex, the 4 angles are measured in whole degrees that always add to 360 by largest remainder, and written at the
      vertices while she drags; only convex shapes can be dragged).
@@ -26,6 +27,10 @@
      Shortcuts this set defeats: "the sum changes with the shape" (drag), "only convex shapes add to 360°" (concave),
      "any 4 equal angles will do" (poss, with 4 equal angles that are not 90°), "one triangle is 180° so a quadrilateral
      is 180°" (tri), "the sum is 4 × the first angle I see" (rect, poss).
+     Bijit, 11 Nov 2026 (ChatGPT defaults, bridge cd28102b): this page is supported practice. Every total asked for is
+     360°, so a right total alone is limited evidence; the 2-parts and "possible or not" items are the ones that tell.
+     The triangle angle sum (180°) is written for her only on the supported item, and its support column says so; it is
+     not evidence that she holds KI-GE-22.
      Engine and records: assets/quad-engine.js. -->
 <link rel="stylesheet" href="assets/quad.css">
 <style>
@@ -271,8 +276,9 @@ function rectTask(ctx){const L=pickL(ctx),P=rectShape(ctx);
   ctx.auto({right(){mark();answer(360);},wrongs:[{expect:"That is 1 right angle",fn(){mark();answer(90);}},{expect:"That is 2 right angles",fn(){mark();answer(180);}},{expect:"That is 3 right angles",fn(){mark();answer(270);}}]});}
 
 QE.start({set:"ki-ge-23",ki:"KI-GE-23",title:"Find out what the 4 angles of a quadrilateral add up to",version:"quadrilaterals-4 1.0 (11 Nov 2026)",
-  teacher:"Angle sum of a quadrilateral: ∠A + ∠B + ∠C + ∠D = 360°. Taught through KI-GE-66 (angle sum of a triangle, 180°): a diagonal cuts a quadrilateral into 2 triangles, 2 × 180° = 360°.",
+  teacher:"Angle sum of a quadrilateral: ∠A + ∠B + ∠C + ∠D = 360°. Taught through KI-GE-66 (an interior diagonal divides a quadrilateral into two triangles) and KI-GE-22 (the interior angles of a triangle sum to 180°): 2 × 180° = 360°.",
   worked:[W1,W2],sup:ctx=>triTask(ctx,{help:true,variant:"sum",L:"ABCD"}),
+  supSupport:"worked lines on screen; triangle angle sum written (the 3 angles of a triangle add up to 180°)",
   gen:{tri:triTask,drag:dragTask,poss:possTask,concave:concaveTask,rect:rectTask},
   plan:["tri","poss","drag","concave","tri","rect","poss","drag","concave","tri","poss"],
   contrasts:["a corner points in","four angles that cannot be","shape changes, sum does not"],

@@ -2504,6 +2504,10 @@
     {
      "ki": "KI-GE-23",
      "basis": "mathematical necessity"
+    },
+    {
+     "ki": "KI-GE-21",
+     "basis": "mathematical necessity"
     }
    ],
    "part_of": [],
@@ -6132,7 +6136,7 @@
   },
   {
    "id": "KI-GE-21",
-   "statement": "A quadrilateral is a closed figure in a plane bounded by four line segments, and it has four sides, four vertices and four angles.",
+   "statement": "A quadrilateral is a closed figure in a plane bounded by four line segments, in which adjacent sides meet only at their common end point, opposite sides do not meet and no three vertices lie on one straight line; it has four sides, four distinct vertices and four interior angles.",
    "kind": "Concept",
    "rationale": "without",
    "first_grade": 6,
@@ -6141,7 +6145,7 @@
     "subject": "pass",
     "truth": "pass"
    },
-   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) places quadrilaterals in Grade 6 (Understanding Elementary Shapes); not checked against the textbook."
+   "note": "authored by ConveGenius, 24 Oct 2026. NCERT (2017) places quadrilaterals in Grade 6 (Understanding Elementary Shapes); not checked against the textbook. Statement revised 11 Nov 2026 (Bijit's decision that the sides do not cross; wording checked by ChatGPT, bridge request cd28102b): it excludes crossed shapes, opposite sides that touch and three vertices in a line, and allows concave quadrilaterals."
   },
   {
    "id": "KI-GE-22",
@@ -6704,7 +6708,7 @@
   },
   {
    "id": "KI-GE-66",
-   "statement": "A diagonal of a quadrilateral divides it into two triangles.",
+   "statement": "Every quadrilateral has at least one diagonal that lies inside it apart from its end points, and that diagonal divides the quadrilateral into two triangles.",
    "kind": "Principle",
    "rationale": "without",
    "first_grade": 8,
@@ -6713,7 +6717,7 @@
     "subject": "pass",
     "truth": "pass"
    },
-   "note": "authored by ConveGenius, 24 Oct 2026. Two readings of kind: principle, or concept because the result is always two triangles; recorded as a principle."
+   "note": "authored by ConveGenius, 24 Oct 2026. Two readings of kind: principle, or concept because the result is always two triangles; recorded as a principle. Corrected 11 Nov 2026: the earlier statement did not specify which diagonal. A concave quadrilateral has one interior diagonal that divides it into two triangles; its other diagonal lies outside, apart from its end points. In a convex quadrilateral, either diagonal divides it into two triangles."
   },
   {
    "id": "KI-GE-67",
@@ -8473,6 +8477,11 @@
   {
    "from": "KI-GE-23",
    "to": "KI-GE-22",
+   "basis": "instructional route"
+  },
+  {
+   "from": "KI-GE-23",
+   "to": "KI-GE-66",
    "basis": "instructional route"
   },
   {

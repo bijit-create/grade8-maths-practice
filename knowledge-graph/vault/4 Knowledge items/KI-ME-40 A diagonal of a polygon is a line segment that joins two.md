@@ -38,7 +38,7 @@ Required by skills in grade(s): 8.
 | requires | Knowledge item [[KI-GE-30 The diagonals of a parallelogram bisect each other]] | mathematical necessity | required before teaching | — |
 | requires | Knowledge item [[KI-GE-34 The diagonals of a rhombus bisect each other at right angles]] | mathematical necessity | required before teaching | — |
 | requires | Knowledge item [[KI-GE-35 The diagonals of a rectangle are equal in length]] | mathematical necessity | required before teaching | — |
-| requires | Knowledge item [[KI-GE-66 A diagonal of a quadrilateral divides it into two triangles]] | mathematical necessity | required before teaching | — |
+| requires | Knowledge item [[KI-GE-66 Every quadrilateral has at least one diagonal that lies]] | mathematical necessity | required before teaching | — |
 | requires | Knowledge item [[KI-GE-71 To construct a quadrilateral ABCD from sides AB, BC and CD]] | mathematical necessity | required before teaching | — |
 | requires | Knowledge item [[KI-ME-27 The area of a quadrilateral with a diagonal of length d,]] | mathematical necessity | required before teaching | — |
 | requires | Skill [[SK-GE-12 Verifies by measuring that a stated property holds for a]] | mathematical necessity | required before teaching | — |
