@@ -32,7 +32,10 @@ function doPost(e) {
       else rows.push(ACTIVITY_COLS.map(c => c === 'ts' ? ts : clean(r[c])));
     });
     if (rows.length) act.getRange(act.getLastRow() + 1, 1, rows.length, ACTIVITY_COLS.length).setValues(rows);
-    return reply({ ok: true, activity: rows.length, states: states });
+    /* The Signals tab (Signals.gs) is rewritten from Activity. A failure there must never lose her answers. */
+    let signals = 'not updated';
+    if (rows.length) { try { updateSignals(); signals = 'updated'; } catch (err) { signals = 'failed: ' + err; } }
+    return reply({ ok: true, activity: rows.length, states: states, signals: signals });
   } finally {
     lock.releaseLock();
   }
