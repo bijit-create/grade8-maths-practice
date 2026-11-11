@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Terms and coefficients</title>
+<!--
+  Student 2: KI-AG-04 (a term) and KI-AG-06 (coefficient and constant term). Spec: student2/specs/ki-ag-04-06.md.
+  Engine copied from ki-ag-01-03.html (approved 9 Nov 2026); only the content block, the storage keys
+  and the added answer types (eqn, exprs) differ. Offline and self-contained.
+-->
+<style>
+:root{--bg:#F4F6F8;--card:#FFFFFF;--ink:#1A2430;--muted:#5B6878;--line:#D3DAE2;--ok:#25724A;--no:#B5442E;--warn:#9A5A00;--accent:#1F6FB2;--key:#E9EEF3;--keyink:#1A2430;--soft:#EEF3F8;
+ --f:system-ui,"Segoe UI",Roboto,Arial,sans-serif;--mono:ui-monospace,Consolas,Menlo,monospace;--math:"Cambria Math",Cambria,"Times New Roman",serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121820;--card:#1A222C;--ink:#E6ECF2;--muted:#9AA8B6;--line:#2E3A47;--ok:#62C48F;--no:#F08A72;--warn:#E8B04D;--accent:#6BAEF0;--key:#26313D;--keyink:#E6ECF2;--soft:#1F2934;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121820;--card:#1A222C;--ink:#E6ECF2;--muted:#9AA8B6;--line:#2E3A47;--ok:#62C48F;--no:#F08A72;--warn:#E8B04D;--accent:#6BAEF0;--key:#26313D;--keyink:#E6ECF2;--soft:#1F2934;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:18px;line-height:1.45;-webkit-user-select:none;user-select:none;overflow-x:hidden}
+.app{max-width:760px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px;min-height:100%}
+.top{display:flex;justify-content:flex-end;gap:8px}
+.btn{min-height:44px;min-width:44px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:600 1rem var(--f);padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn:focus-visible,.ch:focus-visible,.key:focus-visible,.box:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.card p{margin:0}
+.m{font-family:var(--math);font-size:1.12em;white-space:nowrap}
+.m i{font-style:italic;padding-right:.07em}
+.ask{font-weight:650}
+.done{color:var(--muted)}
+table.vt{border-collapse:collapse;align-self:flex-start;font-family:var(--math);font-size:1.2rem}
+table.vt th,table.vt td{border:1px solid var(--line);padding:6px 14px;text-align:center;min-width:64px}
+table.vt th{background:var(--soft);font-weight:600}
+table.wt{border-collapse:collapse;font-size:1rem;width:100%}
+table.wt th,table.wt td{border-top:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table.wt th{color:var(--muted);font-weight:600;font-size:.9rem}
+.qrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.box{min-width:110px;min-height:48px;border:3px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:700 1.5rem var(--math);display:inline-flex;align-items:center;justify-content:center;padding:0 10px;cursor:pointer}
+.box.active{border-color:var(--accent)}
+.box.right{border-color:var(--ok)}.box.wrong{border-color:var(--no)}
+.box.locked{cursor:default}
+.box .caret{display:inline-block;width:2px;height:1.1em;background:var(--accent);margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+td .box{min-width:72px;min-height:44px;font-size:1.25rem}
+.choices{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.choices.yn{flex-direction:row;flex-wrap:wrap}
+.ch{min-height:48px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:600 1.05rem var(--f);padding:8px 16px;cursor:pointer;text-align:left}
+.ch.picked{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--card))}
+.ch.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--card))}
+.ch.wrong{border-color:var(--no);background:color-mix(in srgb,var(--no) 14%,var(--card))}
+.ch:disabled{cursor:default;opacity:1}
+.keypad{display:grid;grid-template-columns:repeat(4,minmax(56px,76px));gap:8px;justify-content:center}
+.key{min-height:50px;border:1px solid var(--line);border-radius:10px;background:var(--key);color:var(--keyink);font:700 1.35rem var(--math);cursor:pointer;touch-action:manipulation}
+.key.let{font-style:italic}
+.key.ok{background:var(--accent);border-color:var(--accent);color:#fff;font:700 1.05rem var(--f)}
+.eqrow{flex-wrap:nowrap;gap:8px}
+.eqrow .box{flex:1 1 0;min-width:0;font-size:1.3rem;padding:0 6px}
+.eqrow .eqs{font:700 1.5rem var(--math)}
+@media (max-width:480px){table.vt{font-size:1.05rem}table.vt th,table.vt td{padding:5px 7px;min-width:0}}
+table.wk{border-collapse:collapse;font-size:1rem;align-self:flex-start}
+table.wk td{padding:4px 10px 4px 0;vertical-align:baseline}
+table.wk td.e{font-family:var(--math);font-size:1.2rem;white-space:nowrap}
+table.wk td.s{color:var(--muted)}
+.reply{border-left:5px solid var(--line);padding:8px 12px;background:var(--soft);border-radius:6px;font-size:1.05rem}
+.reply.ok{border-left-color:var(--ok)}.reply.no{border-left-color:var(--no)}.reply.info{border-left-color:var(--accent)}
+.reply p+p{margin-top:6px}
+.actions{display:flex;justify-content:flex-end}
+.hide{display:none!important}
+.overlay{position:fixed;inset:0;background:rgba(10,16,24,.6);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
+.ovcard{background:var(--card);border-radius:12px;padding:20px;max-width:420px;width:100%;display:flex;flex-direction:column;gap:14px;text-align:center}
+.teacher{font-size:.85rem;color:var(--muted);border:1px dashed var(--line);border-radius:8px;padding:8px;-webkit-user-select:text;user-select:text}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="top">
+    <button class="btn" id="readBtn" type="button">Read it</button>
+    <button class="btn" id="pauseBtn" type="button">Pause</button>
+  </div>
+  <div class="card" id="stage" aria-live="polite"></div>
+  <div id="keypadWrap"></div>
+  <div class="teacher hide" id="teacher"></div>
+</div>
+<div class="overlay hide" id="pauseOv"><div class="ovcard"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
+<script src="assets/sheet-config.js"></script>
+<script src="assets/sheetlog.js"></script>
+<script>
+"use strict";
+/* ===================== Settings (teacher side, never on her screen) ===================== */
+const QS=new URLSearchParams(location.search);
+const CONFIG=Object.assign({
+  /* Skip the supported item when every completion step in W1–W3 was right first time.
+     OFF by default: Bijit has not decided (spec, teaching point 6). URL: ?skipSupported=1 */
+  skipSupported:false,
+  stateKey:"student2-ki-ag04-06-v1",
+  kiKey:"student2-ki-v1",
+  version:"ki-ag-04-06 1.0 (10 Nov 2026)"
+},window.KI_CONFIG||{});
+if(QS.get("skipSupported")==="1")CONFIG.skipSupported=true;
+const TEACHER=QS.get("teacher")==="1";
+const SEED=QS.get("seed");
+
+/* ===================== Small helpers ===================== */
+let rngState=SEED?Number(SEED)>>>0||1:0;
+function rand(){if(!rngState)return Math.random();rngState=(rngState*1664525+1013904223)>>>0;return rngState/4294967296;}
+const ri=(a,b)=>a+Math.floor(rand()*(b-a+1));
+const pick=a=>a[Math.floor(rand()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const MINUS="−",TIMES="×";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>{const r=Math.round(n*1000)/1000;return String(r);};
+/* Text uses `...` around mathematics. In maths, single letters are set in italics. */
+function mathHTML(s){return esc(s).replace(/(^|[^A-Za-z])([a-z])(?![A-Za-z])/g,"$1<i>$2</i>").replace(/ /g," ");}
+function rich(t){return esc(t).split("`").map((seg,i)=>i%2?`<span class="m">${mathHTML(seg.replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"'))}</span>`:seg).join("").replace(/₹(\d)/g,"₹⁠$1");}
+function plain(t){return String(t).replace(/`/g,"");}
+function speakable(t){return plain(t).replace(/₹\s?(\d+)/g,"$1 rupees").replace(/(\d)([a-z])\b/g,"$1 $2").replace(new RegExp(MINUS,"g")," minus ").replace(/\+/g," plus ").replace(new RegExp(TIMES,"g")," times ").replace(/=/g," equals ").replace(/▢/g," blank ").replace(/\s+/g," ");}
+const todayKey=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ===================== Reading what she types ===================== */
+/* Numbers: digits with one decimal point, optional leading minus. */
+function readNumber(s){s=s.replace(new RegExp(MINUS,"g"),"-");if(!/^-?(\d+(\.\d*)?|\.\d+)$/.test(s))return null;return parseFloat(s);}
+/* Expressions in one or more letters, linear: returns {coef:{x:3}, c:2, times, tokens} or null. */
+function tokenize(s){const t=[];let i=0;s=s.replace(/\s+/g,"");
+  while(i<s.length){const ch=s[i];
+    if(/[0-9.]/.test(ch)){let j=i;while(j<s.length&&/[0-9.]/.test(s[j]))j++;const num=s.slice(i,j);if((num.match(/\./g)||[]).length>1||num===".")return null;t.push({k:"n",v:parseFloat(num),s:num});i=j;}
+    else if(/[a-z]/.test(ch)){t.push({k:"l",v:ch,s:ch});i++;}
+    else if(ch==="+"||ch==="-"||ch===MINUS){t.push({k:"op",v:ch==="+"?"+":"-",s:ch==="+"?"+":MINUS});i++;}
+    else if(ch===TIMES||ch==="*"){t.push({k:"x",s:TIMES});i++;}
+    else return null;}
+  return t;}
+function readExpr(s){const t=tokenize(s);if(!t||!t.length)return null;let i=0,times=false;const coef={};let c=0;
+  let sign=1;if(t[0].k==="op"){if(t[0].v==="-"){sign=-1;i=1;}else return null;}
+  while(true){/* term */let num=1,letter=null,factors=0;
+    while(i<t.length&&t[i].k!=="op"){const tk=t[i];
+      if(tk.k==="x"){if(!factors)return null;times=true;i++;if(i>=t.length||t[i].k==="op"||t[i].k==="x")return null;continue;}
+      if(factors&&t[i-1].k!=="x"){/* implicit multiplication only for number followed by letter */if(!(t[i-1].k==="n"&&tk.k==="l"))return null;}
+      if(tk.k==="n")num*=tk.v;else{if(letter)return null;letter=tk.v;}
+      factors++;i++;}
+    if(!factors)return null;
+    if(letter)coef[letter]=(coef[letter]||0)+sign*num;else c+=sign*num;
+    if(i>=t.length)break;
+    sign=t[i].v==="+"?1:-1;i++;if(i>=t.length)return null;}
+  const letterCount={};t.filter(x=>x.k==="l").forEach(x=>letterCount[x.v]=(letterCount[x.v]||0)+1);
+  return {coef,c,times,tokens:t,repeated:Object.values(letterCount).some(n=>n>1),letters:Object.keys(letterCount)};}
+function sameExpr(e,a,L,b){/* e equals a·L + b for every L */const keys=Object.keys(e.coef).filter(k=>e.coef[k]!==0);
+  if(a===0)return keys.length===0&&Math.abs(e.c-b)<1e-9;
+  return keys.length===1&&keys[0]===L&&Math.abs(e.coef[L]-a)<1e-9&&Math.abs(e.c-b)<1e-9;}
+function exprText(s){const t=tokenize(s);if(!t)return s;let out="";t.forEach((tk,i)=>{if(tk.k==="op"){out+=(i?" ":"")+tk.s+(i?" ":"");}else if(tk.k==="x")out+=" "+TIMES+" ";else out+=tk.s;});return out.trim();}
+/* Works out her expression at a value, written the way a teacher writes it: 2x + 1 → 2 × 3 + 1 = 7 */
+function substitute(s,L,v){const t=tokenize(s);let out="";t.forEach((tk,i)=>{
+  if(tk.k==="op")out+=(i?" ":"")+tk.s+(i?" ":"");
+  else if(tk.k==="x")out+=" "+TIMES+" ";
+  else if(tk.k==="l"){if(i>0&&t[i-1].k==="n")out+=" "+TIMES+" ";out+=tk.v===L?fmt(v):tk.v;}
+  else out+=tk.s;});return out.trim();}
+function valueAt(e,L,v){let s=e.c;for(const k in e.coef)s+=e.coef[k]*(k===L?v:NaN);return s;}
+
+/* Linear form a·L + b of an expression in one letter, or null if another letter is in it. */
+function linForm(e,L){if(!e)return null;const ks=Object.keys(e.coef).filter(k=>e.coef[k]!==0);if(ks.some(k=>k!==L))return null;return [e.coef[L]||0,e.c];}
+function eqSolution(l,r){const a=l[0]-r[0],b=r[1]-l[1];if(Math.abs(a)<1e-9)return Math.abs(b)<1e-9?"all":"none";return b/a;}
+function linText(f,L){const [a,b]=f;const t=a===1?L:a===-1?MINUS+L:fmt(a)+L;if(Math.abs(a)<1e-9)return fmt(b).replace("-",MINUS);if(Math.abs(b)<1e-9)return t.replace("-",MINUS);return t.replace("-",MINUS)+(b<0?" "+MINUS+" ":" + ")+fmt(Math.abs(b));}
+const sameLin=(p,q)=>Math.abs(p[0]-q[0])<1e-9&&Math.abs(p[1]-q[1])<1e-9;
+const valLin=(f,v)=>f[0]*v+f[1];
+
+/* ===================== Records ===================== */
+const HAS_SHEET=typeof SheetLog!=="undefined";
+let S=null,K=null;
+function saveAll(){store.set(CONFIG.stateKey,S);store.set(CONFIG.kiKey,K);}
+function record(event,f){const row=Object.assign({t:new Date().toISOString(),event,set:S?S.stop:"",role:"",eq:"",x:"",answer:"",right:"",own:"",support:"",checks:"",detail:""},f||{});
+  if(S){S.events.push(row);if(S.events.length>2000)S.events.splice(0,S.events.length-2000);store.set(CONFIG.stateKey,S);}
+  if(HAS_SHEET){try{SheetLog.activity({event:row.event,set:row.set,role:row.role,eq:row.eq,x:row.x,answer:row.answer,right:row.right,own:row.own,support:row.support,checks:row.checks,detail:typeof row.detail==="string"?row.detail:JSON.stringify(row.detail)});}catch(e){}}
+  window.__records=(window.__records||[]);window.__records.push(row);
+  renderTeacher();}
+function sendState(stopId,status){if(!HAS_SHEET)return;const k=K[stopId]||{};try{SheetLog.state({set:stopId,ki:STOPS[stopId].ki,teacher:STOPS[stopId].teacher,status,stage:k.stage||"",own_right:(k.res||[]).filter(r=>r.own&&r.right).length,items:(k.res||[]).length});}catch(e){}}
+
+//META {"file":"ki-ag-04-06.html","title":"Terms and coefficients","comment":"KI-AG-04 (a term) and KI-AG-06 (coefficient and constant term). Spec: student2/specs/ki-ag-04-06.md.","stateKey":"student2-ki-ag04-06-v1","version":"ki-ag-04-06 1.0 (10 Nov 2026)"}
+/* ===================== Content: KI-AG-04 ===================== */
+const LETTERS=["x","y","n","a"];
+const STORIES=[{}];
+const ONE_TWO_THREE=(right,reply,tag)=>[{t:"one term",right:right===1,reply:right===1?"":reply,tag:right===1?"":tag},{t:"two terms",right:right===2,reply:right===2?"":reply,tag:right===2?"":tag},{t:"three terms",right:right===3,reply:right===3?"":reply,tag:right===3?"":tag}];
+const W04=[
+ {id:"W1",lines:["The terms of an expression are the parts joined by + or −."],
+  wtable:{head:["Expression","Its terms"],rows:[["`3x + 5`","`3x` and `5`"],["`4y − 7`","`4y` and `−7`"],["`2x + y − 6`","`2x`, `y` and `−6`"]]},
+  after:["In `4y − 7`, the terms are `4y` and `−7`. The − sign belongs to the 7."],
+  steps:[{type:"num",q:"How many terms does `5x + 2y − 1` have?",ans:3,letters:["x"],why:"The terms of `5x + 2y − 1` are `5x`, `2y` and `−1`.",
+   wrong:{2:"`5x + 2y − 1` has three parts joined by + or −. They are `5x`, `2y` and `−1`.",6:"`5x` is one term, not two. A number times a letter is one term. The terms are `5x`, `2y` and `−1`."}}]},
+ {id:"W2",lines:["`5xy` means `5 × x × y`. It is one term, because nothing in it is joined by + or −.","`5x + y` has two terms. They are `5x` and `y`."],
+  steps:[{type:"choice",q:"Is `6ab` one term, or more than one?",letters:["a","b"],options:ONE_TWO_THREE(1,"`6ab` means `6 × a × b`. Nothing in it is joined by + or −, so it is one term.","product split"),why:"`6ab` means `6 × a × b`. Nothing in it is joined by + or −, so it is one term."},
+   {type:"num",q:"If `a` is 2 and `b` is 3, what is `6ab`?",ans:36,letters:["a","b"],why:"`6ab` means `6 × a × b`. It is `6 × 2 × 3 = 36`.",
+    wrong:{11:"`6ab` means `6 × a × b`, not `6 + a + b`. It is `6 × 2 × 3 = 36`.",623:"`6ab` means `6 × a × b`. It is `6 × 2 × 3 = 36`, not 6, 2 and 3 written side by side."}}]},
+ {id:"W3",lines:["`7 − 2x` has the terms `7` and `−2x`. Written in the other order, it is `−2x + 7`.","If `x` is 1, `7 − 2x` is `7 − 2 = 5`, and `−2x + 7` is `−2 + 7 = 5`."],
+  steps:[{type:"expr",q:"Write `9 − 4x` with the term in `x` first.",letters:["x"],a:-4,b:9,canon:"−4x + 9",
+   letterFirst:"That is the same expression, but the term in `x` is not first. The terms are `9` and `−4x`. With the term in `x` first, it is `−4x + 9`.",
+   why:"The terms of `9 − 4x` are `9` and `−4x`. With the term in `x` first, it is `−4x + 9`.",
+   forms:[{a:4,b:9,reply:"`4x + 9` has the term `4x`, not `−4x`. The − belongs to the `4x`. With the term in `x` first, it is `−4x + 9`.",tag:"sign detached"},
+    {a:4,b:-9,reply:"`4x − 9` has the terms `4x` and `−9`. The terms of `9 − 4x` are `9` and `−4x`. With the term in `x` first, it is `−4x + 9`.",tag:"sign detached"}]}]}
+];
+const SUP04={support:["In `4y − 7`, the terms are `4y` and `−7`. The − sign belongs to the 7."],
+  part:{type:"exprs",q:"What are the terms of `3x − 8`?",L:"x",letters:["x"],ans:[[3,0],[0,-8]],why:"The terms of `3x − 8` are `3x` and `−8`.",
+   wrong:{"3x | 8":"The − before the 8 belongs to the term. The terms of `3x − 8` are `3x` and `−8`.","8 | 3x":"The − before the 8 belongs to the term. The terms of `3x − 8` are `3x` and `−8`."}}};
+const G04={
+ U1(L){let a,b,c;do{a=ri(2,6);b=ri(2,9);c=ri(2,6);}while(a===c);const M="y"===L?"n":"y";
+  const e=`${a}${L} + ${b} ${MINUS} ${c}${M}`;
+  return {signal:"U1",letter:L,letters:[L,M],parts:[{type:"num",q:`How many terms does \`${e}\` have?`,ans:3,why:`The terms of \`${e}\` are \`${a}${L}\`, \`${b}\` and \`${MINUS}${c}${M}\`.`,
+   wrong:{2:`\`${e}\` has three parts joined by + or −. They are \`${a}${L}\`, \`${b}\` and \`${MINUS}${c}${M}\`.`,6:`\`${a}${L}\` is one term, not two. A number times a letter is one term. \`${e}\` has three terms.`,5:`\`${a}${L}\` is one term, not two. A number times a letter is one term. \`${e}\` has three terms.`},
+   tags:{2:"a term missed",6:"product split",5:"product split"}}]};},
+ U1x(L){const a=ri(3,7),b=ri(1,9);const e=`${a} ${TIMES} ${L} + ${b}`;
+  return {signal:"U1",contrast:"× does not split a term",parts:[{type:"num",q:`How many terms does \`${e}\` have?`,ans:2,why:`\`${a} ${TIMES} ${L}\` is one term, and ${b} is the other. \`${e}\` has two terms.`,
+   wrong:{3:`\`${a} ${TIMES} ${L}\` means ${a} times \`${L}\`, so it is one term. The × does not split it. \`${e}\` has two terms.`,4:`\`${a} ${TIMES} ${L}\` means ${a} times \`${L}\`, so it is one term. The × does not split it. \`${e}\` has two terms.`},
+   tags:{3:"× splits a term",4:"every symbol a term"}}]};},
+ U2(L){const a=ri(4,9),b=ri(2,9);
+  return {signal:"U2",contrast:"sign with term",parts:[{type:"num",q:`What is the second term of \`${a}${L} ${MINUS} ${b}\`?`,ans:-b,why:`The terms of \`${a}${L} ${MINUS} ${b}\` are \`${a}${L}\` and \`${MINUS}${b}\`. The second term is \`${MINUS}${b}\`.`,
+   wrong:{[b]:`The − before the ${b} belongs to the term. The second term of \`${a}${L} ${MINUS} ${b}\` is \`${MINUS}${b}\`, not ${b}.`},tags:{[b]:"sign detached"}}]};},
+ U2b(L){const k=ri(8,15),a=ri(2,7);const e=`${k} ${MINUS} ${a}${L}`;
+  return {signal:"U2",parts:[
+   {type:"num",q:`What is the first term of \`${e}\`?`,ans:k,why:`The first term of \`${e}\` is \`${k}\`.`,wrong:{[-k]:`The first term has no sign before it, so it is \`${k}\`. The − belongs to the second term.`},tags:{[-k]:"sign attached to the wrong term"}},
+   {type:"expr",q:`What is the second term of \`${e}\`?`,a:-a,b:0,canon:`${MINUS}${a}${L}`,why:`The − before \`${a}${L}\` belongs to the term. The second term is \`${MINUS}${a}${L}\`.`,
+    forms:[{a,b:0,reply:`The − before \`${a}${L}\` belongs to the term. The second term of \`${e}\` is \`${MINUS}${a}${L}\`, not \`${a}${L}\`.`,tag:"sign detached"}]}]};},
+ U3(){const c=pick([3,4,6,7]),x=ri(2,4),y=ri(5,6),v=c*x*y,s=c+x+y,cat=Number(""+c+x+y);
+  return {signal:"U3",letter:"x",letters:["x","y"],parts:[
+   {type:"choice",q:`Is \`${c}xy\` one term, or more than one?`,options:ONE_TWO_THREE(1,`Nothing in \`${c}xy\` is joined by + or −. It is one term.`,"product split"),why:`\`${c}xy\` means \`${c} × x × y\`. Nothing in it is joined by + or −, so it is one term.`},
+   {type:"num",q:`If \`x\` is ${x} and \`y\` is ${y}, what is \`${c}xy\`?`,ans:v,x:`x=${x}, y=${y}`,why:`\`${c}xy\` means \`${c} × x × y\`. It is \`${c} × ${x} × ${y} = ${v}\`.`,
+    wrong:{[c*x]:`\`${c}xy\` means \`${c} × x × y\`. x and y are both multiplied. It is \`${c} × ${x} × ${y} = ${v}\`.`,[s]:`\`${c}xy\` means \`${c} × x × y\`, not \`${c} + x + y\`. It is \`${c} × ${x} × ${y} = ${v}\`.`,[cat]:`\`${c}xy\` means \`${c} × x × y\`. It is \`${c} × ${x} × ${y} = ${v}\`, not ${c}, ${x} and ${y} written side by side.`},
+    tags:{[c*x]:"one letter dropped",[s]:"product read as sum",[cat]:"juxtaposed"}}]};},
+ U4(L){const a=ri(3,8),b=ri(2,9);
+  return {signal:"U4",parts:[{type:"expr",q:`Write an expression with the terms \`${a}${L}\` and \`${MINUS}${b}\`.`,a,b:-b,canon:`${a}${L} ${MINUS} ${b}`,why:`The terms \`${a}${L}\` and \`${MINUS}${b}\` are joined by their signs, so the expression is \`${a}${L} ${MINUS} ${b}\`.`,
+   forms:[{a,b,reply:`\`${a}${L} + ${b}\` has the term \`+${b}\`, not \`${MINUS}${b}\`. With the term \`${MINUS}${b}\`, it is \`${a}${L} ${MINUS} ${b}\`.`,tag:"sign detached"},
+    {a:a-b,b:0,reply:`\`${a}${L}\` and \`${MINUS}${b}\` are two terms. They are kept apart, so the expression is \`${a}${L} ${MINUS} ${b}\`.`,tag:"conjoining"}]}]};},
+ U4b(L){const k=ri(3,9),a=ri(2,7);
+  return {signal:"U4",parts:[{type:"expr",q:`Write an expression with the terms \`${k}\` and \`${MINUS}${a}${L}\`.`,a:-a,b:k,canon:`${k} ${MINUS} ${a}${L}`,why:`The terms \`${k}\` and \`${MINUS}${a}${L}\` are joined by their signs, so the expression is \`${k} ${MINUS} ${a}${L}\`.`,
+   forms:[{a,b:k,reply:`\`${k} + ${a}${L}\` has the term \`${a}${L}\`, not \`${MINUS}${a}${L}\`. With \`${MINUS}${a}${L}\`, it is \`${k} ${MINUS} ${a}${L}\`.`,tag:"sign detached"},
+    {a,b:-k,reply:`\`${a}${L} ${MINUS} ${k}\` has the terms \`${a}${L}\` and \`${MINUS}${k}\`. The terms asked for are \`${k}\` and \`${MINUS}${a}${L}\`, so the expression is \`${k} ${MINUS} ${a}${L}\`.`,tag:"signs swapped"}]}]};},
+ U5same(L){const k=ri(6,12),a=ri(2,4),v=2,val=k-a*v;
+  return {signal:"U5",contrast:"same terms, other order",parts:[
+   {type:"yn",q:`Do \`${k} ${MINUS} ${a}${L}\` and \`${MINUS}${a}${L} + ${k}\` have the same value for every \`${L}\`?`,yes:"Yes, they do",no:"No, they do not",ans:true,
+    rightReply:`Both have the terms \`${k}\` and \`${MINUS}${a}${L}\`, in a different order, so they have the same value for every \`${L}\`.`,
+    wrongReply:`Both have the terms \`${k}\` and \`${MINUS}${a}${L}\`. Changing the order of the terms, with their signs, keeps the value. When \`${L}\` is ${v}, both are ${val}.`,tag:"order changes value"},
+   {type:"num",q:`If \`${L}\` is ${v}, what is \`${MINUS}${a}${L} + ${k}\`?`,ans:val,x:`${L}=${v}`,why:`\`${MINUS}${a}${L} + ${k}\` is \`${MINUS}${a} × ${v} + ${k} = ${MINUS}${a*v} + ${k} = ${val}\`.`,
+    wrong:{[a*v+k]:`The term is \`${MINUS}${a}${L}\`, with the sign. \`${MINUS}${a}${L} + ${k}\` is \`${MINUS}${a*v} + ${k} = ${val}\`.`},tags:{[a*v+k]:"sign detached"}}]};},
+ U5diff(L){const k=ri(6,12),a=ri(2,4),v=2,val=a*v-k,other=k-a*v;
+  return {signal:"U5",contrast:"signs swapped",parts:[
+   {type:"yn",q:`Do \`${k} ${MINUS} ${a}${L}\` and \`${a}${L} ${MINUS} ${k}\` have the same value for every \`${L}\`?`,yes:"Yes, they do",no:"No, they do not",ans:false,
+    rightReply:`\`${k} ${MINUS} ${a}${L}\` has the terms \`${k}\` and \`${MINUS}${a}${L}\`. \`${a}${L} ${MINUS} ${k}\` has the terms \`${a}${L}\` and \`${MINUS}${k}\`. The signs are different, so the values are different.`,
+    wrongReply:`\`${k} ${MINUS} ${a}${L}\` has the terms \`${k}\` and \`${MINUS}${a}${L}\`, but \`${a}${L} ${MINUS} ${k}\` has the terms \`${a}${L}\` and \`${MINUS}${k}\`. When \`${L}\` is ${v}, the first is ${other} and the second is ${val}.`,tag:"signs ignored"},
+   {type:"num",q:`If \`${L}\` is ${v}, what is \`${a}${L} ${MINUS} ${k}\`?`,ans:val,x:`${L}=${v}`,why:`\`${a}${L} ${MINUS} ${k}\` is \`${a} × ${v} ${MINUS} ${k} = ${a*v} ${MINUS} ${k} = ${val}\`.`,
+    wrong:{[other]:`${other} is the value of \`${k} ${MINUS} ${a}${L}\`. \`${a}${L} ${MINUS} ${k}\` is \`${a*v} ${MINUS} ${k} = ${val}\`.`},tags:{[other]:"signs ignored"}}]};}
+};
+G04.U3b=G04.U3;
+const PLAN04=["U1","U2","U4","U3","U5same","U1x","U2b","U5diff","U4b","U3b","U1","U2"];
+const CONTRASTS04=["sign with term","× does not split a term","same terms, other order","signs swapped"];
+const CONTRAST_KIND04={"sign with term":"U2","× does not split a term":"U1x","same terms, other order":"U5same","signs swapped":"U5diff"};
+
+/* ===================== Content: KI-AG-06 ===================== */
+const W06=[
+ {id:"W1",lines:["In a term, the number that multiplies the letter is the coefficient. A term with no letter is a constant term."],
+  wtable:{head:["Term","The number that multiplies x","Is it a constant term?"],rows:[["`5x`","5","No"],["`−4x`","−4","No"],["`x`","1","No"],["`9`","There is no `x`.","Yes"]]},
+  after:["`x` means `1 × x`, so the coefficient of `x` is 1."],
+  steps:[{type:"num",q:"What is the coefficient of `y` in `3y`?",ans:3,letters:["y"],why:"`3y` means `3 × y`. The coefficient of `y` is 3."},
+   {type:"num",q:"What is the coefficient of `n` in `−n`?",ans:-1,letters:["n"],why:"`−n` means `−1 × n`. The coefficient of `n` is −1.",
+    wrong:{1:"`−n` means `−1 × n`. The sign belongs to the term, so the coefficient is −1.",0:"`−n` means `−1 × n`. The coefficient of `n` is −1."}}]},
+ {id:"W2",lines:["In `7 − 4x`, the term in `x` is `−4x`. Its coefficient is −4.","The constant term is 7."],
+  steps:[{type:"num",q:"What is the constant term in `2a − 9`?",ans:-9,letters:["a"],why:"The terms of `2a − 9` are `2a` and `−9`. The constant term is −9.",
+   wrong:{9:"The term is `−9`. The − belongs to it, so the constant term is −9.",2:"2 is the coefficient of `a`. The constant term is the term with no letter, which is −9."}}]},
+ {id:"W3",lines:["`2x + 5y` has no constant term. Every term in it has a letter."],
+  steps:[{type:"yn",q:"Does `6 + x` have a constant term?",yes:"Yes, it does",no:"No, it does not",ans:true,letters:["x"],endOnWrong:true,
+    rightReply:"The term `6` has no letter, so it is a constant term.",wrongReply:"The term `6` has no letter, so `6 + x` has a constant term."},
+   {type:"num",q:"What is the constant term of `6 + x`?",ans:6,letters:["x"],why:"The term with no letter is `6`.",wrong:{1:"1 is the coefficient of `x`. The constant term is the term with no letter, which is 6."}}]}
+];
+const SUP06={support:["`5x` has the coefficient 5. `x` has the coefficient 1."],part:{type:"num",q:"What is the coefficient of `x` in `8x + 1`?",ans:8,letters:["x"],why:"The term in `x` is `8x`. Its coefficient is 8.",wrong:{1:"1 is the constant term. The coefficient is the number that multiplies `x`, which is 8."}}};
+const G06={
+ V1(L){let a,b;do{a=ri(3,9);b=ri(2,9);}while(a===b);
+  return {signal:"V1",parts:[{type:"num",q:`What is the coefficient of \`${L}\` in \`${a}${L} + ${b}\`?`,ans:a,why:`The term in \`${L}\` is \`${a}${L}\`, which means \`${a} × ${L}\`. The coefficient is ${a}.`,
+   wrong:{[b]:`${b} is the constant term. The coefficient is the number that multiplies \`${L}\`, which is ${a}.`},tags:{[b]:"constant for coefficient"}}]};},
+ V2(L){const k=ri(2,9);
+  return {signal:"V2",contrast:"hidden 1",parts:[{type:"num",q:`What is the coefficient of \`${L}\` in \`${L} ${MINUS} ${k}\`?`,ans:1,why:`\`${L}\` means \`1 × ${L}\`. The coefficient of \`${L}\` is 1.`,
+   wrong:{0:`\`${L}\` means \`1 × ${L}\`. The coefficient of \`${L}\` is 1.`,[-k]:`\`${MINUS}${k}\` is the constant term. \`${L}\` means \`1 × ${L}\`, so the coefficient of \`${L}\` is 1.`,[k]:`${k} belongs to the constant term. \`${L}\` means \`1 × ${L}\`, so the coefficient of \`${L}\` is 1.`},
+   tags:{0:"hidden 1 missed",[-k]:"constant for coefficient",[k]:"constant for coefficient"}}]};},
+ V2neg(L){const k=ri(2,9);
+  return {signal:"V2",contrast:"coefficient −1",parts:[{type:"num",q:`What is the coefficient of \`${L}\` in \`${k} ${MINUS} ${L}\`?`,ans:-1,why:`The term in \`${L}\` is \`${MINUS}${L}\`, which means \`${MINUS}1 × ${L}\`. The coefficient is −1.`,
+   wrong:{1:`\`${MINUS}${L}\` means \`${MINUS}1 × ${L}\`. The sign belongs to the term, so the coefficient is −1.`,0:`\`${MINUS}${L}\` means \`${MINUS}1 × ${L}\`. The coefficient is −1.`,[k]:`${k} is the constant term. \`${MINUS}${L}\` means \`${MINUS}1 × ${L}\`, so the coefficient is −1.`},
+   tags:{1:"sign detached",0:"hidden 1 missed",[k]:"constant for coefficient"}}]};},
+ V3(L){let a,k;do{a=ri(2,7);k=ri(8,15);}while(a===k);
+  return {signal:"V3",contrast:"sign of coefficient",parts:[{type:"num",q:`What is the coefficient of \`${L}\` in \`${k} ${MINUS} ${a}${L}\`?`,ans:-a,why:`The term is \`${MINUS}${a}${L}\`. Its coefficient is −${a}, with the sign.`,
+   wrong:{[a]:`The term is \`${MINUS}${a}${L}\`. Its coefficient is −${a}, with the sign.`,[k]:`${k} is the constant term. The term in \`${L}\` is \`${MINUS}${a}${L}\`, so the coefficient is −${a}.`},tags:{[a]:"sign detached",[k]:"constant for coefficient"}}]};},
+ V4(L){let a,k;do{a=ri(2,8);k=ri(2,9);}while(a===k);
+  return {signal:"V4",parts:[{type:"num",q:`What is the constant term of \`${a}${L} ${MINUS} ${k}\`?`,ans:-k,why:`The term with no letter is \`${MINUS}${k}\`. The constant term is −${k}.`,
+   wrong:{[k]:`The term is \`${MINUS}${k}\`. The − belongs to it, so the constant term is −${k}.`,[a]:`${a} is the coefficient of \`${L}\`. The constant term is the term with no letter, which is −${k}.`},tags:{[k]:"sign detached",[a]:"coefficient for constant"}}]};},
+ V4none(){const a=ri(2,6),b=ri(2,6);
+  return {signal:"V4",contrast:"no constant term",letter:"x",letters:["x","y"],parts:[{type:"yn",q:`Does \`${a}x + ${b}y\` have a constant term?`,yes:"Yes, it does",no:"No, it does not",ans:false,
+   rightReply:`Each term in \`${a}x + ${b}y\` has a letter. There is no constant term.`,wrongReply:`Each term in \`${a}x + ${b}y\` has a letter. There is no constant term.`,tag:"every expression has a constant"}]};},
+ V5(){const c=pick([5,6,7]),k=pick([2,3,4]);
+  return {signal:"V5",letter:"x",parts:[{type:"expr",q:`Write an expression in \`x\` whose coefficient of \`x\` is ${c} and whose constant term is \`${MINUS}${k}\`.`,a:c,b:-k,canon:`${c}x ${MINUS} ${k}`,
+   why:`The coefficient goes with \`x\`, so the term in \`x\` is \`${c}x\`. The constant term is \`${MINUS}${k}\`. The expression is \`${c}x ${MINUS} ${k}\`.`,
+   forms:[{a:k,b:-c,reply:`In \`${k}x ${MINUS} ${c}\`, the coefficient of \`x\` is ${k} and the constant term is \`${MINUS}${c}\`. The two numbers are the other way round. The expression is \`${c}x ${MINUS} ${k}\`.`,tag:"swapped"},
+    {a:-k,b:c,reply:`In \`${MINUS}${k}x + ${c}\`, the coefficient of \`x\` is \`${MINUS}${k}\` and the constant term is ${c}. The coefficient goes with \`x\`, so the term in \`x\` is \`${c}x\`. The constant term is \`${MINUS}${k}\`. The expression is \`${c}x ${MINUS} ${k}\`.`,tag:"swapped"},
+    {a:c,b:k,reply:`\`${c}x + ${k}\` has the constant term ${k}, not \`${MINUS}${k}\`. The expression is \`${c}x ${MINUS} ${k}\`.`,tag:"sign detached"}]}]};},
+ V5b(L){const c=pick([3,4,5]),k=pick([6,7,8]);
+  return {signal:"V5",parts:[{type:"expr",q:`Write an expression in \`${L}\` whose coefficient of \`${L}\` is \`${MINUS}${c}\` and whose constant term is ${k}.`,a:-c,b:k,canon:`${MINUS}${c}${L} + ${k}`,
+   why:`The term in \`${L}\` is \`${MINUS}${c}${L}\`, and the constant term is ${k}. The expression is \`${MINUS}${c}${L} + ${k}\`, which can also be written \`${k} ${MINUS} ${c}${L}\`.`,
+   forms:[{a:k,b:-c,reply:`In \`${k}${L} ${MINUS} ${c}\`, the coefficient of \`${L}\` is ${k} and the constant term is \`${MINUS}${c}\`. The two numbers are the other way round. The expression is \`${k} ${MINUS} ${c}${L}\`.`,tag:"swapped"},
+    {a:c,b:k,reply:`\`${c}${L} + ${k}\` has the coefficient ${c}, not \`${MINUS}${c}\`. The expression is \`${k} ${MINUS} ${c}${L}\`.`,tag:"sign detached"}]}]};}
+};
+G06.V1y=G06.V1;G06.V3b=G06.V3;
+const PLAN06=["V1","V4","V2","V3","V1y","V5","V4none","V2neg","V3b","V1","V5b","V4"];
+const CONTRASTS06=["hidden 1","coefficient −1","sign of coefficient","no constant term"];
+const CONTRAST_KIND06={"hidden 1":"V2","coefficient −1":"V2neg","sign of coefficient":"V3","no constant term":"V4none"};
+
+const STOPS={
+ "ki-ag-04":{ki:"KI-AG-04",teacher:"Term: a number, a variable, or a product of numbers and variables; terms are joined by + or − (the sign belongs to the term; 5xy is one term; −2x + 7 ≡ 7 − 2x).",worked:W04,sup:SUP04,gen:G04,plan:PLAN04,contrasts:CONTRASTS04,contrastKind:CONTRAST_KIND04,gates:{U5same:["U2"],U5diff:["U2"]}},
+ "ki-ag-06":{ki:"KI-AG-06",teacher:"Coefficient: the numerical factor of a term (x has coefficient 1, −x has −1); constant term: a term with no variable (3x + 2y has none).",worked:W06,sup:SUP06,gen:G06,plan:PLAN06,contrasts:CONTRASTS06,contrastKind:CONTRAST_KIND06,gates:{}}
+};
+const ORDER=["ki-ag-04","ki-ag-06"];
+
+ORDER.forEach(id=>STOPS[id].id=id);
+
+/* ===================== State ===================== */
+function freshStop(){return {phase:"worked",w:0,firstTry:[],pi:0,queue:null,missRun:0,res:[],resumed:false};}
+function loadState(){S=store.get(CONFIG.stateKey);if(!S||S.v!==1)S={v:1,stop:null,stops:{},events:[],stoppedOn:null,lastDay:null,letter:0,story:0,review:null};
+  K=store.get(CONFIG.kiKey)||{};}
+function kiOf(id){return K[id]||(K[id]={ki:STOPS[id].ki,res:[],passed:false,stage:""});}
+function nextLetter(){S.letter=(S.letter+1)%LETTERS.length;return LETTERS[S.letter];}
+function nextStory(){S.story=(S.story+1)%STORIES.length;return STORIES[S.story];}
+
+/* ===================== Rendering ===================== */
+const $=id=>document.getElementById(id);
+const stage=$("stage"),kpWrap=$("keypadWrap");
+let screenText=[];      /* what Read it reads */
+let keyHandler=null;    /* the box that the keypad types into */
+function say(t){screenText.push(t);}
+function clearStage(){if(window.__ki)window.__ki.part=null;stage.innerHTML="";kpWrap.innerHTML="";screenText=[];keyHandler=null;stopSpeech();}
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;return e;}
+function para(t,cls){const p=el("p",cls,rich(t));stage.appendChild(p);say(plain(t));return p;}
+function valueTable(tb,boxes){const t=el("table","vt");const hr=el("tr");tb.head.forEach(h=>hr.appendChild(el("th","",mathHTML(h))));const th=el("thead");th.appendChild(hr);t.appendChild(th);
+  const body=el("tbody");tb.rows.forEach(r=>{const tr=el("tr");r.forEach(c=>{const td=el("td");if(typeof c==="object"&&c.box!==undefined){td.appendChild(boxes[c.box]);}else td.innerHTML=mathHTML(c);tr.appendChild(td);});body.appendChild(tr);});t.appendChild(body);
+  say("A table. "+tb.head.join(", ")+". "+tb.rows.map(r=>r.map(c=>typeof c==="object"?"blank":c).join(", ")).join(". "));return t;}
+function workTable(rows){const t=el("table","wk");rows.forEach(r=>{const tr=el("tr");tr.appendChild(el("td","e",mathHTML(r[0])));tr.appendChild(el("td","s",rich(r[1]||"")));t.appendChild(tr);});
+  say(rows.map(r=>r[0]+(r[1]?", "+plain(r[1]):"")).join(". "));return t;}
+function wordTable(tb){const t=el("table","wt");const hr=el("tr");tb.head.forEach(h=>hr.appendChild(el("th","",esc(h))));t.appendChild(hr);
+  tb.rows.forEach(r=>{const tr=el("tr");r.forEach(c=>tr.appendChild(el("td","",rich(c))));t.appendChild(tr);});
+  say(tb.rows.map(r=>r.map(plain).join(". ")).join(". "));return t;}
+
+/* A typed answer box. kind: "num" | "expr". */
+function makeBox(kind,label){const b=el("button","box");b.type="button";b.dataset.kind=kind;b.setAttribute("aria-label",label||"answer box");b._v="";b._locked=false;
+  b.addEventListener("click",()=>{if(!b._locked)focusBox(b);});return b;}
+let activeBox=null,boxesNow=[];
+function paintBox(b){const shown=b.dataset.kind==="expr"||/[a-z+×−-]/.test(b._v)?mathHTML(exprText(b._v)):esc(b._v);b.innerHTML=shown+(b===activeBox&&!b._locked?'<span class="caret"></span>':"");}
+function focusBox(b){activeBox=b;boxesNow.forEach(x=>{x.classList.toggle("active",x===b);paintBox(x);});}
+function typeKey(k){const b=activeBox;if(!b||b._locked)return;
+  if(k==="⌫")b._v=b._v.slice(0,-1);else if(k==="OK"){if(keyHandler)keyHandler();return;}else if(b._v.length<14)b._v+=k;
+  paintBox(b);}
+function keypad(letters,onOK){keyHandler=onOK;const kp=el("div","keypad");kp.setAttribute("role","group");kp.setAttribute("aria-label","keypad");
+  const keys=["7","8","9","⌫","4","5","6","+","1","2","3",MINUS,"0",".",TIMES,...letters];
+  keys.forEach(k=>{const b=el("button","key"+(/^[a-z]$/.test(k)?" let":""),esc(k));b.type="button";b.dataset.k=k;b.setAttribute("aria-label",k==="⌫"?"delete":k===MINUS?"minus":k===TIMES?"times":k==="."?"point":k);b.addEventListener("click",()=>typeKey(k));kp.appendChild(b);});
+  const ok=el("button","key ok","OK");ok.type="button";const rest=keys.length%4;ok.style.gridColumn="span "+(rest?4-rest:4);ok.dataset.k="OK";ok.addEventListener("click",()=>typeKey("OK"));kp.appendChild(ok);
+  kpWrap.innerHTML="";kpWrap.appendChild(kp);}
+function hideKeypad(){kpWrap.innerHTML="";keyHandler=null;activeBox=null;}
+document.addEventListener("keydown",e=>{if(!$("pauseOv").classList.contains("hide"))return;if(e.target&&e.target.closest&&e.target.closest(".ch,.btn")&&e.key==="Enter")return;
+  if(!keyHandler||!activeBox)return;const allowed=[...kpWrap.querySelectorAll(".key")].map(b=>b.dataset.k);let k=e.key;
+  if(k==="Backspace")k="⌫";else if(k==="Enter")k="OK";else if(k==="-")k=MINUS;else if(k==="*")k=TIMES;
+  if(allowed.includes(k)){e.preventDefault();typeKey(k);}});
+
+function reply(html,cls){const r=el("div","reply "+(cls||"info"));r.innerHTML=html;stage.appendChild(r);say(r.textContent);return r;}
+function nextButton(label,fn){const a=el("div","actions");const b=el("button","btn primary",esc(label||"Next"));b.type="button";b.addEventListener("click",()=>{b.disabled=true;fn();},{once:true});a.appendChild(b);stage.appendChild(a);hideKeypad();setTimeout(()=>b.focus({preventScroll:false}),0);return b;}
+
+/* ---------- One part: shows its question and controls, calls done(result) ---------- */
+/* result: {right, answer, tag, replyHTML?}  */
+function runPart(part,ctx,done){
+  window.__ki.part=part;window.__ki.ctx=ctx;
+  const letters=part.letters||ctx.letters||[ctx.letter];
+  if(part.intro)para(part.intro);
+  if(part.type==="num"||part.type==="own"){
+    const box=makeBox("num");boxesNow=[box];
+    if(part.inTable&&ctx.tableBox){ctx.tableBox.replaceWith(box);para(part.q,"ask");}
+    else{const row=el("div","qrow");const q=el("p","ask",rich(part.q));stage.appendChild(q);say(plain(part.q));if(part.prefix)row.appendChild(el("span","m",mathHTML(part.prefix)));row.appendChild(box);stage.appendChild(row);}
+    focusBox(box);
+    keypad(letters,()=>{const s=box._v;if(!s)return;const n=readNumber(s);
+      if(n===null){unreadable(box,s);return;}
+      clearUnreadable();box._locked=true;hideKeypad();paintBox(box);
+      if(part.type==="own"){const r=part.check(n,ctx.prev||[]);if(r.retry){box._locked=false;box._v="";focusBox(box);keypad(letters,keyHandlerSaved);noteRetry(r.retry);return;}
+        box.classList.add(r.right?"right":"wrong");done({right:r.right,answer:s,tag:r.tag,text:r.right?"Right. "+r.why:r.reply,value:n});return;}
+      const right=Math.abs(n-part.ans)<1e-9;box.classList.add(right?"right":"wrong");
+      let text;if(right)text="Right. "+(part.why||"");else{const key=fmt(n);text=(part.wrong&&part.wrong[key])||(part.gen?part.gen(n):"")||(part.why?part.why:`The answer is ${fmt(part.ans)}.`);}
+      done({right,answer:s,tag:right?"":((part.tags&&part.tags[fmt(n)])||""),text});});
+    var keyHandlerSaved=keyHandler;
+  }
+  else if(part.type==="nums"){
+    const boxes=part.rows.map(()=>makeBox("num"));boxesNow=boxes;
+    part.rows.forEach((r,i)=>{const row=el("div","qrow");const q=el("span","ask",rich(r.q));row.appendChild(q);say(plain(r.q));row.appendChild(boxes[i]);stage.appendChild(row);});
+    focusBox(boxes[0]);
+    keypad(letters,()=>{const i=boxes.indexOf(activeBox);if(!activeBox._v)return;const n=readNumber(activeBox._v);if(n===null){unreadable(activeBox,activeBox._v);return;}clearUnreadable();
+      const empty=boxes.find(b=>!b._v);if(empty){focusBox(empty);return;}
+      const vals=boxes.map(b=>readNumber(b._v));if(vals.some(v=>v===null)){focusBox(boxes[vals.findIndex(v=>v===null)]);unreadable(activeBox,activeBox._v);return;}
+      boxes.forEach(b=>{b._locked=true;});hideKeypad();boxes.forEach(paintBox);
+      const rights=vals.map((v,j)=>Math.abs(v-part.rows[j].ans)<1e-9);boxes.forEach((b,j)=>b.classList.add(rights[j]?"right":"wrong"));
+      const right=rights.every(Boolean);
+      const whys=part.rows.map(r=>r.why).filter(Boolean).join(" ")+(part.afterRight&&rights.every(Boolean)?" "+part.afterRight:"");
+      done({right,answer:boxes.map(b=>b._v).join(" | "),text:(right?"Right. ":"")+whys,rights});});
+  }
+  else if(part.type==="expr"||part.type==="ownexpr"){
+    const box=makeBox("expr");boxesNow=[box];para(part.q,"ask");const row=el("div","qrow");row.appendChild(box);stage.appendChild(row);focusBox(box);
+    const L=part.type==="ownexpr"?part.L:ctx.letter;
+    keypad([L],()=>{const s=box._v;if(!s)return;const e=readExpr(s);
+      if(!e){unreadable(box,s,true);return;}
+      const otherLetter=e.letters.find(x=>x!==L);if(otherLetter){unreadable(box,s,true);return;}
+      clearUnreadable();box._locked=true;hideKeypad();paintBox(box);const shown="`"+exprText(s)+"`";
+      if(part.type==="ownexpr"){
+        if(!e.letters.includes(L)){box.classList.add("wrong");const val=e.c;done({right:false,answer:s,tag:"no letter",text:`${shown} is a number with no \`${L}\` in it. Write one that uses \`${L}\`.`});return;}
+        const val=valueAt(e,L,part.v);const work=`When \`${L}\` is ${part.v}, ${shown} is \`${substitute(s,L,part.v)} = ${fmt(val)}\`.`;
+        const right=Math.abs(val-part.T)<1e-9;box.classList.add(right?"right":"wrong");
+        done({right,answer:s,text:right?"Right. "+work+` So your expression is ${part.T} when \`${L}\` is ${part.v}.`:work+` That is not ${part.T}. One expression that works is \`${L} + ${part.T-part.v}\`, because \`${part.v} + ${part.T-part.v} = ${part.T}\`.`});return;}
+      if(part.letterFirst&&sameExpr(e,part.a,L,part.b)){let i=e.tokens[0].k==="op"?1:0,hasL=false;while(i<e.tokens.length&&e.tokens[i].k!=="op"){if(e.tokens[i].k==="l")hasL=true;i++;}
+        if(!hasL){box.classList.add("wrong");done({right:false,answer:s,tag:"order not changed",text:part.letterFirst});return;}}
+      if(sameExpr(e,part.a,L,part.b)){box.classList.add("right");let note="";
+        if(e.times||e.repeated)note=` We write this as \`${part.canon}\`.`;
+        done({right:true,answer:s,text:"Right. "+part.why+note});return;}
+      box.classList.add("wrong");const f=(part.forms||[]).find(f=>sameExpr(e,f.a,L,f.b));
+      done({right:false,answer:s,tag:f?f.tag:"",text:f?f.reply:`${shown} is not ${part.q.replace(/^Write /,"").replace(/ as an expression\.$/,"")}. ${part.why}`});});
+  }
+  else if(part.type==="eqn"){
+    /* An equation line: two expression boxes with = between. Right when it has the same solution as the first equation. */
+    const L=part.L||ctx.letter;const bl=makeBox("expr","left side"),br=makeBox("expr","right side");boxesNow=[bl,br];
+    para(part.q,"ask");const row=el("div","qrow eqrow");row.appendChild(bl);row.appendChild(el("span","eqs","="));row.appendChild(br);stage.appendChild(row);focusBox(bl);
+    keypad([L],()=>{if(!activeBox._v)return;const e0=readExpr(activeBox._v);if(!e0||!linForm(e0,L)){unreadable(activeBox,activeBox._v,true);return;}clearUnreadable();
+      const empty=[bl,br].find(b=>!b._v);if(empty){focusBox(empty);return;}
+      const fs=[bl,br].map(b=>linForm(readExpr(b._v),L));const bad=fs.findIndex(f=>!f);if(bad>=0){focusBox([bl,br][bad]);unreadable(activeBox,activeBox._v,true);return;}
+      [bl,br].forEach(b=>b._locked=true);hideKeypad();[bl,br].forEach(paintBox);
+      const her="`"+exprText(bl._v)+" = "+exprText(br._v)+"`";const sol=eqSolution(fs[0],fs[1]);const v=part.sol;
+      const right=typeof sol==="number"&&Math.abs(sol-v)<1e-9;[bl,br].forEach(b=>b.classList.add(right?"right":"wrong"));
+      const ans=bl._v+" = "+br._v;
+      if(right){const asked=part.want&&((sameLin(fs[0],part.want.l)&&sameLin(fs[1],part.want.r))||(sameLin(fs[0],part.want.r)&&sameLin(fs[1],part.want.l)));
+        done({right:true,answer:ans,text:"Right. "+(part.why||"")+(part.want&&!asked?" Your equation is written in a different way, and it has the same solution, so it is right too.":"")});return;}
+      const F0=part.from.map(s=>linForm(readExpr(s),L));const w=part.check!==undefined?part.check:v;
+      const values=`When \`${L}\` is ${fmt(w)}, the first equation gives \`${fmt(valLin(F0[0],w))} = ${fmt(valLin(F0[1],w))}\`, but yours gives \`${fmt(valLin(fs[0],w))} = ${fmt(valLin(fs[1],w))}\`.`;
+      const f=(part.forms||[]).find(f=>sameLin(fs[0],f.l)&&sameLin(fs[1],f.r));
+      let text;if(f)text=f.reply.replace("{VALUES}",values);
+      else if(sol==="none"||sol==="all")text=`Your equation is ${her}. It has no \`${L}\` left in it, so it cannot give the value of \`${L}\`. ${part.why||""}`;
+      else text=`Your equation is ${her}. ${values} ${part.why||""}`;
+      done({right:false,answer:ans,tag:f?f.tag:"different solution",text});});
+  }
+  else if(part.type==="exprs"){
+    /* Several expressions in any order, e.g. the terms of an expression. */
+    const L=part.L||ctx.letter;const boxes=part.ans.map((_,i)=>makeBox("expr","answer box "+(i+1)));boxesNow=boxes;
+    para(part.q,"ask");const row=el("div","qrow");boxes.forEach((b,i)=>{if(i)row.appendChild(el("span","","and"));row.appendChild(b);});stage.appendChild(row);focusBox(boxes[0]);
+    keypad([L],()=>{if(!activeBox._v)return;if(!linForm(readExpr(activeBox._v),L)){unreadable(activeBox,activeBox._v,true);return;}clearUnreadable();
+      const empty=boxes.find(b=>!b._v);if(empty){focusBox(empty);return;}
+      boxes.forEach(b=>b._locked=true);hideKeypad();boxes.forEach(paintBox);
+      const fs=boxes.map(b=>linForm(readExpr(b._v),L));const left=part.ans.slice();
+      const rights=fs.map(f=>{const i=left.findIndex(a=>sameLin(a,f));if(i>=0){left.splice(i,1);return true;}return false;});
+      boxes.forEach((b,j)=>b.classList.add(rights[j]?"right":"wrong"));const right=rights.every(Boolean);
+      const ans=boxes.map(b=>b._v).join(" | ");const key=fs.map(f=>linText(f,L)).join(" | ");
+      done({right,answer:ans,tag:right?"":((part.tags||{})[key]||""),text:right?"Right. "+(part.why||""):((part.wrong||{})[key]||part.why||"")});});
+  }
+  else if(part.type==="choice"||part.type==="yn"){
+    const q=el("p","ask",rich(part.q));stage.appendChild(q);say(plain(part.q));
+    const opts=part.type==="yn"?[{t:part.yes,v:true},{t:part.no,v:false}]:shuffle(part.options);
+    const wrap=el("div","choices"+(part.type==="yn"?" yn":""));const btns=[];
+    opts.forEach(o=>{const b=el("button","ch",rich(o.t));b.type="button";say(plain(o.t));btns.push(b);wrap.appendChild(b);
+      b.addEventListener("click",()=>{if(b.disabled)return;btns.forEach(x=>x.disabled=true);
+        const right=part.type==="yn"?o.v===part.ans:!!o.right;b.classList.add(ctx.hold?"picked":(right?"right":"wrong"));
+        let text;if(part.type==="yn")text=right?(part.rightReply||""):(part.wrongReply||"");
+        else text=right?"Right. "+(part.why||""):(o.reply||part.why||"");
+        done({right,answer:plain(o.t),tag:right?"":(o.tag||part.tag||""),text:(right&&part.type==="yn"&&text&&!/^Right/.test(text)?"Right. ":"")+text});});});
+    stage.appendChild(wrap);hideKeypad();
+  }
+}
+let unreadEl=null;
+function unreadable(box,s,expr){clearUnreadable();const shown=expr?exprText(s):s;
+  let t;if(expr){if(/[+−×]$/.test(shown))t=`\`${shown}\` is not finished. Write a number or a letter after the last sign.`;else t=`\`${shown}\` cannot be read as an expression. Change it, then press OK.`;}
+  else if(/[a-z]/.test(s))t=`The answer here is a number. Write the number without a letter, then press OK.`;
+  else if(/[+−×]/.test(s))t=`Work out \`${exprText(s)}\` and write the answer as one number, then press OK.`;
+  else t=`${s} cannot be read as a number. Change it, then press OK.`;
+  unreadEl=reply(rich(t),"info");unreadEl.dataset.unreadable="1";record("unreadable answer",{answer:s,detail:{text:t}});}
+function noteRetry(t){clearUnreadable();unreadEl=reply(rich(t),"info");unreadEl.dataset.unreadable="1";}
+function clearUnreadable(){if(unreadEl){unreadEl.remove();unreadEl=null;}}
+
+/* ===================== Flow ===================== */
+const ST=()=>S.stops[S.stop]||(S.stops[S.stop]=freshStop());
+
+function start(){
+  loadState();
+  if(HAS_SHEET)try{SheetLog.setSession("s2ki-"+Date.now().toString(36));}catch(e){}
+  const today=todayKey();
+  const newDay=S.lastDay!==today;S.lastDay=today;
+  record("session start",{detail:{version:CONFIG.version,skipSupported:CONFIG.skipSupported}});
+  if(S.stoppedOn===today){return endScreen("stopped");}
+  if(S.stoppedOn&&S.stoppedOn!==today){S.stoppedOn=null;const st=S.stops[S.stop];if(st){st.phase="worked";st.w=0;st.resumed=true;st.missRun=0;}}
+  if(!S.stop){S.stop=ORDER.find(id=>!kiOf(id).passed)||null;}
+  saveAll();
+  /* Review: each new session opens with one fresh item of every item already held. */
+  const held=ORDER.filter(id=>kiOf(id).passed);
+  if(newDay&&held.length&&S.events.some(e=>e.event==="answer")){S.review=held.slice();}
+  go();
+}
+let SAMPLE=false;
+function go(){if(SAMPLE){clearStage();return;}saveAll();renderTeacher();
+  if(S.review&&S.review.length)return reviewItem(S.review[0]);
+  if(!S.stop)return endScreen("all");
+  const st=ST(),def=STOPS[S.stop];
+  if(st.phase==="worked")return workedExample(def,st);
+  if(st.phase==="supported")return supportedItem(def,st);
+  if(st.phase==="own")return ownItem(def,st);
+}
+
+/* ---------- Worked examples ---------- */
+function workedExample(def,st){
+  const W=def.worked[st.w];clearStage();
+  W.lines.forEach(l=>para(l));
+  let tableBox=null;
+  if(W.table){const boxes=[el("span","box locked","▢")];tableBox=boxes[0];stage.appendChild(valueTable(W.table,boxes));}
+  if(W.wtable)stage.appendChild(wordTable(W.wtable));
+  if(W.work)stage.appendChild(workTable(W.work));
+  (W.after||[]).forEach(l=>para(l));
+  let si=0;
+  const nextStep=()=>{
+    if(si>=W.steps.length){
+      return nextButton("Next",()=>{st.w++;if(st.w>=def.worked.length){
+        const allFirst=st.firstTry.length&&st.firstTry.every(Boolean);
+        if(st.resumed){st.phase="own";st.resumed=false;}
+        else if(CONFIG.skipSupported&&allFirst){st.phase="own";record("supported item skipped",{role:"supported",detail:{reason:"every completion step right first time",setting:"skipSupported on"}});}
+        else st.phase="supported";}
+        go();});}
+    const step=W.steps[si];
+    runPart(step,{letter:(step.letters||["x"])[0],letters:step.letters,tableBox,worked:true},res=>{
+      st.firstTry.push(res.right);
+      record("answer",{role:"worked example step",eq:plain(step.q||step.rows.map(r=>r.q).join(" | ")),answer:res.answer,right:res.right?1:0,own:1,support:"worked example on screen",checks:def.ki+" "+W.id,detail:{example:W.id,step:si+1,tag:res.tag||""}});
+      reply(rich(res.text+(step.after&&res.right?" "+step.after:"")),res.right?"ok":"no");
+      si++;saveAll();
+      if(si<W.steps.length)nextButton("Next",()=>{const r=stage.querySelectorAll(".reply,.actions");r.forEach(x=>x.classList.add("done"));stage.querySelectorAll(".actions").forEach(a=>a.remove());nextStep();});
+      else nextStep();});
+  };
+  nextStep();
+}
+
+/* ---------- Supported item ---------- */
+function supportedItem(def,st){clearStage();
+  def.sup.support.forEach(l=>para(l,"done"));
+  const part=def.sup.part;
+  runPart(part,{letter:(part.letters||["x"])[0],letters:part.letters||["x"]},res=>{
+    record("answer",{role:"supported",eq:plain(part.q),answer:res.answer,right:res.right?1:0,own:0,support:"worked lines on screen",checks:def.ki,detail:{tag:res.tag||""}});
+    reply(rich(res.text),res.right?"ok":"no");
+    kiOf(S.stop).stage="own items";
+    nextButton("Next",()=>{st.phase="own";go();});});
+}
+
+/* ---------- Her own items ---------- */
+function planQueue(def,st){if(!st.queue)st.queue=def.plan.slice();return st.queue;}
+function heldNow(def,st){
+  const own=st.res.filter(r=>r.own&&r.right);
+  const last=st.res[st.res.length-1];
+  const kinds=new Set(own.map(r=>r.signal));
+  const contrastsOk=def.contrasts.every(c=>own.some(r=>r.contrast===c));
+  return {held:!!last&&last.own&&last.right&&contrastsOk&&kinds.size>=3,contrastsOk,kinds:[...kinds],missing:def.contrasts.filter(c=>!own.some(r=>r.contrast===c))};
+}
+function ownItem(def,st){
+  const q=planQueue(def,st);
+  if(st.pi>=q.length){
+    const h=heldNow(def,st);
+    if(h.held)return holds(def,st);
+    /* The authored set is done but the rule is not met: add a fresh item for what is still missing. */
+    q.push(h.missing.length?def.contrastKind[h.missing[0]]:q[q.length-1]);
+  }
+  let kind=q[st.pi];
+  /* Incorrect worked answers come only after her own items on the same signal were right. */
+  const gate=def.gates[kind];
+  if(gate){const ownRight=st.res.filter(r=>r.own&&r.right).map(r=>r.signal);const miss=gate.find(g=>!ownRight.includes(g));
+    if(miss){const k=def.plan.find(p=>p.startsWith(miss))||miss;q.splice(st.pi,0,k);kind=k;}}
+  showItem(def,st,kind,"own");
+}
+function makeItem(def,kind){const L=nextLetter();const ctx={story:nextStory()};const gen=def.gen[kind]||def.gen[kind.replace(/Why$/,"")];const it=gen(L,ctx);it.kind=kind;it.L=it.letter||L;return it;}
+function showItem(def,st,kind,role,after){
+  clearStage();const it=makeItem(def,kind);const results=[];let pi=0;const prevVals=[];
+  const runNext=()=>{
+    if(pi>=it.parts.length)return finish();
+    const part=it.parts[pi];
+    if(part.needsPrevRight&&!results[results.length-1].right){pi++;return runNext();}
+    runPart(part,{letter:it.L,letters:it.letters||[it.L],hold:it.holdReply,prev:prevVals},res=>{
+      results.push(res);if(res.value!==undefined)prevVals.push(res.value);
+      const isLast=pi===it.parts.length-1||(part.endOnWrong&&!res.right)||(part.onlyIfRight&&!res.right);
+      record("answer",{set:def.id,role,eq:plain(part.q||part.rows.map(r=>r.q).join(" | ")),x:part.x||(it.parts.find(p=>p.x)||{}).x||"",answer:res.answer,right:res.right?1:0,own:1,support:"none",
+        checks:def.ki+" "+it.signal+(it.contrast?" | contrast: "+it.contrast:""),detail:{kind,part:pi+1,of:it.parts.length,tag:res.tag||"",reply:plain(res.text||""),itemDone:isLast,itemRight:isLast?results.every(r=>r.right):""}});
+      if(!it.holdReply&&res.text)reply(rich(res.text),res.right?"ok":"no");
+      if(part.endOnWrong&&!res.right){pi=it.parts.length;return finish();}
+      if(part.onlyIfRight&&!res.right){pi=it.parts.length;return finish();}
+      pi++;
+      if(pi<it.parts.length){
+        if(!it.holdReply&&res.text)nextButton("Next",()=>{stage.querySelectorAll(".reply").forEach(x=>x.classList.add("done"));stage.querySelectorAll(".actions").forEach(a=>a.remove());runNext();});
+        else runNext();}
+      else finish();});
+  };
+  const finish=()=>{
+    const right=results.every(r=>r.right);
+    if(it.summary)reply(rich(it.summary(right)),right?"ok":"no");
+    const r={kind,signal:it.signal,contrast:it.contrast||"",right,own:true,t:new Date().toISOString(),role};
+    if(role==="review")return after(r);
+    st.res.push(r);kiOf(S.stop).res.push(r);
+    if(right){st.missRun=0;st.pi++;}
+    else{st.missRun++;
+      /* A miss: the next item is a fresh one of the same kind. Two in a row end this practice for today. */
+      if(st.missRun>=2){st.pi++;st.queue.splice(st.pi,0,kind);saveAll();return nextButton("Next",()=>stopForToday(def));}
+      st.pi++;st.queue.splice(st.pi,0,kind);}
+    saveAll();
+    nextButton("Next",()=>go());
+  };
+  runNext();
+}
+function holds(def,st){const k=kiOf(S.stop);k.passed=true;k.stage="held on own items (mixed set and gap still to come)";k.heldOn=new Date().toISOString();
+  record("item holds",{role:"own",checks:def.ki,detail:{rule:"last right on her own, every contrast case right on her own, at least three signal kinds right on her own",kinds:heldNow(def,st).kinds}});
+  sendState(S.stop,"held");
+  const i=ORDER.indexOf(S.stop);S.stop=ORDER.slice(i+1).find(id=>!kiOf(id).passed)||null;saveAll();go();}
+function stopForToday(def){S.stoppedOn=todayKey();kiOf(S.stop).stage="saved stop: two items in a row not right";
+  record("saved stop",{checks:def.ki,detail:{reason:"two items in a row not right on her own"}});sendState(S.stop,"stopped for today");saveAll();
+  if(HAS_SHEET)setTimeout(()=>{try{SheetLog.flush()}catch(e){}},50);endScreen("stopped");}
+function reviewItem(id){const def=STOPS[id];const kinds=def.plan.filter(k=>!def.gates[k]);const kind=pick(kinds);
+  const fakeSt={res:[],queue:[]};
+  showItem(def,fakeSt,kind,"review",r=>{S.review.shift();
+    kiOf(id).res.push(r);
+    if(!r.right){const k=kiOf(id);k.passed=false;k.stage="back to practice after a review miss";S.stops[id]=freshStop();S.stops[id].phase="own";S.stop=id;sendState(id,"back to practice");
+      record("teaching decision",{checks:def.ki,detail:{action:"back to practice",reason:"review item not right"}});}
+    saveAll();nextButton("Next",()=>go());});}
+function endScreen(why){clearStage();
+  if(why==="stopped"){para("We stop here for today. Your place is kept.");para("Next time, you start again with an example and then new questions.");}
+  else{para("That is the end of this part. Your work is kept.");para("Next time, there will be new questions on both.");}
+  record("session end",{detail:{reason:why}});if(HAS_SHEET)setTimeout(()=>{try{SheetLog.flush()}catch(e){}},50);}
+
+/* ===================== Read it and Pause ===================== */
+function stopSpeech(){try{speechSynthesis.cancel();}catch(e){}}
+$("readBtn").addEventListener("click",()=>{stopSpeech();try{const u=new SpeechSynthesisUtterance(speakable(screenText.join(". ")));u.lang="en-IN";u.rate=.92;speechSynthesis.speak(u);}catch(e){}record("read it",{});});
+$("pauseBtn").addEventListener("click",()=>{stopSpeech();$("pauseOv").classList.remove("hide");$("resumeBtn").focus();record("pause",{});saveAll();});
+$("resumeBtn").addEventListener("click",()=>{$("pauseOv").classList.add("hide");record("resume",{});});
+
+/* ===================== Teacher strip (?teacher=1 only) ===================== */
+function renderTeacher(){if(!TEACHER||!S)return;const t=$("teacher");t.classList.remove("hide");
+  const st=S.stop?S.stops[S.stop]:null;const def=S.stop?STOPS[S.stop]:null;const h=st&&def?heldNow(def,st):null;
+  t.innerHTML=`<b>For the teacher.</b> ${S.stop?STOPS[S.stop].ki:"all held"}; phase ${st?st.phase:"-"}; item ${st?st.pi+1:"-"} of ${st&&st.queue?st.queue.length:"-"} (${st&&st.queue?st.queue[st.pi]||"":""}); misses in a row ${st?st.missRun:"-"}; contrasts still needed: ${h?h.missing.join(", ")||"none":"-"}; signals right: ${h?h.kinds.join(" "):"-"}. Supported item skip: ${CONFIG.skipSupported?"on":"off"}. ${S.events.length} records${HAS_SHEET?", "+SheetLog.pending()+" waiting to send":", no Sheet logger on this page"}. <button class="btn" id="tReset" type="button">Start again (clears this page's record)</button>`;
+  $("tReset").onclick=()=>{try{localStorage.removeItem(CONFIG.stateKey);const k=store.get(CONFIG.kiKey)||{};ORDER.forEach(id=>delete k[id]);store.set(CONFIG.kiKey,k);}catch(e){}location.reload();};}
+
+/* ===================== Sample screens (?screen=...) for review ===================== */
+function sample(name){loadState();
+  const wm=name.match(/^w(\d)-(\d)$/),sm=name.match(/^sup(\d)$/);
+  S.stop=(wm||sm)?ORDER[Number((wm||sm)[1])-1]:ORDER.find(id=>STOPS[id].gen[name]);
+  const def=STOPS[S.stop];const st={phase:"own",w:0,firstTry:[],pi:0,queue:[],missRun:0,res:[]};
+  if(wm){st.w=Number(wm[2])-1;st.phase="worked";return workedExample(def,st);}
+  if(sm)return supportedItem(def,st);
+  showItem(def,st,name,"own");}
+window.__ki={part:null,ctx:null,readExpr,readNumber,sameExpr,substitute,STOPS,get S(){return S},get K(){return K},heldNow};
+if(QS.get("screen")){SAMPLE=true;/* review mode: nothing is stored */CONFIG.stateKey="student2-ki-sample";CONFIG.kiKey="student2-ki-sample-k";sample(QS.get("screen"));}
+else start();
+</script>
+</body>
+</html>

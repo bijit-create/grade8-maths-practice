@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Letters and expressions</title>
+<!--
+  Student 2: KI-AG-01 (a variable) and KI-AG-03 (an algebraic expression).
+  Built to study-materials/ki-understanding-AG01-AG03.md (approved by Bijit, 9 Nov 2026).
+  Offline and self-contained. If assets/sheetlog.js is loaded before this page's script,
+  every answer also goes to her Google Sheet through SheetLog.activity / SheetLog.state.
+  Teacher settings (not on her screen): window.KI_CONFIG or URL parameters, see CONFIG below.
+-->
+<style>
+:root{--bg:#F4F6F8;--card:#FFFFFF;--ink:#1A2430;--muted:#5B6878;--line:#D3DAE2;--ok:#25724A;--no:#B5442E;--warn:#9A5A00;--accent:#1F6FB2;--key:#E9EEF3;--keyink:#1A2430;--soft:#EEF3F8;
+ --f:system-ui,"Segoe UI",Roboto,Arial,sans-serif;--mono:ui-monospace,Consolas,Menlo,monospace;--math:"Cambria Math",Cambria,"Times New Roman",serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121820;--card:#1A222C;--ink:#E6ECF2;--muted:#9AA8B6;--line:#2E3A47;--ok:#62C48F;--no:#F08A72;--warn:#E8B04D;--accent:#6BAEF0;--key:#26313D;--keyink:#E6ECF2;--soft:#1F2934;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121820;--card:#1A222C;--ink:#E6ECF2;--muted:#9AA8B6;--line:#2E3A47;--ok:#62C48F;--no:#F08A72;--warn:#E8B04D;--accent:#6BAEF0;--key:#26313D;--keyink:#E6ECF2;--soft:#1F2934;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:18px;line-height:1.45;-webkit-user-select:none;user-select:none;overflow-x:hidden}
+.app{max-width:760px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px;min-height:100%}
+.top{display:flex;justify-content:flex-end;gap:8px}
+.btn{min-height:44px;min-width:44px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:600 1rem var(--f);padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn:focus-visible,.ch:focus-visible,.key:focus-visible,.box:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.card p{margin:0}
+.m{font-family:var(--math);font-size:1.12em;white-space:nowrap}
+.m i{font-style:italic;padding-right:.07em}
+.ask{font-weight:650}
+.done{color:var(--muted)}
+table.vt{border-collapse:collapse;align-self:flex-start;font-family:var(--math);font-size:1.2rem}
+table.vt th,table.vt td{border:1px solid var(--line);padding:6px 14px;text-align:center;min-width:64px}
+table.vt th{background:var(--soft);font-weight:600}
+table.wt{border-collapse:collapse;font-size:1rem;width:100%}
+table.wt th,table.wt td{border-top:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table.wt th{color:var(--muted);font-weight:600;font-size:.9rem}
+.qrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.box{min-width:110px;min-height:48px;border:3px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:700 1.5rem var(--math);display:inline-flex;align-items:center;justify-content:center;padding:0 10px;cursor:pointer}
+.box.active{border-color:var(--accent)}
+.box.right{border-color:var(--ok)}.box.wrong{border-color:var(--no)}
+.box.locked{cursor:default}
+.box .caret{display:inline-block;width:2px;height:1.1em;background:var(--accent);margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+td .box{min-width:72px;min-height:44px;font-size:1.25rem}
+.choices{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.choices.yn{flex-direction:row;flex-wrap:wrap}
+.ch{min-height:48px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:600 1.05rem var(--f);padding:8px 16px;cursor:pointer;text-align:left}
+.ch.picked{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--card))}
+.ch.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--card))}
+.ch.wrong{border-color:var(--no);background:color-mix(in srgb,var(--no) 14%,var(--card))}
+.ch:disabled{cursor:default;opacity:1}
+.keypad{display:grid;grid-template-columns:repeat(4,minmax(56px,76px));gap:8px;justify-content:center}
+.key{min-height:50px;border:1px solid var(--line);border-radius:10px;background:var(--key);color:var(--keyink);font:700 1.35rem var(--math);cursor:pointer;touch-action:manipulation}
+.key.let{font-style:italic}
+.key.ok{background:var(--accent);border-color:var(--accent);color:#fff;font:700 1.05rem var(--f)}
+.reply{border-left:5px solid var(--line);padding:8px 12px;background:var(--soft);border-radius:6px;font-size:1.05rem}
+.reply.ok{border-left-color:var(--ok)}.reply.no{border-left-color:var(--no)}.reply.info{border-left-color:var(--accent)}
+.reply p+p{margin-top:6px}
+.actions{display:flex;justify-content:flex-end}
+.hide{display:none!important}
+.overlay{position:fixed;inset:0;background:rgba(10,16,24,.6);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
+.ovcard{background:var(--card);border-radius:12px;padding:20px;max-width:420px;width:100%;display:flex;flex-direction:column;gap:14px;text-align:center}
+.teacher{font-size:.85rem;color:var(--muted);border:1px dashed var(--line);border-radius:8px;padding:8px;-webkit-user-select:text;user-select:text}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="top">
+    <button class="btn" id="readBtn" type="button">Read it</button>
+    <button class="btn" id="pauseBtn" type="button">Pause</button>
+  </div>
+  <div class="card" id="stage" aria-live="polite"></div>
+  <div id="keypadWrap"></div>
+  <div class="teacher hide" id="teacher"></div>
+</div>
+<div class="overlay hide" id="pauseOv"><div class="ovcard"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
+<script src="assets/sheet-config.js"></script>
+<script src="assets/sheetlog.js"></script>
+<script>
+"use strict";
+/* ===================== Settings (teacher side, never on her screen) ===================== */
+const QS=new URLSearchParams(location.search);
+const CONFIG=Object.assign({
+  /* Skip the supported item when every completion step in W1–W3 was right first time.
+     OFF by default: Bijit has not decided (spec, teaching point 6). URL: ?skipSupported=1 */
+  skipSupported:false,
+  stateKey:"student2-ki-ag01-03-v1",
+  kiKey:"student2-ki-v1",
+  version:"ki-ag-01-03 1.0 (9 Nov 2026)"
+},window.KI_CONFIG||{});
+if(QS.get("skipSupported")==="1")CONFIG.skipSupported=true;
+const TEACHER=QS.get("teacher")==="1";
+const SEED=QS.get("seed");
+
+/* ===================== Small helpers ===================== */
+let rngState=SEED?Number(SEED)>>>0||1:0;
+function rand(){if(!rngState)return Math.random();rngState=(rngState*1664525+1013904223)>>>0;return rngState/4294967296;}
+const ri=(a,b)=>a+Math.floor(rand()*(b-a+1));
+const pick=a=>a[Math.floor(rand()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const MINUS="−",TIMES="×";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>{const r=Math.round(n*1000)/1000;return String(r);};
+/* Text uses `...` around mathematics. In maths, single letters are set in italics. */
+function mathHTML(s){return esc(s).replace(/(^|[^A-Za-z])([a-z])(?![A-Za-z])/g,"$1<i>$2</i>").replace(/ /g," ");}
+function rich(t){return esc(t).split("`").map((seg,i)=>i%2?`<span class="m">${mathHTML(seg.replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"'))}</span>`:seg).join("").replace(/₹(\d)/g,"₹⁠$1");}
+function plain(t){return String(t).replace(/`/g,"");}
+function speakable(t){return plain(t).replace(/₹\s?(\d+)/g,"$1 rupees").replace(/(\d)([a-z])\b/g,"$1 $2").replace(new RegExp(MINUS,"g")," minus ").replace(/\+/g," plus ").replace(new RegExp(TIMES,"g")," times ").replace(/=/g," equals ").replace(/▢/g," blank ").replace(/\s+/g," ");}
+const todayKey=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ===================== Reading what she types ===================== */
+/* Numbers: digits with one decimal point, optional leading minus. */
+function readNumber(s){s=s.replace(new RegExp(MINUS,"g"),"-");if(!/^-?(\d+(\.\d*)?|\.\d+)$/.test(s))return null;return parseFloat(s);}
+/* Expressions in one or more letters, linear: returns {coef:{x:3}, c:2, times, tokens} or null. */
+function tokenize(s){const t=[];let i=0;s=s.replace(/\s+/g,"");
+  while(i<s.length){const ch=s[i];
+    if(/[0-9.]/.test(ch)){let j=i;while(j<s.length&&/[0-9.]/.test(s[j]))j++;const num=s.slice(i,j);if((num.match(/\./g)||[]).length>1||num===".")return null;t.push({k:"n",v:parseFloat(num),s:num});i=j;}
+    else if(/[a-z]/.test(ch)){t.push({k:"l",v:ch,s:ch});i++;}
+    else if(ch==="+"||ch==="-"||ch===MINUS){t.push({k:"op",v:ch==="+"?"+":"-",s:ch==="+"?"+":MINUS});i++;}
+    else if(ch===TIMES||ch==="*"){t.push({k:"x",s:TIMES});i++;}
+    else return null;}
+  return t;}
+function readExpr(s){const t=tokenize(s);if(!t||!t.length)return null;let i=0,times=false;const coef={};let c=0;
+  let sign=1;if(t[0].k==="op"){if(t[0].v==="-"){sign=-1;i=1;}else return null;}
+  while(true){/* term */let num=1,letter=null,factors=0;
+    while(i<t.length&&t[i].k!=="op"){const tk=t[i];
+      if(tk.k==="x"){if(!factors)return null;times=true;i++;if(i>=t.length||t[i].k==="op"||t[i].k==="x")return null;continue;}
+      if(factors&&t[i-1].k!=="x"){/* implicit multiplication only for number followed by letter */if(!(t[i-1].k==="n"&&tk.k==="l"))return null;}
+      if(tk.k==="n")num*=tk.v;else{if(letter)return null;letter=tk.v;}
+      factors++;i++;}
+    if(!factors)return null;
+    if(letter)coef[letter]=(coef[letter]||0)+sign*num;else c+=sign*num;
+    if(i>=t.length)break;
+    sign=t[i].v==="+"?1:-1;i++;if(i>=t.length)return null;}
+  const letterCount={};t.filter(x=>x.k==="l").forEach(x=>letterCount[x.v]=(letterCount[x.v]||0)+1);
+  return {coef,c,times,tokens:t,repeated:Object.values(letterCount).some(n=>n>1),letters:Object.keys(letterCount)};}
+function sameExpr(e,a,L,b){/* e equals a·L + b for every L */const keys=Object.keys(e.coef).filter(k=>e.coef[k]!==0);
+  if(a===0)return keys.length===0&&Math.abs(e.c-b)<1e-9;
+  return keys.length===1&&keys[0]===L&&Math.abs(e.coef[L]-a)<1e-9&&Math.abs(e.c-b)<1e-9;}
+function exprText(s){const t=tokenize(s);if(!t)return s;let out="";t.forEach((tk,i)=>{if(tk.k==="op"){out+=(i?" ":"")+tk.s+(i?" ":"");}else if(tk.k==="x")out+=" "+TIMES+" ";else out+=tk.s;});return out.trim();}
+/* Works out her expression at a value, written the way a teacher writes it: 2x + 1 → 2 × 3 + 1 = 7 */
+function substitute(s,L,v){const t=tokenize(s);let out="";t.forEach((tk,i)=>{
+  if(tk.k==="op")out+=(i?" ":"")+tk.s+(i?" ":"");
+  else if(tk.k==="x")out+=" "+TIMES+" ";
+  else if(tk.k==="l"){if(i>0&&t[i-1].k==="n")out+=" "+TIMES+" ";out+=tk.v===L?fmt(v):tk.v;}
+  else out+=tk.s;});return out.trim();}
+function valueAt(e,L,v){let s=e.c;for(const k in e.coef)s+=e.coef[k]*(k===L?v:NaN);return s;}
+
+/* ===================== Records ===================== */
+const HAS_SHEET=typeof SheetLog!=="undefined";
+let S=null,K=null;
+function saveAll(){store.set(CONFIG.stateKey,S);store.set(CONFIG.kiKey,K);}
+function record(event,f){const row=Object.assign({t:new Date().toISOString(),event,set:S?S.stop:"",role:"",eq:"",x:"",answer:"",right:"",own:"",support:"",checks:"",detail:""},f||{});
+  if(S){S.events.push(row);if(S.events.length>2000)S.events.splice(0,S.events.length-2000);store.set(CONFIG.stateKey,S);}
+  if(HAS_SHEET){try{SheetLog.activity({event:row.event,set:row.set,role:row.role,eq:row.eq,x:row.x,answer:row.answer,right:row.right,own:row.own,support:row.support,checks:row.checks,detail:typeof row.detail==="string"?row.detail:JSON.stringify(row.detail)});}catch(e){}}
+  window.__records=(window.__records||[]);window.__records.push(row);
+  renderTeacher();}
+function sendState(stopId,status){if(!HAS_SHEET)return;const k=K[stopId]||{};try{SheetLog.state({set:stopId,ki:STOPS[stopId].ki,teacher:STOPS[stopId].teacher,status,stage:k.stage||"",own_right:(k.res||[]).filter(r=>r.own&&r.right).length,items:(k.res||[]).length});}catch(e){}}
+
+/* ===================== Content: KI-AG-01 ===================== */
+const LETTERS=["x","y","n","a"];
+function letterFor(i){return LETTERS[i%LETTERS.length];}
+/* Stories: the letter is never the first letter of the thing counted. */
+const STORIES=[
+  {thing:"pen",things:"pens",buyer:"Asha",judge:"Ravi",price:()=>pick([4,5,6,7])},
+  {thing:"book",things:"books",buyer:"Ravi",judge:"Meera",price:()=>pick([20,25,30,40])},
+  {thing:"bus ticket",things:"bus tickets",buyer:"Sunita",judge:"Imran",price:()=>pick([8,9,12,15])}
+];
+function storyLetter(st,avoid){return LETTERS.filter(l=>l!=="a"&&l!==st.thing[0]&&l!==avoid)[0];}
+
+const W01=[
+ {id:"W1",lines:["In `x + 4`, the letter `x` stands for a number."],
+  table:{head:["x","x + 4"],rows:[["3","3 + 4 = 7"],["10","10 + 4 = 14"],["0","0 + 4 = 4"],["8",{box:0}]]},
+  after:["The number that `x` stands for can be different each time. When `x` is 0, `x + 4` is 4."],
+  steps:[
+   {type:"num",q:"When `x` is 8, what is `x + 4`?",inTable:true,ans:12,why:"When `x` is 8, `x + 4` is `8 + 4 = 12`.",letters:["x"]},
+   {type:"num",q:"In `n + 4`, the letter `n` stands for a number too. When `n` is 8, what is `n + 4`?",ans:12,why:"When `n` is 8, `n + 4` is `8 + 4 = 12`.",letters:["n"]}]},
+ {id:"W2",lines:["A pen costs ₹5. Asha buys `x` pens.","`x` stands for the number of pens Asha buys. `x` does not stand for the pens.","The cost of the pens in rupees is `5 × x`. We write this as `5x`.","If Asha buys 4 pens, `x` is 4, and the cost is `5 × 4` = ₹20."],
+  steps:[
+   {type:"choice",q:"A book costs ₹30. Ravi buys `y` books. What does `y` stand for?",options:[{t:"the books"},{t:"the number of books Ravi buys",right:true},{t:"the cost of the books"}],
+    why:"`y` stands for the number of books Ravi buys. The books are not a number, and the cost is `30y` rupees.",letters:["y"]},
+   {type:"num",q:"Ravi buys 2 books. What is `30y`?",ans:60,why:"`30y` means `30 × y`. When `y` is 2, `30y` is `30 × 2 = 60`.",letters:["y"]}]},
+ {id:"W3",lines:["In `x + x`, both `x`'s stand for the same number. If `x` is 4, `x + x` is `4 + 4 = 8`.","`x` and `y` can stand for different numbers, like 2 and 7. They can also stand for the same number, like 5 and 5."],
+  steps:[{type:"num",q:"If `a` is 6, what is `a + a`?",ans:12,why:"Both `a`'s stand for 6, so `a + a` is `6 + 6 = 12`.",letters:["a"]}]}
+];
+const SUP01={support:["When `x` is 3, `x + 4` is `3 + 4 = 7`.","When `x` is 10, `x + 4` is `10 + 4 = 14`."],
+  part:{type:"num",q:"If `x` is 6, what is `x + 4`?",ans:10,why:"When `x` is 6, `x + 4` is `6 + 4 = 10`.",letters:["x"],
+   wrong:{6:"6 is the number that `x` stands for. The question asks for `x + 4`, which is `6 + 4 = 10`.",4:"4 is the number added to `x`. `x` stands for 6, so `x + 4` is `6 + 4 = 10`.",64:"`x + 4` means the number `x`, then 4 added. It is `6 + 4 = 10`, not 6 and 4 written side by side."}}};
+
+/* Generators: each returns {signal, contrast, parts[]} with fresh numbers. L = the letter for this item. */
+const G01={
+ S1a(L){let v,k;do{v=ri(5,9);k=ri(2,5);}while(v===k);const sum=v+k,cat=Number(""+v+k);
+  return {signal:"S1",parts:[{type:"num",q:`If \`${L}\` is ${v}, what is \`${L} + ${k}\`?`,ans:sum,x:`${L}=${v}`,why:`\`${L} + ${k}\` is \`${v} + ${k} = ${sum}\`.`,
+   wrong:{[v]:`${v} is the number that \`${L}\` stands for. The question asks for \`${L} + ${k}\`, which is \`${v} + ${k} = ${sum}\`.`,[k]:`${k} is the number added to \`${L}\`. \`${L}\` stands for ${v}, so \`${L} + ${k}\` is \`${v} + ${k} = ${sum}\`.`,[cat]:`\`${L} + ${k}\` means the number \`${L}\`, then ${k} added. It is \`${v} + ${k} = ${sum}\`, not ${v} and ${k} written side by side.`},
+   tags:{[v]:"letter value only",[k]:"letter ignored",[cat]:"juxtaposed"}}]};},
+ S1b(L){let v,k;do{v=ri(9,15);k=ri(2,5);}while(v===k);const d=v-k;
+  return {signal:"S1",parts:[{type:"num",q:`If \`${L}\` is ${v}, what is \`${L} ${MINUS} ${k}\`?`,ans:d,x:`${L}=${v}`,why:`\`${L} ${MINUS} ${k}\` is \`${v} ${MINUS} ${k} = ${d}\`.`,
+   wrong:{[v]:`${v} is the number that \`${L}\` stands for. The question asks for \`${L} ${MINUS} ${k}\`, which is \`${v} ${MINUS} ${k} = ${d}\`.`,[v+k]:`${v+k} is \`${v} + ${k}\`. \`${L} ${MINUS} ${k}\` takes ${k} away from ${v}, so it is \`${v} ${MINUS} ${k} = ${d}\`.`},tags:{[v]:"letter value only",[v+k]:"operation"}}]};},
+ S1c(L){let v,k;do{v=ri(4,9);k=ri(2,6);}while(v===k);const sum=v+k;
+  return {signal:"S1",parts:[{type:"num",q:`If \`${L}\` is ${v}, what is \`${k} + ${L}\`?`,ans:sum,x:`${L}=${v}`,why:`\`${k} + ${L}\` is \`${k} + ${v} = ${sum}\`.`,
+   wrong:{[v]:`${v} is the number that \`${L}\` stands for. The question asks for \`${k} + ${L}\`, which is \`${k} + ${v} = ${sum}\`.`,[k]:`${k} is the number that \`${L}\` is added to. \`${L}\` stands for ${v}, so \`${k} + ${L}\` is \`${k} + ${v} = ${sum}\`.`,[Number(""+k+v)]:`\`${k} + ${L}\` means ${k}, then the number \`${L}\` added. It is \`${k} + ${v} = ${sum}\`, not ${k} and ${v} written side by side.`},tags:{[v]:"letter value only",[k]:"letter ignored"}}]};},
+ S2a(L){const k=ri(3,6),v=ri(11,19),T=v+k;
+  return {signal:"S2",parts:[
+   {type:"yn",q:`Can \`${L} + ${k}\` be ${T}?`,yes:"Yes, it can",no:"No, it cannot",ans:true,endOnWrong:true,
+    wrongReply:`When \`${L}\` is ${v}, \`${L} + ${k}\` is \`${v} + ${k} = ${T}\`. So \`${L} + ${k}\` can be ${T}.`},
+   {type:"num",q:`What number does \`${L}\` stand for when \`${L} + ${k}\` is ${T}?`,prefix:`${L} =`,ans:v,why:`When \`${L}\` is ${v}, \`${L} + ${k}\` is \`${v} + ${k} = ${T}\`.`,
+    gen:w=>`When \`${L}\` is ${fmt(w)}, \`${L} + ${k}\` is \`${fmt(w)} + ${k} = ${fmt(w+k)}\`, not ${T}. \`${L}\` stands for ${v}.`}]};},
+ S2z(L){const k=ri(3,9);
+  return {signal:"S2",contrast:"x = 0",parts:[
+   {type:"yn",q:`Can \`${L} + ${k}\` be ${k}?`,yes:"Yes, it can",no:"No, it cannot",ans:true,endOnWrong:true,
+    wrongReply:`When \`${L}\` is 0, \`${L} + ${k}\` is \`0 + ${k} = ${k}\`. \`${L}\` can stand for 0.`},
+   {type:"num",q:`What number does \`${L}\` stand for when \`${L} + ${k}\` is ${k}?`,prefix:`${L} =`,ans:0,why:`When \`${L}\` is 0, \`${L} + ${k}\` is \`0 + ${k} = ${k}\`.`,
+    gen:w=>`When \`${L}\` is ${fmt(w)}, \`${L} + ${k}\` is \`${fmt(w)} + ${k} = ${fmt(w+k)}\`, not ${k}. \`${L}\` stands for 0.`}]};},
+ S2d(L){const T=pick([5,7,9,11,13,15]),h=T/2;
+  return {signal:"S2",contrast:"decimal value",parts:[
+   {type:"yn",q:`Can \`${L} + ${L}\` be ${T}?`,yes:"Yes, it can",no:"No, it cannot",ans:true,endOnWrong:true,
+    wrongReply:`When \`${L}\` is ${fmt(h)}, \`${L} + ${L}\` is \`${fmt(h)} + ${fmt(h)} = ${T}\`. \`${L}\` can stand for a number that is not a whole number.`},
+   {type:"num",q:`What number does \`${L}\` stand for when \`${L} + ${L}\` is ${T}?`,prefix:`${L} =`,ans:h,why:`When \`${L}\` is ${fmt(h)}, \`${L} + ${L}\` is \`${fmt(h)} + ${fmt(h)} = ${T}\`.`,
+    gen:w=>`When \`${L}\` is ${fmt(w)}, \`${L} + ${L}\` is \`${fmt(w)} + ${fmt(w)} = ${fmt(2*w)}\`, not ${T}. \`${L}\` stands for ${fmt(h)}.`}]};},
+ S3(L,ctx){const st=ctx.story,c=st.price(),Lx=storyLetter(st);let n;do{n=ri(2,4);}while(Number(""+c+n)===c*n);const buy=`${st.buyer} buys \`${Lx}\` ${st.things}.`;
+  return {signal:"S3",contrast:"number, not object",letter:Lx,parts:[
+   {type:"choice",q:`A ${st.thing} costs ₹${c}. ${buy} What does \`${Lx}\` stand for?`,
+    options:[{t:`the ${st.things}`,reply:`\`${Lx}\` stands for a number. Here it is the number of ${st.things} ${st.buyer} buys.`,tag:"letter as object"},{t:`the number of ${st.things} ${st.buyer} buys`,right:true},{t:`the cost of the ${st.things}`,reply:`The cost is \`${c}${Lx}\` rupees. \`${Lx}\` is the number of ${st.things}.`,tag:"letter as cost"}],
+    why:`\`${Lx}\` stands for the number of ${st.things} ${st.buyer} buys.`},
+   {type:"num",q:`${st.buyer} buys ${n} ${st.things}. What is \`${c}${Lx}\`?`,ans:c*n,x:`${Lx}=${n}`,why:`\`${c}${Lx}\` means \`${c} × ${Lx}\`. When \`${Lx}\` is ${n}, \`${c}${Lx}\` is \`${c} × ${n} = ${c*n}\`.`,
+    wrong:{[Number(""+c+n)]:`\`${c}${Lx}\` means \`${c} × ${Lx}\`. When \`${Lx}\` is ${n}, \`${c}${Lx}\` is \`${c} × ${n} = ${c*n}\`, not ${c}${n}.`,[c+n]:`\`${c}${Lx}\` means \`${c} × ${Lx}\`, not \`${c} + ${Lx}\`. When \`${Lx}\` is ${n}, it is \`${c} × ${n} = ${c*n}\`.`},tags:{[Number(""+c+n)]:"juxtaposed",[c+n]:"5x as 5 + x"}}]};},
+ S4a(L){let v,k;do{v=ri(3,7);k=ri(2,6);}while(v===k);const ans=2*v+k;
+  return {signal:"S4",contrast:"same letter twice",parts:[{type:"num",q:`If \`${L}\` is ${v}, what is \`${L} + ${L} + ${k}\`?`,ans,x:`${L}=${v}`,why:`Each \`${L}\` stands for ${v}, so \`${L} + ${L} + ${k}\` is \`${v} + ${v} + ${k} = ${ans}\`.`,
+   wrong:{[v+k]:`The letter \`${L}\` is written two times, and each one stands for ${v}. So \`${L} + ${L} + ${k}\` is \`${v} + ${v} + ${k} = ${ans}\`.`},tags:{[v+k]:"one x counted"}}]};},
+ S4b(L){const a=ri(2,4),b=a+ri(2,4);
+  return {signal:"S4",parts:[{type:"yn",q:`In \`${L} + ${L}\`, can the first \`${L}\` be ${a} and the second \`${L}\` be ${b}?`,yes:"Yes, it can",no:"No, it cannot",ans:false,
+   rightReply:`Both \`${L}\`'s stand for the same number. If the first \`${L}\` is ${a}, the second \`${L}\` is ${a} as well.`,
+   wrongReply:`In \`${L} + ${L}\`, both \`${L}\`'s stand for the same number. If the first \`${L}\` is ${a}, the second \`${L}\` is ${a} as well.`,tag:"each x a different number"}]};},
+ S4c(L){const pairs=[["x","y"],["n","y"],["a","n"]],p=pick(pairs),v=ri(3,9);
+  return {signal:"S4",letter:p[0],letters:p,parts:[{type:"yn",q:`Can \`${p[0]}\` and \`${p[1]}\` stand for the same number?`,yes:"Yes, they can",no:"No, they cannot",ans:true,
+   rightReply:`Different letters can stand for the same number. \`${p[0]}\` can be ${v} and \`${p[1]}\` can be ${v}.`,
+   wrongReply:`Different letters can stand for the same number. \`${p[0]}\` can be ${v} and \`${p[1]}\` can be ${v}.`,tag:"different letters must differ"}]};},
+ S5a(L){const k=ri(3,9);
+  return {signal:"S5",parts:[{type:"expr",q:`Write ${k} more than a number \`${L}\` as an expression.`,a:1,b:k,canon:`${L} + ${k}`,why:`${k} more than \`${L}\` is \`${L} + ${k}\`.`,
+   forms:[{a:1,b:-k,reply:`\`${L} ${MINUS} ${k}\` is ${k} less than \`${L}\`. ${k} more than \`${L}\` is \`${L} + ${k}\`.`,tag:"operation"},{a:-1,b:k,reply:`\`${k} ${MINUS} ${L}\` is \`${L}\` less than ${k}. ${k} more than \`${L}\` is \`${L} + ${k}\`.`,tag:"operation"},{a:k,b:0,reply:`\`${k}${L}\` is ${k} times \`${L}\`. ${k} more than \`${L}\` is \`${L} + ${k}\`.`,tag:"operation"}]}]};},
+ S5b(L){const k=ri(3,9);
+  return {signal:"S5",contrast:"order in x − k",parts:[{type:"expr",q:`Write ${k} less than a number \`${L}\` as an expression.`,a:1,b:-k,canon:`${L} ${MINUS} ${k}`,why:`${k} less than \`${L}\` is \`${L} ${MINUS} ${k}\`.`,
+   forms:[{a:-1,b:k,reply:`\`${k} ${MINUS} ${L}\` is \`${L}\` less than ${k}. In ${k} less than a number \`${L}\`, the number \`${L}\` comes first, then ${k} is taken away. That is \`${L} ${MINUS} ${k}\`.`,tag:"order reversed"},{a:1,b:k,reply:`\`${L} + ${k}\` is ${k} more than \`${L}\`. ${k} less than \`${L}\` is \`${L} ${MINUS} ${k}\`.`,tag:"operation"}]}]};},
+ S5c(L){const k=ri(3,9);
+  return {signal:"S5",parts:[{type:"expr",q:`Write ${k} times a number \`${L}\` as an expression.`,a:k,b:0,canon:`${k}${L}`,why:`${k} times \`${L}\` is \`${k} × ${L}\`, and we write this as \`${k}${L}\`.`,
+   forms:[{a:1,b:k,reply:`\`${L} + ${k}\` adds ${k}. ${k} times \`${L}\` is \`${k} × ${L}\`, which we write as \`${k}${L}\`.`,tag:"times as plus"}]}]};},
+ S5d(L){const k=ri(3,9);
+  return {signal:"S5",parts:[{type:"choice",q:`What does \`${L} ${MINUS} ${k}\` say in words?`,
+   options:[{t:`${k} less than a number \`${L}\``,right:true},{t:`a number \`${L}\` less than ${k}`,reply:`A number \`${L}\` less than ${k} is \`${k} ${MINUS} ${L}\`. \`${L} ${MINUS} ${k}\` starts with \`${L}\` and takes ${k} away, so it is ${k} less than a number \`${L}\`.`,tag:"order reversed"},{t:`${k} more than a number \`${L}\``,reply:`${k} more than a number \`${L}\` is \`${L} + ${k}\`. \`${L} ${MINUS} ${k}\` takes ${k} away, so it is ${k} less than a number \`${L}\`.`,tag:"operation"}],
+   why:`\`${L} ${MINUS} ${k}\` starts with \`${L}\` and takes ${k} away. It is ${k} less than a number \`${L}\`.`}]};},
+ S6(L){const k=ri(2,5),T=ri(10,15),edge=T-k;
+  const chk=(w,first)=>{if(first!==undefined&&Math.abs(w-first)<1e-9)return {retry:`That is the same number as before. Give a different number for \`${L}\`.`};
+    const val=w+k;if(val>T)return {right:true,why:`When \`${L}\` is ${fmt(w)}, \`${L} + ${k}\` is \`${fmt(w)} + ${k} = ${fmt(val)}\`, which is more than ${T}.`};
+    if(Math.abs(val-T)<1e-9)return {right:false,reply:`When \`${L}\` is ${fmt(w)}, \`${L} + ${k}\` is ${T}. ${T} is not more than ${T}. Any number more than ${edge} works.`,tag:"boundary"};
+    return {right:false,reply:`When \`${L}\` is ${fmt(w)}, \`${L} + ${k}\` is \`${fmt(w)} + ${k} = ${fmt(val)}\`, which is not more than ${T}. Any number more than ${edge} works.`};};
+  return {signal:"S6",parts:[
+   {type:"own",q:`Give a number for \`${L}\` so that \`${L} + ${k}\` is more than ${T}.`,prefix:`${L} =`,solve:edge+1,wrongs:[edge,edge-1],check:(w)=>chk(w)},
+   {type:"own",q:`Give a different number for \`${L}\` that also makes \`${L} + ${k}\` more than ${T}.`,prefix:`${L} =`,solve:edge+2,wrongs:[edge],check:(w,prev)=>chk(w,prev[0])}]};},
+ S7(L,ctx){const st=ctx.story,c=st.price(),Lx=storyLetter(st);let n;do{n=ri(2,4);}while(Number(""+c+n)===c*n);
+  return {signal:"S7",contrast:"number, not object",letter:Lx,holdReply:true,parts:[
+   {type:"yn",q:`A ${st.thing} costs ₹${c}. ${st.buyer} buys \`${Lx}\` ${st.things}. ${st.judge} says that \`${c}${Lx}\` means ${c} ${st.things}. Is ${st.judge} right?`,yes:`Yes, ${st.judge} is right`,no:`No, ${st.judge} is not right`,ans:false,tag:"letter as object"},
+   {type:"choice",q:`What does \`${c}${Lx}\` stand for?`,options:[{t:`the cost of the ${st.things} in rupees`,right:true},{t:`${c} ${st.things}`,tag:"letter as object"},{t:`the number of ${st.things}`,tag:"letter as count"}]},
+   {type:"num",q:`${st.buyer} buys ${n} ${st.things}. What is \`${c}${Lx}\`?`,ans:c*n,x:`${Lx}=${n}`,wrong:{},tags:{[Number(""+c+n)]:"juxtaposed",[c+n]:"5x as 5 + x"}}],
+   summary:ok=>ok?`Right. \`${c}${Lx}\` is \`${c} × ${Lx}\`, the cost of the ${st.things} in rupees. When ${st.buyer} buys ${n} ${st.things}, it is \`${c} × ${n} = ${c*n}\`. So ${st.judge} is not right.`
+    :`\`${c}${Lx}\` means \`${c} × ${Lx}\`. \`${Lx}\` is the number of ${st.things}, so \`${c}${Lx}\` is the cost of the ${st.things} in rupees, not ${c} ${st.things}. When ${st.buyer} buys ${n} ${st.things}, \`${c}${Lx}\` is \`${c} × ${n} = ${c*n}\`. ${st.judge} is not right.`};}
+};
+const PLAN01=["S1a","S3","S2a","S4a","S5b","S2z","S6","S4c","S5d","S4b","S2d","S7","S5c"];
+const CONTRASTS01=["x = 0","decimal value","order in x − k","same letter twice","number, not object"];
+const CONTRAST_KIND01={"x = 0":"S2z","decimal value":"S2d","order in x − k":"S5b","same letter twice":"S4a","number, not object":"S3"};
+
+/* ===================== Content: KI-AG-03 ===================== */
+const W03=[
+ {id:"W1",lines:["An expression is made of numbers and letters joined by +, −, × or ÷. An expression has no equals sign."],
+  wtable:{head:["Written","Is it an expression?","Why"],rows:[["`3x + 2`","Yes","Numbers and a letter are joined by +."],["`x`","Yes","It is a letter alone."],["`7`","Yes","It is a number alone."],["`3x + 2 = 11`","No","It has an equals sign. It is an equation."],["`3x +`","No","The + joins nothing on the right."]]},
+  steps:[
+   {type:"yn",q:"Is `2y + 1 = 7` an expression?",yes:"Yes",no:"No",ans:false,letters:["y"],rightReply:"`2y + 1 = 7` has an equals sign, so it is an equation, not an expression.",wrongReply:"`2y + 1 = 7` has an equals sign, so it is an equation, not an expression."},
+   {type:"yn",q:"Is `2y + 1` an expression?",yes:"Yes",no:"No",ans:true,letters:["y"],rightReply:"`2y + 1` is a number and a letter joined by +, with no equals sign. It is an expression.",wrongReply:"`2y + 1` is a number and a letter joined by +, with no equals sign. It is an expression."}]},
+ {id:"W2",lines:["`3x + 2` tells you to take the number `x`, multiply it by 3, then add 2.","If `x` is 5, `3x + 2` is `3 × 5 + 2 = 15 + 2 = 17`."],
+  steps:[{type:"num",q:"If `n` is 6, what is `2n + 1`?",ans:13,letters:["n"],why:"`2n + 1` is `2 × 6 + 1 = 12 + 1 = 13`.",
+   wrong:{27:"`2n` means `2 × n`, so `2n` is `2 × 6 = 12`, not 26. `2n + 1` is `12 + 1 = 13`.",9:"`2n` means `2 × n`, not `2 + n`. `2n + 1` is `2 × 6 + 1 = 13`.",14:"14 is `2 × (6 + 1)`. In `2n + 1`, `n` is multiplied by 2 first, then 1 is added. That is `2 × 6 + 1 = 13`."}}]},
+ {id:"W3",lines:["Here are the values of three expressions when `x` is 1 and when `x` is 4."],
+  table:{head:["x","3x + 2","2 + 3x","2x + 3"],rows:[["1","5","5","5"],["4","14","14","11"]]},
+  after:["`3x + 2` and `2 + 3x` have the same value for every `x`. `2x + 3` gives 5 when `x` is 1, but 11 when `x` is 4, so it is a different expression."],
+  steps:[{type:"nums",rows:[{q:"When `x` is 6, what is `3x + 2`?",ans:20,why:"`3x + 2` is `3 × 6 + 2 = 20`."},{q:"When `x` is 6, what is `2x + 3`?",ans:15,why:"`2x + 3` is `2 × 6 + 3 = 15`."}],letters:["x"],
+   after:"The values are different, so `3x + 2` and `2x + 3` are different expressions."}]}
+];
+const SUP03={support:["`3x + 2` tells you to take the number `x`, multiply it by 3, then add 2."],
+  part:{type:"num",q:"If `x` is 4, what is `3x + 2`?",ans:14,letters:["x"],why:"`3x + 2` is `3 × 4 + 2 = 12 + 2 = 14`.",
+   wrong:{34:"`3x` means `3 × x`. When `x` is 4, `3x` is `3 × 4 = 12`, not 32. So `3x + 2` is `12 + 2 = 14`.",9:"`3x` means `3 × x`, not `3 + x`. `3x + 2` is `3 × 4 + 2 = 14`.",18:"18 is `3 × (4 + 2)`. In `3x + 2`, `x` is multiplied by 3 first, then 2 is added. That is `3 × 4 + 2 = 14`."}}};
+
+function sortItem(L,form){
+  const a=ri(2,5),b=ri(1,6),c=a*ri(2,4)-b;
+  const F={
+   pos:{w:`${a}${L} ${MINUS} ${b}`,ans:true,no:`\`${a}${L} ${MINUS} ${b}\` is numbers and a letter joined by ${MINUS}, with no equals sign. It is an expression.`},
+   letter:{w:`${L}`,ans:true,no:`\`${L}\` is a letter alone. A letter alone is an expression.`},
+   times:{w:`${a} × ${L}`,ans:true,no:`\`${a} × ${L}\` is a number and a letter joined by ×, with no equals sign. It is an expression.`},
+   eq:{w:`${a}${L} ${MINUS} ${b} = ${c}`,ans:false,contrast:"equation beside expression",yes:`\`${a}${L} ${MINUS} ${b} = ${c}\` has an equals sign. It says two things have the same value, so it is an equation.`,tag:"expression must have ="},
+   inc:{w:`${L} ${MINUS}`,ans:false,contrast:"incomplete form",yes:`The ${MINUS} in \`${L} ${MINUS}\` takes away nothing. An expression joins numbers and letters on both sides of each sign.`,tag:"incomplete accepted"}
+  }[form];
+  const part={type:"yn",q:`Is \`${F.w}\` an expression?`,yes:"Yes",no:"No",ans:F.ans,
+    rightReply:F.ans?`\`${F.w}\` is an expression.`:`\`${F.w}\` is not an expression.`,wrongReply:F.ans?F.no:F.yes,tag:F.tag,eq:F.w};
+  const parts=[part];
+  if(form==="eq"||form==="inc"){/* the why question is asked on the fourth sort item; it never counts on its own */}
+  return {signal:"T1",contrast:F.contrast,parts,form,w:F.w};}
+const G03={
+ T1pos:L=>sortItem(L,"pos"),T1letter:L=>sortItem(L,"letter"),T1times:L=>sortItem(L,"times"),T1eq:L=>sortItem(L,"eq"),T1inc:L=>sortItem(L,"inc"),
+ T1incWhy(L){const it=sortItem(L,"inc");it.parts[0].onlyIfRight=true;
+  it.parts.push({type:"choice",q:`Why is \`${it.w}\` not an expression?`,needsPrevRight:true,options:[{t:`The ${MINUS} has nothing after it.`,right:true},{t:"It has no equals sign.",tag:"expression must have ="}],
+   why:`The ${MINUS} in \`${it.w}\` has nothing after it, so it joins nothing on the right.`});return it;},
+ T2a(L){let a,v,b;do{a=ri(3,4);v=ri(4,6);b=ri(2,5);}while(new Set([a*v+b,Number(""+a+v)+b,a+v+b,a*(v+b)]).size<4);const ans=a*v+b,cat=Number(""+a+v)+b;
+  return {signal:"T2",contrast:"3x as 3 × x",parts:[{type:"num",q:`If \`${L}\` is ${v}, what is \`${a}${L} + ${b}\`?`,ans,x:`${L}=${v}`,why:`\`${a}${L} + ${b}\` is \`${a} × ${v} + ${b} = ${ans}\`.`,
+   wrong:{[cat]:`\`${a}${L}\` means \`${a} × ${L}\`. When \`${L}\` is ${v}, \`${a}${L}\` is \`${a} × ${v} = ${a*v}\`, not ${a}${v}. So \`${a}${L} + ${b}\` is \`${a*v} + ${b} = ${ans}\`.`,[a+v+b]:`\`${a}${L}\` means \`${a} × ${L}\`, not \`${a} + ${L}\`. \`${a}${L} + ${b}\` is \`${a} × ${v} + ${b} = ${ans}\`.`,[a*(v+b)]:`${a*(v+b)} is \`${a} × (${v} + ${b})\`. In \`${a}${L} + ${b}\`, \`${L}\` is multiplied by ${a} first, then ${b} is added. That is \`${a} × ${v} + ${b} = ${ans}\`.`},
+   tags:{[cat]:"3x as two-digit number",[a+v+b]:"3x as 3 + x",[a*(v+b)]:"3(x + 2)"}}]};},
+ T2b(L){const a=ri(3,6),b=ri(1,5);
+  return {signal:"T2",parts:[{type:"choice",q:`In \`${a}${L} ${MINUS} ${b}\`, what is done to the number \`${L}\`?`,
+   options:[{t:`multiply it by ${a}, then take away ${b}`,right:true},{t:`take away ${b}, then multiply by ${a}`,reply:`Taking away ${b} first and then multiplying by ${a} gives \`${a} × (${L} ${MINUS} ${b})\`. In \`${a}${L} ${MINUS} ${b}\`, \`${L}\` is multiplied by ${a} first, then ${b} is taken away.`,tag:"order of operations"},{t:`add ${a}, then take away ${b}`,reply:`\`${a}${L}\` means \`${a} × ${L}\`, not \`${a} + ${L}\`. In \`${a}${L} ${MINUS} ${b}\`, \`${L}\` is multiplied by ${a}, then ${b} is taken away.`,tag:"3x as 3 + x"}],
+   why:`In \`${a}${L} ${MINUS} ${b}\`, \`${L}\` is multiplied by ${a}, then ${b} is taken away.`}]};},
+ T3a(L){const a=ri(3,6),b=ri(1,4),v=ri(2,4),val=a*v+b;
+  return {signal:"T3",parts:[
+   {type:"nums",rows:[{q:`When \`${L}\` is ${v}, what is \`${a}${L} + ${b}\`?`,ans:val,why:`\`${a}${L} + ${b}\` is \`${a} × ${v} + ${b} = ${val}\`.`},{q:`When \`${L}\` is ${v}, what is \`${b} + ${a}${L}\`?`,ans:val,why:`\`${b} + ${a}${L}\` is \`${b} + ${a} × ${v} = ${val}\`.`}],x:`${L}=${v}`},
+   {type:"yn",q:`Do \`${a}${L} + ${b}\` and \`${b} + ${a}${L}\` have the same value for every \`${L}\`?`,yes:"Yes, they do",no:"No, they do not",ans:true,
+    rightReply:`Both add the same two parts, \`${a}${L}\` and ${b}, in a different order, so they have the same value for every \`${L}\`.`,
+    wrongReply:`When \`${L}\` is ${v}, both are ${val}. \`${a}${L} + ${b}\` and \`${b} + ${a}${L}\` add the same two parts, \`${a}${L}\` and ${b}, in a different order, so they have the same value for every \`${L}\`.`}]};},
+ T3b(L){const a=ri(3,6),b=ri(2,5),v=ri(2,4),v1=a*v+b,v2=v+a;
+  return {signal:"T3",contrast:"same numbers, different expression",parts:[
+   {type:"nums",rows:[{q:`When \`${L}\` is ${v}, what is \`${a}${L} + ${b}\`?`,ans:v1,why:`\`${a}${L} + ${b}\` is \`${a} × ${v} + ${b} = ${v1}\`.`},{q:`When \`${L}\` is ${v}, what is \`${L} + ${a}\`?`,ans:v2,why:`\`${L} + ${a}\` is \`${v} + ${a} = ${v2}\`.`}],x:`${L}=${v}`},
+   {type:"yn",q:`Do \`${a}${L} + ${b}\` and \`${L} + ${a}\` have the same value for every \`${L}\`?`,yes:"Yes, they do",no:"No, they do not",ans:false,
+    rightReply:`When \`${L}\` is ${v}, \`${a}${L} + ${b}\` is ${v1} and \`${L} + ${a}\` is ${v2}. They are different expressions.`,
+    wrongReply:`When \`${L}\` is ${v}, \`${a}${L} + ${b}\` is ${v1} and \`${L} + ${a}\` is ${v2}. The values are different, so they do not have the same value for every \`${L}\`.`,tag:"same numbers, same expression"}]};},
+ T4a(L){let a,b;do{a=ri(2,5);b=ri(2,6);}while(a===b);
+  return {signal:"T4",parts:[{type:"expr",q:`Write ${b} more than ${a} times a number \`${L}\` as an expression.`,a,b,canon:`${a}${L} + ${b}`,why:`${a} times \`${L}\` is \`${a}${L}\`, and ${b} more is \`${a}${L} + ${b}\`.`,
+   forms:[{a:b,b:a,reply:`\`${a} + ${b}${L}\` is ${a} more than ${b} times \`${L}\`. Here \`${L}\` is multiplied by ${a}, then ${b} is added. That is \`${a}${L} + ${b}\`.`,tag:"numbers swapped"},{a:1,b:a+b,reply:`\`${L} + ${a+b}\` adds ${a+b} to \`${L}\`. Here \`${L}\` is multiplied by ${a}, then ${b} is added. That is \`${a}${L} + ${b}\`.`,tag:"times as plus"},{a:a+b,b:0,reply:`\`${a+b}${L}\` joins \`${a}${L}\` and ${b} into one term. \`${a}${L}\` and ${b} cannot be joined. The expression is \`${a}${L} + ${b}\`.`,tag:"conjoining"}]}]};},
+ T4b(L){let a,b;do{a=ri(2,5);b=ri(2,7);}while(a===b);
+  return {signal:"T4",parts:[{type:"expr",q:`Write ${b} less than ${a} times a number \`${L}\` as an expression.`,a,b:-b,canon:`${a}${L} ${MINUS} ${b}`,why:`${a} times \`${L}\` is \`${a}${L}\`, and ${b} less is \`${a}${L} ${MINUS} ${b}\`.`,
+   forms:[{a:-a,b,reply:`\`${b} ${MINUS} ${a}${L}\` takes \`${a}${L}\` away from ${b}. Here ${b} is taken away from \`${a}${L}\`. That is \`${a}${L} ${MINUS} ${b}\`.`,tag:"order reversed"},{a,b,reply:`\`${a}${L} + ${b}\` is ${b} more than ${a} times \`${L}\`. ${b} less is \`${a}${L} ${MINUS} ${b}\`.`,tag:"operation"}]}]};},
+ T5(L){const a=ri(2,5),b=ri(2,6),v=ri(2,4),lhs=a*v+b,rhs=(a+b)*v,nm=pick(["Meera","Imran","Sunita"]);
+  return {signal:"T5",contrast:"conjoining",holdReply:true,parts:[
+   {type:"yn",q:`${nm} writes \`${a}${L} + ${b} = ${a+b}${L}\`. Is ${nm} right?`,yes:`Yes, ${nm} is right`,no:`No, ${nm} is not right`,ans:false,tag:"conjoining"},
+   {type:"nums",intro:`Check ${nm}'s work with a number.`,rows:[{q:`When \`${L}\` is ${v}, what is \`${a}${L} + ${b}\`?`,ans:lhs},{q:`When \`${L}\` is ${v}, what is \`${a+b}${L}\`?`,ans:rhs}],x:`${L}=${v}`}],
+   summary:ok=>`When \`${L}\` is ${v}, \`${a}${L} + ${b}\` is \`${a} × ${v} + ${b} = ${lhs}\` and \`${a+b}${L}\` is \`${a+b} × ${v} = ${rhs}\`. They are not equal, so \`${a}${L} + ${b}\` is not \`${a+b}${L}\`. \`${a}${L}\` and ${b} cannot be joined into one term.`+(ok?"":` ${nm} is not right.`)};},
+ T6(L){const v=ri(2,4),T=pick([9,11,13,14,17].filter(t=>t!==v));
+  return {signal:"T6",parts:[{type:"ownexpr",q:`Write an expression with \`${L}\` in it that is ${T} when \`${L}\` is ${v}.`,L,v,T}]};}
+};
+const PLAN03=["T1pos","T2a","T1letter","T1eq","T3a","T1incWhy","T4a","T2b","T1times","T3b","T5","T6","T4b"];
+const CONTRASTS03=["equation beside expression","incomplete form","3x as 3 × x","same numbers, different expression","conjoining"];
+const CONTRAST_KIND03={"equation beside expression":"T1eq","incomplete form":"T1inc","3x as 3 × x":"T2a","same numbers, different expression":"T3b","conjoining":"T5"};
+
+const STOPS={
+ "ki-ag-01":{ki:"KI-AG-01",teacher:"Variable: a letter stands for a number that can take different values (x + 4 at x = 0, 3.5; same letter same value; x − 4 order; letter as number, not object).",worked:W01,sup:SUP01,gen:G01,plan:PLAN01,contrasts:CONTRASTS01,contrastKind:CONTRAST_KIND01,gates:{S7:["S3"]}},
+ "ki-ag-03":{ki:"KI-AG-03",teacher:"Algebraic expression: numbers and variables joined by operation signs, no equals sign (sort vs equation/incomplete; 3x = 3 × x; 3x + 2 ≡ 2 + 3x ≠ 2x + 3; 3x + 2 ≠ 5x).",worked:W03,sup:SUP03,gen:G03,plan:PLAN03,contrasts:CONTRASTS03,contrastKind:CONTRAST_KIND03,gates:{T5:["T2","T3"]}}
+};
+const ORDER=["ki-ag-01","ki-ag-03"];
+ORDER.forEach(id=>STOPS[id].id=id);
+
+/* ===================== State ===================== */
+function freshStop(){return {phase:"worked",w:0,firstTry:[],pi:0,queue:null,missRun:0,res:[],resumed:false};}
+function loadState(){S=store.get(CONFIG.stateKey);if(!S||S.v!==1)S={v:1,stop:null,stops:{},events:[],stoppedOn:null,lastDay:null,letter:0,story:0,review:null};
+  K=store.get(CONFIG.kiKey)||{};}
+function kiOf(id){return K[id]||(K[id]={ki:STOPS[id].ki,res:[],passed:false,stage:""});}
+function nextLetter(){S.letter=(S.letter+1)%LETTERS.length;return LETTERS[S.letter];}
+function nextStory(){S.story=(S.story+1)%STORIES.length;return STORIES[S.story];}
+
+/* ===================== Rendering ===================== */
+const $=id=>document.getElementById(id);
+const stage=$("stage"),kpWrap=$("keypadWrap");
+let screenText=[];      /* what Read it reads */
+let keyHandler=null;    /* the box that the keypad types into */
+function say(t){screenText.push(t);}
+function clearStage(){if(window.__ki)window.__ki.part=null;stage.innerHTML="";kpWrap.innerHTML="";screenText=[];keyHandler=null;stopSpeech();}
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;return e;}
+function para(t,cls){const p=el("p",cls,rich(t));stage.appendChild(p);say(plain(t));return p;}
+function valueTable(tb,boxes){const t=el("table","vt");const hr=el("tr");tb.head.forEach(h=>hr.appendChild(el("th","",mathHTML(h))));const th=el("thead");th.appendChild(hr);t.appendChild(th);
+  const body=el("tbody");tb.rows.forEach(r=>{const tr=el("tr");r.forEach(c=>{const td=el("td");if(typeof c==="object"&&c.box!==undefined){td.appendChild(boxes[c.box]);}else td.innerHTML=mathHTML(c);tr.appendChild(td);});body.appendChild(tr);});t.appendChild(body);
+  say("A table. "+tb.head.join(", ")+". "+tb.rows.map(r=>r.map(c=>typeof c==="object"?"blank":c).join(", ")).join(". "));return t;}
+function wordTable(tb){const t=el("table","wt");const hr=el("tr");tb.head.forEach(h=>hr.appendChild(el("th","",esc(h))));t.appendChild(hr);
+  tb.rows.forEach(r=>{const tr=el("tr");r.forEach(c=>tr.appendChild(el("td","",rich(c))));t.appendChild(tr);});
+  say(tb.rows.map(r=>plain(r[0])+". "+r[1]+". "+r[2]).join(" "));return t;}
+
+/* A typed answer box. kind: "num" | "expr". */
+function makeBox(kind,label){const b=el("button","box");b.type="button";b.dataset.kind=kind;b.setAttribute("aria-label",label||"answer box");b._v="";b._locked=false;
+  b.addEventListener("click",()=>{if(!b._locked)focusBox(b);});return b;}
+let activeBox=null,boxesNow=[];
+function paintBox(b){const shown=b.dataset.kind==="expr"||/[a-z+×−-]/.test(b._v)?mathHTML(exprText(b._v)):esc(b._v);b.innerHTML=shown+(b===activeBox&&!b._locked?'<span class="caret"></span>':"");}
+function focusBox(b){activeBox=b;boxesNow.forEach(x=>{x.classList.toggle("active",x===b);paintBox(x);});}
+function typeKey(k){const b=activeBox;if(!b||b._locked)return;
+  if(k==="⌫")b._v=b._v.slice(0,-1);else if(k==="OK"){if(keyHandler)keyHandler();return;}else if(b._v.length<14)b._v+=k;
+  paintBox(b);}
+function keypad(letters,onOK){keyHandler=onOK;const kp=el("div","keypad");kp.setAttribute("role","group");kp.setAttribute("aria-label","keypad");
+  const keys=["7","8","9","⌫","4","5","6","+","1","2","3",MINUS,"0",".",TIMES,...letters];
+  keys.forEach(k=>{const b=el("button","key"+(/^[a-z]$/.test(k)?" let":""),esc(k));b.type="button";b.dataset.k=k;b.setAttribute("aria-label",k==="⌫"?"delete":k===MINUS?"minus":k===TIMES?"times":k==="."?"point":k);b.addEventListener("click",()=>typeKey(k));kp.appendChild(b);});
+  const ok=el("button","key ok","OK");ok.type="button";const rest=keys.length%4;ok.style.gridColumn="span "+(rest?4-rest:4);ok.dataset.k="OK";ok.addEventListener("click",()=>typeKey("OK"));kp.appendChild(ok);
+  kpWrap.innerHTML="";kpWrap.appendChild(kp);}
+function hideKeypad(){kpWrap.innerHTML="";keyHandler=null;activeBox=null;}
+document.addEventListener("keydown",e=>{if(!$("pauseOv").classList.contains("hide"))return;if(e.target&&e.target.closest&&e.target.closest(".ch,.btn")&&e.key==="Enter")return;
+  if(!keyHandler||!activeBox)return;const allowed=[...kpWrap.querySelectorAll(".key")].map(b=>b.dataset.k);let k=e.key;
+  if(k==="Backspace")k="⌫";else if(k==="Enter")k="OK";else if(k==="-")k=MINUS;else if(k==="*")k=TIMES;
+  if(allowed.includes(k)){e.preventDefault();typeKey(k);}});
+
+function reply(html,cls){const r=el("div","reply "+(cls||"info"));r.innerHTML=html;stage.appendChild(r);say(r.textContent);return r;}
+function nextButton(label,fn){const a=el("div","actions");const b=el("button","btn primary",esc(label||"Next"));b.type="button";b.addEventListener("click",()=>{b.disabled=true;fn();},{once:true});a.appendChild(b);stage.appendChild(a);hideKeypad();setTimeout(()=>b.focus({preventScroll:false}),0);return b;}
+
+/* ---------- One part: shows its question and controls, calls done(result) ---------- */
+/* result: {right, answer, tag, replyHTML?}  */
+function runPart(part,ctx,done){
+  window.__ki.part=part;window.__ki.ctx=ctx;
+  const letters=part.letters||ctx.letters||[ctx.letter];
+  if(part.intro)para(part.intro);
+  if(part.type==="num"||part.type==="own"){
+    const box=makeBox("num");boxesNow=[box];
+    if(part.inTable&&ctx.tableBox){ctx.tableBox.replaceWith(box);para(part.q,"ask");}
+    else{const row=el("div","qrow");const q=el("p","ask",rich(part.q));stage.appendChild(q);say(plain(part.q));if(part.prefix)row.appendChild(el("span","m",mathHTML(part.prefix)));row.appendChild(box);stage.appendChild(row);}
+    focusBox(box);
+    keypad(letters,()=>{const s=box._v;if(!s)return;const n=readNumber(s);
+      if(n===null){unreadable(box,s);return;}
+      clearUnreadable();box._locked=true;hideKeypad();paintBox(box);
+      if(part.type==="own"){const r=part.check(n,ctx.prev||[]);if(r.retry){box._locked=false;box._v="";focusBox(box);keypad(letters,keyHandlerSaved);noteRetry(r.retry);return;}
+        box.classList.add(r.right?"right":"wrong");done({right:r.right,answer:s,tag:r.tag,text:r.right?"Right. "+r.why:r.reply,value:n});return;}
+      const right=Math.abs(n-part.ans)<1e-9;box.classList.add(right?"right":"wrong");
+      let text;if(right)text="Right. "+(part.why||"");else{const key=fmt(n);text=(part.wrong&&part.wrong[key])||(part.gen?part.gen(n):"")||(part.why?part.why:`The answer is ${fmt(part.ans)}.`);}
+      done({right,answer:s,tag:right?"":((part.tags&&part.tags[fmt(n)])||""),text});});
+    var keyHandlerSaved=keyHandler;
+  }
+  else if(part.type==="nums"){
+    const boxes=part.rows.map(()=>makeBox("num"));boxesNow=boxes;
+    part.rows.forEach((r,i)=>{const row=el("div","qrow");const q=el("span","ask",rich(r.q));row.appendChild(q);say(plain(r.q));row.appendChild(boxes[i]);stage.appendChild(row);});
+    focusBox(boxes[0]);
+    keypad(letters,()=>{const i=boxes.indexOf(activeBox);if(!activeBox._v)return;const n=readNumber(activeBox._v);if(n===null){unreadable(activeBox,activeBox._v);return;}clearUnreadable();
+      const empty=boxes.find(b=>!b._v);if(empty){focusBox(empty);return;}
+      const vals=boxes.map(b=>readNumber(b._v));if(vals.some(v=>v===null)){focusBox(boxes[vals.findIndex(v=>v===null)]);unreadable(activeBox,activeBox._v);return;}
+      boxes.forEach(b=>{b._locked=true;});hideKeypad();boxes.forEach(paintBox);
+      const rights=vals.map((v,j)=>Math.abs(v-part.rows[j].ans)<1e-9);boxes.forEach((b,j)=>b.classList.add(rights[j]?"right":"wrong"));
+      const right=rights.every(Boolean);
+      const whys=part.rows.map(r=>r.why).filter(Boolean).join(" ");
+      done({right,answer:boxes.map(b=>b._v).join(" | "),text:(right?"Right. ":"")+whys,rights});});
+  }
+  else if(part.type==="expr"||part.type==="ownexpr"){
+    const box=makeBox("expr");boxesNow=[box];para(part.q,"ask");const row=el("div","qrow");row.appendChild(box);stage.appendChild(row);focusBox(box);
+    const L=part.type==="ownexpr"?part.L:ctx.letter;
+    keypad([L],()=>{const s=box._v;if(!s)return;const e=readExpr(s);
+      if(!e){unreadable(box,s,true);return;}
+      const otherLetter=e.letters.find(x=>x!==L);if(otherLetter){unreadable(box,s,true);return;}
+      clearUnreadable();box._locked=true;hideKeypad();paintBox(box);const shown="`"+exprText(s)+"`";
+      if(part.type==="ownexpr"){
+        if(!e.letters.includes(L)){box.classList.add("wrong");const val=e.c;done({right:false,answer:s,tag:"no letter",text:`${shown} is a number with no \`${L}\` in it. Write one that uses \`${L}\`.`});return;}
+        const val=valueAt(e,L,part.v);const work=`When \`${L}\` is ${part.v}, ${shown} is \`${substitute(s,L,part.v)} = ${fmt(val)}\`.`;
+        const right=Math.abs(val-part.T)<1e-9;box.classList.add(right?"right":"wrong");
+        done({right,answer:s,text:right?"Right. "+work+` So your expression is ${part.T} when \`${L}\` is ${part.v}.`:work+` That is not ${part.T}. One expression that works is \`${L} + ${part.T-part.v}\`, because \`${part.v} + ${part.T-part.v} = ${part.T}\`.`});return;}
+      if(sameExpr(e,part.a,L,part.b)){box.classList.add("right");let note="";
+        if(e.times||e.repeated)note=` We write this as \`${part.canon}\`.`;
+        done({right:true,answer:s,text:"Right. "+part.why+note});return;}
+      box.classList.add("wrong");const f=(part.forms||[]).find(f=>sameExpr(e,f.a,L,f.b));
+      done({right:false,answer:s,tag:f?f.tag:"",text:f?f.reply:`${shown} is not ${part.q.replace(/^Write /,"").replace(/ as an expression\.$/,"")}. ${part.why}`});});
+  }
+  else if(part.type==="choice"||part.type==="yn"){
+    const q=el("p","ask",rich(part.q));stage.appendChild(q);say(plain(part.q));
+    const opts=part.type==="yn"?[{t:part.yes,v:true},{t:part.no,v:false}]:shuffle(part.options);
+    const wrap=el("div","choices"+(part.type==="yn"?" yn":""));const btns=[];
+    opts.forEach(o=>{const b=el("button","ch",rich(o.t));b.type="button";say(plain(o.t));btns.push(b);wrap.appendChild(b);
+      b.addEventListener("click",()=>{if(b.disabled)return;btns.forEach(x=>x.disabled=true);
+        const right=part.type==="yn"?o.v===part.ans:!!o.right;b.classList.add(ctx.hold?"picked":(right?"right":"wrong"));
+        let text;if(part.type==="yn")text=right?(part.rightReply||""):(part.wrongReply||"");
+        else text=right?"Right. "+(part.why||""):(o.reply||part.why||"");
+        done({right,answer:plain(o.t),tag:right?"":(o.tag||part.tag||""),text:(right&&part.type==="yn"&&text&&!/^Right/.test(text)?"Right. ":"")+text});});});
+    stage.appendChild(wrap);hideKeypad();
+  }
+}
+let unreadEl=null;
+function unreadable(box,s,expr){clearUnreadable();const shown=expr?exprText(s):s;
+  let t;if(expr){if(/[+−×]$/.test(shown))t=`\`${shown}\` is not finished. Write a number or a letter after the last sign.`;else t=`\`${shown}\` cannot be read as an expression. Change it, then press OK.`;}
+  else if(/[a-z]/.test(s))t=`The answer here is a number. Write the number without a letter, then press OK.`;
+  else if(/[+−×]/.test(s))t=`Work out \`${exprText(s)}\` and write the answer as one number, then press OK.`;
+  else t=`${s} cannot be read as a number. Change it, then press OK.`;
+  unreadEl=reply(rich(t),"info");unreadEl.dataset.unreadable="1";record("unreadable answer",{answer:s,detail:{text:t}});}
+function noteRetry(t){clearUnreadable();unreadEl=reply(rich(t),"info");unreadEl.dataset.unreadable="1";}
+function clearUnreadable(){if(unreadEl){unreadEl.remove();unreadEl=null;}}
+
+/* ===================== Flow ===================== */
+const ST=()=>S.stops[S.stop]||(S.stops[S.stop]=freshStop());
+
+function start(){
+  loadState();
+  if(HAS_SHEET)try{SheetLog.setSession("s2ki-"+Date.now().toString(36));}catch(e){}
+  const today=todayKey();
+  const newDay=S.lastDay!==today;S.lastDay=today;
+  record("session start",{detail:{version:CONFIG.version,skipSupported:CONFIG.skipSupported}});
+  if(S.stoppedOn===today){return endScreen("stopped");}
+  if(S.stoppedOn&&S.stoppedOn!==today){S.stoppedOn=null;const st=S.stops[S.stop];if(st){st.phase="worked";st.w=0;st.resumed=true;st.missRun=0;}}
+  if(!S.stop){S.stop=ORDER.find(id=>!kiOf(id).passed)||null;}
+  saveAll();
+  /* Review: each new session opens with one fresh item of every item already held. */
+  const held=ORDER.filter(id=>kiOf(id).passed);
+  if(newDay&&held.length&&S.events.some(e=>e.event==="answer")){S.review=held.slice();}
+  go();
+}
+let SAMPLE=false;
+function go(){if(SAMPLE){clearStage();return;}saveAll();renderTeacher();
+  if(S.review&&S.review.length)return reviewItem(S.review[0]);
+  if(!S.stop)return endScreen("all");
+  const st=ST(),def=STOPS[S.stop];
+  if(st.phase==="worked")return workedExample(def,st);
+  if(st.phase==="supported")return supportedItem(def,st);
+  if(st.phase==="own")return ownItem(def,st);
+}
+
+/* ---------- Worked examples ---------- */
+function workedExample(def,st){
+  const W=def.worked[st.w];clearStage();
+  W.lines.forEach(l=>para(l));
+  let tableBox=null;
+  if(W.table){const boxes=[el("span","box locked","▢")];tableBox=boxes[0];stage.appendChild(valueTable(W.table,boxes));}
+  if(W.wtable)stage.appendChild(wordTable(W.wtable));
+  (W.after||[]).forEach(l=>para(l));
+  let si=0;
+  const nextStep=()=>{
+    if(si>=W.steps.length){
+      return nextButton("Next",()=>{st.w++;if(st.w>=def.worked.length){
+        const allFirst=st.firstTry.length&&st.firstTry.every(Boolean);
+        if(st.resumed){st.phase="own";st.resumed=false;}
+        else if(CONFIG.skipSupported&&allFirst){st.phase="own";record("supported item skipped",{role:"supported",detail:{reason:"every completion step right first time",setting:"skipSupported on"}});}
+        else st.phase="supported";}
+        go();});}
+    const step=W.steps[si];
+    runPart(step,{letter:(step.letters||["x"])[0],letters:step.letters,tableBox,worked:true},res=>{
+      st.firstTry.push(res.right);
+      record("answer",{role:"worked example step",eq:plain(step.q||step.rows.map(r=>r.q).join(" | ")),answer:res.answer,right:res.right?1:0,own:1,support:"worked example on screen",checks:def.ki+" "+W.id,detail:{example:W.id,step:si+1,tag:res.tag||""}});
+      reply(rich(res.text+(step.after&&res.right?" "+step.after:"")),res.right?"ok":"no");
+      si++;saveAll();
+      if(si<W.steps.length)nextButton("Next",()=>{const r=stage.querySelectorAll(".reply,.actions");r.forEach(x=>x.classList.add("done"));stage.querySelectorAll(".actions").forEach(a=>a.remove());nextStep();});
+      else nextStep();});
+  };
+  nextStep();
+}
+
+/* ---------- Supported item ---------- */
+function supportedItem(def,st){clearStage();
+  def.sup.support.forEach(l=>para(l,"done"));
+  const part=def.sup.part;
+  runPart(part,{letter:part.letters[0],letters:part.letters},res=>{
+    record("answer",{role:"supported",eq:plain(part.q),answer:res.answer,right:res.right?1:0,own:0,support:"worked lines on screen",checks:def.ki,detail:{tag:res.tag||""}});
+    reply(rich(res.text),res.right?"ok":"no");
+    kiOf(S.stop).stage="own items";
+    nextButton("Next",()=>{st.phase="own";go();});});
+}
+
+/* ---------- Her own items ---------- */
+function planQueue(def,st){if(!st.queue)st.queue=def.plan.slice();return st.queue;}
+function heldNow(def,st){
+  const own=st.res.filter(r=>r.own&&r.right);
+  const last=st.res[st.res.length-1];
+  const kinds=new Set(own.map(r=>r.signal));
+  const contrastsOk=def.contrasts.every(c=>own.some(r=>r.contrast===c));
+  return {held:!!last&&last.own&&last.right&&contrastsOk&&kinds.size>=3,contrastsOk,kinds:[...kinds],missing:def.contrasts.filter(c=>!own.some(r=>r.contrast===c))};
+}
+function ownItem(def,st){
+  const q=planQueue(def,st);
+  if(st.pi>=q.length){
+    const h=heldNow(def,st);
+    if(h.held)return holds(def,st);
+    /* The authored set is done but the rule is not met: add a fresh item for what is still missing. */
+    q.push(h.missing.length?def.contrastKind[h.missing[0]]:q[q.length-1]);
+  }
+  let kind=q[st.pi];
+  /* Incorrect worked answers come only after her own items on the same signal were right. */
+  const gate=def.gates[kind];
+  if(gate){const ownRight=st.res.filter(r=>r.own&&r.right).map(r=>r.signal);const miss=gate.find(g=>!ownRight.includes(g));
+    if(miss){const k=def.plan.find(p=>p.startsWith(miss))||miss;q.splice(st.pi,0,k);kind=k;}}
+  showItem(def,st,kind,"own");
+}
+function makeItem(def,kind){const L=nextLetter();const ctx={story:nextStory()};const gen=def.gen[kind]||def.gen[kind.replace(/Why$/,"")];const it=gen(L,ctx);it.kind=kind;it.L=it.letter||L;return it;}
+function showItem(def,st,kind,role,after){
+  clearStage();const it=makeItem(def,kind);const results=[];let pi=0;const prevVals=[];
+  const runNext=()=>{
+    if(pi>=it.parts.length)return finish();
+    const part=it.parts[pi];
+    if(part.needsPrevRight&&!results[results.length-1].right){pi++;return runNext();}
+    runPart(part,{letter:it.L,letters:it.letters||[it.L],hold:it.holdReply,prev:prevVals},res=>{
+      results.push(res);if(res.value!==undefined)prevVals.push(res.value);
+      const isLast=pi===it.parts.length-1||(part.endOnWrong&&!res.right)||(part.onlyIfRight&&!res.right);
+      record("answer",{set:def.id,role,eq:plain(part.q||part.rows.map(r=>r.q).join(" | ")),x:part.x||(it.parts.find(p=>p.x)||{}).x||"",answer:res.answer,right:res.right?1:0,own:1,support:"none",
+        checks:def.ki+" "+it.signal+(it.contrast?" | contrast: "+it.contrast:""),detail:{kind,part:pi+1,of:it.parts.length,tag:res.tag||"",reply:plain(res.text||""),itemDone:isLast,itemRight:isLast?results.every(r=>r.right):""}});
+      if(!it.holdReply&&res.text)reply(rich(res.text),res.right?"ok":"no");
+      if(part.endOnWrong&&!res.right){pi=it.parts.length;return finish();}
+      if(part.onlyIfRight&&!res.right){pi=it.parts.length;return finish();}
+      pi++;
+      if(pi<it.parts.length){
+        if(!it.holdReply&&res.text)nextButton("Next",()=>{stage.querySelectorAll(".reply").forEach(x=>x.classList.add("done"));stage.querySelectorAll(".actions").forEach(a=>a.remove());runNext();});
+        else runNext();}
+      else finish();});
+  };
+  const finish=()=>{
+    const right=results.every(r=>r.right);
+    if(it.summary)reply(rich(it.summary(right)),right?"ok":"no");
+    const r={kind,signal:it.signal,contrast:it.contrast||"",right,own:true,t:new Date().toISOString(),role};
+    if(role==="review")return after(r);
+    st.res.push(r);kiOf(S.stop).res.push(r);
+    if(right){st.missRun=0;st.pi++;}
+    else{st.missRun++;
+      /* A miss: the next item is a fresh one of the same kind. Two in a row end this practice for today. */
+      if(st.missRun>=2){st.pi++;st.queue.splice(st.pi,0,kind);saveAll();return nextButton("Next",()=>stopForToday(def));}
+      st.pi++;st.queue.splice(st.pi,0,kind);}
+    saveAll();
+    nextButton("Next",()=>go());
+  };
+  runNext();
+}
+function holds(def,st){const k=kiOf(S.stop);k.passed=true;k.stage="held on own items (mixed set and gap still to come)";k.heldOn=new Date().toISOString();
+  record("item holds",{role:"own",checks:def.ki,detail:{rule:"last right on her own, every contrast case right on her own, at least three signal kinds right on her own",kinds:heldNow(def,st).kinds}});
+  sendState(S.stop,"held");
+  const i=ORDER.indexOf(S.stop);S.stop=ORDER.slice(i+1).find(id=>!kiOf(id).passed)||null;saveAll();go();}
+function stopForToday(def){S.stoppedOn=todayKey();kiOf(S.stop).stage="saved stop: two items in a row not right";
+  record("saved stop",{checks:def.ki,detail:{reason:"two items in a row not right on her own"}});sendState(S.stop,"stopped for today");saveAll();
+  if(HAS_SHEET)setTimeout(()=>{try{SheetLog.flush()}catch(e){}},50);endScreen("stopped");}
+function reviewItem(id){const def=STOPS[id];const kinds=def.plan.filter(k=>!def.gates[k]);const kind=pick(kinds);
+  const fakeSt={res:[],queue:[]};
+  showItem(def,fakeSt,kind,"review",r=>{S.review.shift();
+    kiOf(id).res.push(r);
+    if(!r.right){const k=kiOf(id);k.passed=false;k.stage="back to practice after a review miss";S.stops[id]=freshStop();S.stops[id].phase="own";S.stop=id;sendState(id,"back to practice");
+      record("teaching decision",{checks:def.ki,detail:{action:"back to practice",reason:"review item not right"}});}
+    saveAll();nextButton("Next",()=>go());});}
+function endScreen(why){clearStage();
+  if(why==="stopped"){para("We stop here for today. Your place is kept.");para("Next time, you start again with an example and then new questions.");}
+  else{para("That is the end of this part. Your work is kept.");para("Next time, there will be new questions on both.");}
+  record("session end",{detail:{reason:why}});if(HAS_SHEET)setTimeout(()=>{try{SheetLog.flush()}catch(e){}},50);}
+
+/* ===================== Read it and Pause ===================== */
+function stopSpeech(){try{speechSynthesis.cancel();}catch(e){}}
+$("readBtn").addEventListener("click",()=>{stopSpeech();try{const u=new SpeechSynthesisUtterance(speakable(screenText.join(". ")));u.lang="en-IN";u.rate=.92;speechSynthesis.speak(u);}catch(e){}record("read it",{});});
+$("pauseBtn").addEventListener("click",()=>{stopSpeech();$("pauseOv").classList.remove("hide");$("resumeBtn").focus();record("pause",{});saveAll();});
+$("resumeBtn").addEventListener("click",()=>{$("pauseOv").classList.add("hide");record("resume",{});});
+
+/* ===================== Teacher strip (?teacher=1 only) ===================== */
+function renderTeacher(){if(!TEACHER||!S)return;const t=$("teacher");t.classList.remove("hide");
+  const st=S.stop?S.stops[S.stop]:null;const def=S.stop?STOPS[S.stop]:null;const h=st&&def?heldNow(def,st):null;
+  t.innerHTML=`<b>For the teacher.</b> ${S.stop?STOPS[S.stop].ki:"both held"}; phase ${st?st.phase:"-"}; item ${st?st.pi+1:"-"} of ${st&&st.queue?st.queue.length:"-"} (${st&&st.queue?st.queue[st.pi]||"":""}); misses in a row ${st?st.missRun:"-"}; contrasts still needed: ${h?h.missing.join(", ")||"none":"-"}; signals right: ${h?h.kinds.join(" "):"-"}. Supported item skip: ${CONFIG.skipSupported?"on":"off"}. ${S.events.length} records${HAS_SHEET?", "+SheetLog.pending()+" waiting to send":", no Sheet logger on this page"}. <button class="btn" id="tReset" type="button">Start again (clears this page's record)</button>`;
+  $("tReset").onclick=()=>{try{localStorage.removeItem(CONFIG.stateKey);const k=store.get(CONFIG.kiKey)||{};ORDER.forEach(id=>delete k[id]);store.set(CONFIG.kiKey,k);}catch(e){}location.reload();};}
+
+/* ===================== Sample screens (?screen=...) for review ===================== */
+function sample(name){loadState();
+  const wm=name.match(/^w(01|03)-(\d)$/),sm=name.match(/^sup(01|03)$/);
+  S.stop=(wm||sm)?"ki-ag-"+(wm||sm)[1]:(G01[name]?"ki-ag-01":"ki-ag-03");
+  const def=STOPS[S.stop];const st={phase:"own",w:0,firstTry:[],pi:0,queue:[],missRun:0,res:[]};
+  if(wm){st.w=Number(wm[2])-1;st.phase="worked";return workedExample(def,st);}
+  if(sm)return supportedItem(def,st);
+  showItem(def,st,name,"own");}
+window.__ki={part:null,ctx:null,readExpr,readNumber,sameExpr,substitute,STOPS,G01,G03,get S(){return S},get K(){return K},heldNow};
+if(QS.get("screen")){SAMPLE=true;/* review mode: nothing is stored */CONFIG.stateKey="student2-ki-sample";CONFIG.kiKey="student2-ki-sample-k";sample(QS.get("screen"));}
+else start();
+</script>
+</body>
+</html>
