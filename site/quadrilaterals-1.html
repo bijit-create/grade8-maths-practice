@@ -114,15 +114,15 @@ function standardWrongs(good,P){const [a,b,c,d]=good;return [
 /* ---------- worked examples ---------- */
 function W1(ctx){const P=[[80,90],[330,70],[355,300],[70,320],[220,200]];
   ctx.say(RULE);
-  ctx.say("Here, 4 points were tapped in turn, A, B, C and then D. The sides AB, BC and CD are drawn. To close the shape, the last side must go from D back to A.");
+  ctx.say("The sides AB, BC and CD join the points A, B, C and D in turn. To close the shape, the last side must go from D back to A.");
   const B=build(ctx,P,{path:[0,1,2,3]});
-  ctx.ask("Tap A to close the shape. Then tap My shape is finished.");
+  ctx.ask("Tap A to close the shape. Then tap “My shape is finished”.");
   finishButton(ctx,B);
   ctx.auto({right(){B.tap(0);pressFinish();},wrongs:[{expect:"Your shape is not closed",fn(){pressFinish();}}]});}
 function W2(ctx){const P=[[80,90],[340,90],[80,310],[340,310]];
-  ctx.say("These 4 points were joined in the order A, B, C, D and back to A. Side BC crosses side DA, so this shape is not a quadrilateral. The sides of a quadrilateral meet only at its corners.");
+  ctx.say("The sides of this shape join the 4 points in the order A, B, C, D and back to A. Side BC crosses side DA, so this shape is not a quadrilateral. The sides of a quadrilateral meet only at its corners.");
   const B=build(ctx,P,{path:[0,1,2,3],closed:true});
-  ctx.ask("Tap Start again. Then join the same 4 points so that no sides cross, and close the shape.");
+  ctx.ask("Tap “Start again”. Then join the same 4 points so that no sides cross, and close the shape.");
   finishButton(ctx,B);
   autoFor(ctx,B,[0,1,3,2],[{order:[0,1,2,3],close:true,expect:"crosses side"}]);}
 function SUP(ctx){const P=pointsFive(ctx);
