@@ -39,6 +39,11 @@ require("./quad-test-lib.cjs").run({page:"quadrilaterals-3.html",phoneShots:["w1
   await p.goto(URL0+"?seed=6&screen=howmany");await lbl(0).click();await lbl(2).click();await lbl(1).click();await lbl(3).click();
   ok(await p.locator("#pic line.kept").count()===2,"howmany: she can try two lines");
   await p.locator("#words .ch").nth(1).click();ok((await lastAnswer(p)).right===1&&(await lastReply(p)).includes("has 2 diagonals"),"howmany: 2 is right");
+  /* side or diagonal or neither is random, not by position; 'neither' (a line to a point E on a side) appears */
+  const tags=[];for(let seed=1;seed<=40;seed++){await p.goto(URL0+"?seed="+(seed*48271+977)+"&screen=which");await p.evaluate(()=>window.__qe.part.right());tags.push((await lastAnswer(p)).answer);}
+  ok(["a side","a diagonal","neither"].every(t=>tags.includes(t)),"which: side, diagonal and neither all appear ("+tags.slice(0,12)+")");
+  ok(tags.some((t,i)=>i>0&&t===tags[i-1]),"which: the answer is not decided by position");
+  await p.goto(URL0+"?seed="+((tags.indexOf("neither")+1)*48271+977)+"&screen=which");ok(await p.locator("#pic circle.dot").count()===1&&(await p.locator("#pic text.lbl").allTextContents()).includes("E"),"neither: the point E is drawn on a side");
   /* the lettering varies: letter sets and the letter at each position change from item to item */
   const sets=new Set(),first=new Set(),second=new Set();
   for(let seed=1;seed<=14;seed++){await p.goto(URL0+"?seed="+seed+"&screen=first");

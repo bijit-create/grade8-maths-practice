@@ -16,7 +16,7 @@
      or "top left to bottom right" worked without looking. Here the letters come from PQRS, KLMN or WXYZ, the lettering starts
      at a different corner and runs either way round, and the shape is turned and mirrored each time.
      Kinds: first (a diagonal of a convex shape), other (the other diagonal; the first is drawn and named), dart (a corner points
-     in; she draws the diagonal that lies outside the shape), which (a drawn line, side or diagonal, half each; a choice of 3),
+     in; she draws the diagonal that lies outside the shape), which (a drawn line, chosen at random: a side, a diagonal, or a line from a vertex to a point E on a side, which is neither; a choice of 3),
      howmany (how many diagonals; choice 1, 2 or 4; she may try lines first; once in the plan).
      Shortcuts this set defeats: "a diagonal goes across the inside" (dart), "any line between two vertices is a diagonal" (which,
      when the line is a side), "PQ and SP are not sides / letters two apart" (first, other, which: the wrap-around side),
@@ -70,6 +70,11 @@ function build(ctx,S,o){o=o||{};let kept=(o.kept||[]).map(p=>p.slice()),sel=null
     svg.appendChild(ctx.el("polygon",{class:"side",points:S.V.map(p=>p.join(",")).join(" ")}));
     kept.forEach(k=>seg(k[0],k[1],"kept"));tried.forEach(k=>seg(k[0],k[1],"kept"));
     if(line)seg(line[0],line[1],"mine");
+    if(o.extra){const X=o.extra,P=S.V[X.from],E=X.pt,dx=E[0]-P[0],dy=E[1]-P[1],d=Math.hypot(dx,dy)||1;svg.appendChild(ctx.el("line",{class:"kept",x1:P[0],y1:P[1],x2:E[0],y2:E[1]}));
+      svg.appendChild(ctx.el("circle",{class:"dot",cx:E[0],cy:E[1],r:7}));
+      const n=ctx.el("text",{class:"nm",x:Math.max(20,Math.min(400,P[0]+dx*.3-dy/d*20)),y:Math.max(20,Math.min(370,P[1]+dy*.3+dx/d*20+6)),"text-anchor":"middle"});n.textContent=S.lt[X.from]+"E";svg.appendChild(n);
+      const c=[0,1].map(k=>S.V.reduce((t,p)=>t+p[k],0)/4),ex=E[0]-c[0],ey=E[1]-c[1],en=Math.hypot(ex,ey)||1;
+      const t=ctx.el("text",{class:"lbl",x:Math.max(16,Math.min(404,E[0]+ex/en*20)),y:Math.max(24,Math.min(366,E[1]+ey/en*20+8)),"text-anchor":"middle"});t.textContent="E";svg.appendChild(t);}
     S.V.forEach((p,i)=>{const g=ctx.el("g",{class:"pt"+(sel===i?" sel":""),tabindex:0,role:"button","aria-label":"Vertex "+S.lt[i],"data-i":i});
       g.appendChild(ctx.el("circle",{class:"hit",cx:p[0],cy:p[1],r:30}));g.appendChild(ctx.el("circle",{class:"pdot",cx:p[0],cy:p[1],r:11}));
       g.addEventListener("click",()=>tap(i));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tap(i);}});
@@ -124,7 +129,6 @@ function SUP(ctx){const S=makeShape(ctx,convexPoints(ctx),false);
   lineTask(ctx,S,{ask:`Draw a diagonal of ${S.name}.`,good:[0,2],wrongs:[{pair:[0,1],expect:SIDE},{pair:[3,0],expect:SIDE}]});}
 
 /* ---------- her own items ---------- */
-let whichN=null;
 const G={
  first(ctx){const S=makeShape(ctx,convexPoints(ctx),false);
    lineTask(ctx,S,{ask:`Draw a diagonal of ${S.name}. Tap one vertex, then tap another vertex.`,good:ctx.pick(S.diags),wrongs:[{pair:[0,1],expect:SIDE},{pair:[3,0],expect:SIDE}]});},
@@ -134,20 +138,24 @@ const G={
  dart(ctx){ctx.contrast="diagonal outside the shape";const S=makeShape(ctx,dartPoints(ctx),true);
    lineTask(ctx,S,{target:S.out,ask:`Draw the diagonal of ${S.name} that lies outside the shape. Tap one vertex, then tap another vertex.`,good:S.out.slice().reverse(),
      wrongs:[{pair:[1,3],expect:"lies inside the shape"},{pair:[0,1],expect:SIDE}]});},
- which(ctx){if(whichN===null)whichN=ctx.int(0,1);const isSide=(whichN++)%2===0;
-   const dart=ctx.rng()<.45,S=makeShape(ctx,dart?dartPoints(ctx):convexPoints(ctx),dart);
-   let pair;if(isSide){const i=ctx.int(0,3);pair=[i,(i+1)%4];ctx.contrast="a side is not a diagonal";}else pair=S.diags[ctx.int(0,1)].slice();
-   if(ctx.rng()<.5)pair.reverse();
-   const B=build(ctx,S,{kept:[pair]}),ab=S.nm(pair[0],pair[1]),la=S.lt[pair[0]],lb=S.lt[pair[1]],nm=S.name,outside=S.out&&same(S.out,pair);
+ which(ctx){const r=ctx.rng(),type=r<.4?"side":r<.8?"diag":"neither";const isSide=type==="side",correct=isSide?0:type==="diag"?1:2;
+   const dart=ctx.rng()<.45,S=makeShape(ctx,dart?dartPoints(ctx):convexPoints(ctx),dart),nm=S.name;
+   let pair=null,extra=null,ab,la,lb,outside=false,sideOf="";
+   if(type==="neither"){const i=ctx.int(0,3),j=(i+ctx.int(1,2))%4,k=(j+1)%4,t=.35+ctx.rng()*.3;
+     extra={from:i,pt:[Math.round(S.V[j][0]+(S.V[k][0]-S.V[j][0])*t),Math.round(S.V[j][1]+(S.V[k][1]-S.V[j][1])*t)]};ab=S.lt[i]+"E";la=S.lt[i];sideOf=S.nm(j,k);}
+   else{if(isSide){const i=ctx.int(0,3);pair=[i,(i+1)%4];ctx.contrast="a side is not a diagonal";}else pair=S.diags[ctx.int(0,1)].slice();
+     if(ctx.rng()<.5)pair.reverse();ab=S.nm(pair[0],pair[1]);la=S.lt[pair[0]];lb=S.lt[pair[1]];outside=!!(S.out&&same(S.out,pair));}
+   const B=build(ctx,S,{kept:pair?[pair]:[],extra});
    ctx.ask(`Is the line ${ab} a side of ${nm}, a diagonal of ${nm}, or neither?`);
-   const words=["a side","a diagonal","neither"],correct=isSide?0:1;
-   function say(c){if(c===correct){return isSide?`${la} and ${lb} are next to each other, so ${ab} is a side of ${nm}, not a diagonal.`
-        :`${la} and ${lb} are not next to each other, so ${ab} is a diagonal of ${nm}.`+(outside?` ${ab} lies outside the shape, and it is still a diagonal.`:"");}
-     const you=c===2?`You chose that ${ab} is neither a side nor a diagonal.`:`You chose that ${ab} is ${words[c]}.`;
-     return you+(isSide?` ${la} and ${lb} are next to each other, so ${ab} is a side of ${nm}.`
-        :` ${la} and ${lb} are not next to each other, so no side joins them, and ${ab} is a diagonal of ${nm}.`+(outside?` ${ab} lies outside the shape, and it is still a diagonal.`:""));}
+   const words=["a side","a diagonal","neither"];
+   const why=type==="neither"?` E is a point on the side ${sideOf}, and E is not a vertex of ${nm}. A side and a diagonal each join two vertices, so ${ab} is neither a side nor a diagonal of ${nm}.`
+     :isSide?` ${la} and ${lb} are next to each other, so ${ab} is a side of ${nm}.`
+     :` ${la} and ${lb} are not next to each other, so no side joins them, and ${ab} is a diagonal of ${nm}.`+(outside?` ${ab} lies outside the shape, and it is still a diagonal.`:"");
+   function say(c){if(c===correct)return type==="neither"?why.trim():isSide?`${la} and ${lb} are next to each other, so ${ab} is a side of ${nm}, not a diagonal.`
+        :`${la} and ${lb} are not next to each other, so ${ab} is a diagonal of ${nm}.`+(outside?` ${ab} lies outside the shape, and it is still a diagonal.`:"");
+     return (c===2?`You chose that ${ab} is neither a side nor a diagonal.`:`You chose that ${ab} is ${words[c]}.`)+why;}
    const w=ctx.choices(["a side of "+nm,"a diagonal of "+nm,"neither a side nor a diagonal of "+nm].map((t,c)=>({t:`${ab} is ${t}`,fn(){
-     ctx.done({right:c===correct,answer:words[c],eq:"a side joins vertices that are next to each other; a diagonal joins vertices that are not",tag:isSide?"a side":(outside?"diagonal outside the shape":"a diagonal"),reply:say(c)});}})));
+     ctx.done({right:c===correct,answer:words[c],eq:"a side joins vertices that are next to each other; a diagonal joins vertices that are not; a point that is not a vertex gives neither",tag:type==="neither"?"neither":isSide?"a side":(outside?"diagonal outside the shape":"a diagonal"),reply:say(c)});}})));
    const pick=c=>()=>w.children[c].click(),other=[0,1,2].filter(c=>c!==correct);
    ctx.auto({right:pick(correct),wrongs:other.map(c=>({expect:c===2?"neither a side nor a diagonal":"You chose that "+ab+" is "+words[c],fn:pick(c)}))});},
  howmany(ctx){const dart=ctx.rng()<.5,S=makeShape(ctx,dart?dartPoints(ctx):convexPoints(ctx),dart);
