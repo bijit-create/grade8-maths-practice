@@ -47,8 +47,9 @@ Deployed to production on Bijit's word ("Production now", 11 Nov) from this bran
 by URL (/quadrilaterals-1 ... /quadrilaterals-7); the home page has no links yet, and the equations session's pages are
 not in this deploy. Next deploy must come from the merged branches.
 
-## 11 Nov, later: local edits, not committed, not deployed
+## 11 Nov, later: committed (6a30629) and deployed to production on Bijit's "please push and deploy"
 - Page 4 teacher comment and teacher string (`?teacher=1`) now name KI-GE-66 (an interior diagonal divides a
   quadrilateral into two triangles) and KI-GE-22 (triangle angle sum); the old text gave KI-GE-66 the triangle's
   meaning. Nothing she sees changed; test 615 passed. `site/knowledge-graph.html` carries the three graph decisions and
-  the KI-GE-66 repair. Both go live only with the next deploy, on Bijit's yes. Review: ChatGPT bridge request cd28102b.
+  the KI-GE-66 repair. The supported item's support column now says the 180° rule was written for her (`supSupport`). Live as
+  deployment dpl_DtzUbNj2NWwEeWsabrJVSqZGbjJH. Review: ChatGPT bridge request cd28102b.
