@@ -8,23 +8,24 @@ Facts from git, 11 Nov 2026 (commit e400dd2); check the code before relying on t
 - Home page (`site/index.html`) starts her on `equations-1.html` (KI-AG-01, KI-AG-03) and `equations-2.html` (KI-AG-04, KI-AG-06), built in HTML-TOOL, logging to her Sheet. The balance page (`balance-equations.html`) is off the home page as rejected; its file stays.
 - Her Sheet: `apps-script/Code.gs` (receiver) and `Signals.gs` (the Signals tab). No Status.gs.
 - Live site: grade8-maths-practice.vercel.app. Pushes do not deploy; prod deploys need Bijit's yes.
-- Not reconciled here: memory notes from 11 Nov also record quadrilateral pages going live and the bags-and-counters KI-AG-01/03 page being dropped. Which pages she is meant to use is a question for Bijit.
+- Since the 11 Nov merge (8db1f2f), main also has the seven quadrilateral pages and their home-page links, as in production (6a30629). The bags-and-counters KI-AG-01/03 page was dropped (11 Nov). Which topic she starts on is open (C1 below).
 
 ## Her record
 
 None yet. `profile.md` (local) is mostly blank.
 
-## 11 Nov 2026: Student 1's 10–11 Nov work brought in (rules, research, code). Not committed.
+## 11 Nov 2026: Student 1's 10–11 Nov work brought in (rules, research, code). Committed on main 11 Nov (900d860).
 
 - `CLAUDE.md`: six steps; which document governs; `supplied` and "helped" in the record; what a knowledge item is and the moment test; show, predict, fade with practice after modelling; decisions rest on researched knowledge (lever points); the route for a new screen.
 - `charter.md` (new): Student 1's goals, for her, without his evidence.
 - `research-from-student-1/` (local): his 11 Nov research with a status note on each file and the ChatGPT method in `README.md`.
 - `templates-from-student-1/2026-11-11/` (local): his journey engine, ladder, tests and Sheet scripts, keys switched to student2. `PORTING-NOTE.md` says what moving the balance page onto it would take.
-- These two local folders were written in this worktree (`.claude/worktrees/peaceful-villani-833f1f`), not the main checkout, and git does not carry them. Move them into the main checkout before the worktree is removed.
+- 11 Nov 2026 (night): both local folders are in the main checkout (moved at 19:56; worktree `peaceful-villani-833f1f` no longer holds them) and stay gitignored. In `CLAUDE.md`, Student 1's diagnosis was taken out of the public text; it now says only "written for Student 1". The worktree's own branch (cd4737b, not pushed) holds an earlier copy of these rule files; main is the one to use.
+- 11 Nov 2026 (night): `claude/funny-gates-6c0b8e` (tip 4286dd9) merged into main (8db1f2f) and pushed. The only conflict was in `.gitignore`, and both lines were kept (`tests/shots/`, `research-from-student-1/`). `git diff 6a30629 main -- site/` is empty, so `site/` on main is what production serves. No redeploy was needed, and none was made.
 
 ## 11 Nov 2026 (evening): ChatGPT's Student 2 handoff checked and repairs applied. Deployed.
 
-On Bijit's "please push and deploy", everything below went into branch `claude/funny-gates-6c0b8e` as commit 6a30629 (pushed). Production deployment dpl_DtzUbNj2NWwEeWsabrJVSqZGbjJH is READY on grade8-maths-practice.vercel.app; the live page 4, engine and graph page were checked. The main checkout holds the same graph and `site/knowledge-graph.html` edits, uncommitted, beside other sessions' uncommitted work (CLAUDE.md, charter, science-books). They agree with the branch until it is merged into main.
+On Bijit's "please push and deploy", everything below went into branch `claude/funny-gates-6c0b8e` as commit 6a30629 (pushed). Production deployment dpl_DtzUbNj2NWwEeWsabrJVSqZGbjJH is READY on grade8-maths-practice.vercel.app; the live page 4, engine and graph page were checked. Since 11 Nov (night) these edits are on main through the merge (8db1f2f). `science-books/` stays untracked until Bijit says whether it belongs in the repo.
 
 Sources: bridge request e29fba0a (ChatGPT's handoff, 09:19) and cd28102b (Claude's audit of it, 15:47; P2, P3 accepted, P1, P4–P7 corrected; each correction checked before use). Backups in the session scratchpad `backup-2026-11-11/`.
 - Graph (`knowledge-graph/`: `fragments/GE.json`, `merged-raw.json`, `graph-data.json`, `vault/`, `graph-page.html`; and `site/knowledge-graph.html` in main and in worktree funny-gates): Bijit's three decisions applied. KI-GE-21 now excludes crossed sides, touching opposite sides and three vertices in a line. KI-GE-23 requires KI-GE-66 (instructional route). SK-GE-08 requires KI-GE-21. KI-GE-66 corrected; the old statement was false for a concave shape: "Every quadrilateral has at least one diagonal that lies inside it apart from its end points, and that diagonal divides the quadrilateral into two triangles." The vault note for KI-GE-66 was renamed to match, with its links. The patched `merged-raw.json` matches a fresh `merge.py` run. `finalize.py` was not rerun, because it rewrites the whole file. The published graph artifact was not republished.
