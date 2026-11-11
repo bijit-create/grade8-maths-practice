@@ -7,3 +7,4 @@ Add a line when `CLAUDE.md`, `charter.md` or `HANDOVER.md` changes.
 - 11 Nov 2026 (night): governing documents committed on main (900d860), with Student 1's diagnosis taken out of `CLAUDE.md`; funny-gates merged and pushed (8db1f2f); `site/` on main matches production; `HANDOVER.md` updated to say so.
 - 11 Nov 2026 (night): `HANDOVER.md` "Her Sheet" line replaced: Signals.gs and the Code.gs hook saved in her Apps Script, not deployed, waiting for Bijit to authorise; Status.gs judged not needed. Not committed.
 - 11 Nov 2026 (night): `science-books/` (NCERT textbook) added to `.gitignore`; stays local (Bijit).
+- 11 Nov 2026 (night): her site cleaned up and deployed (b14d43e): rejected and unlogged equations pages removed, home page plainer, "Back to all pages" on every page. `HANDOVER.md` "What she meets now" home-page line replaced. README updated.
