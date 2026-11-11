@@ -62,7 +62,7 @@ function build(ctx,P,opts){
   const segs=()=>{const s=[];for(let i=1;i<path.length;i++)s.push([path[i-1],path[i]]);if(closed)s.push([path[path.length-1],path[0]]);return s;};
   function crossing(){const s=segs();for(let i=0;i<s.length;i++)for(let j=i+2;j<s.length;j++){if(i===0&&j===s.length-1)continue;
     if(crosses(P[s[i][0]],P[s[i][1]],P[s[j][0]],P[s[j][1]]))return [s[i],s[j]];}return null;}
-  function straightCorner(){if(!closed)return null;const n=path.length;for(let k=0;k<n;k++){const a=P[path[(k+n-1)%n]],b=P[path[k]],c=P[path[(k+1)%n]];if(onLine(a,b,c))return k;}return null;}
+  function straightCorners(){const n=path.length,out=[];for(let k=0;k<n;k++){const a=P[path[(k+n-1)%n]],b=P[path[k]],c=P[path[(k+1)%n]];if(onLine(a,b,c))out.push(k);}return out;}
   function draw(){svg.innerHTML="";const cx=P.reduce((a,p)=>a+p[0],0)/P.length,cy=P.reduce((a,p)=>a+p[1],0)/P.length,bad=closed?crossing():null;
     for(const [a,b] of segs()){const isX=bad&&bad.some(s=>s[0]===a&&s[1]===b);
       svg.appendChild(ctx.el("line",{class:"side"+(isX?" cross":""),x1:P[a][0],y1:P[a][1],x2:P[b][0],y2:P[b][1]}));
@@ -89,10 +89,15 @@ function build(ctx,P,opts){
     if(path.length<2)return {none:true,text:"You have not drawn a side yet. Tap a point to start."};
     const answer=path.map(i=>nm(i)).join("")+(closed?" closed":" open");
     if(!closed)return {right:false,answer,tag:"not closed",text:`Your shape is not closed. Its last side ends at ${last}, and the shape started at ${first}. Your shape has ${n} straight side${n===1?"":"s"}. A quadrilateral is closed.`};
-    if(n!==4)return {right:false,answer,tag:n+" sides",text:`Your shape is closed, and it has ${n} straight sides. A quadrilateral has 4 straight sides.`};
-    const x=crossing();if(x){const [s,t]=x;return {right:false,answer,tag:"sides cross",text:`Your shape has 4 sides, but side ${nm(s[0])}${nm(s[1])} crosses side ${nm(t[0])}${nm(t[1])}. The sides of a quadrilateral meet only at its corners.`};}
-    const k=straightCorner();if(k!==null){const n2=path.length,a=nm(path[(k+n2-1)%n2]),b=nm(path[k]),c=nm(path[(k+1)%n2]);
-      return {right:false,answer,tag:"three points on a line",text:`${b} lies on the straight line from ${a} to ${c}, so ${a}${b} and ${b}${c} make one straight side, ${a}${c}. Your shape has only 3 corners and 3 straight sides. A quadrilateral has 4 straight sides.`};}
+    const x=crossing();if(x){const [s,t]=x;return {right:false,answer,tag:"sides cross",text:`Your shape has ${n} sides, but side ${nm(s[0])}${nm(s[1])} crosses side ${nm(t[0])}${nm(t[1])}. The sides of a quadrilateral meet only at its corners.`};}
+    /* a point on the straight line between its two neighbours is not a corner: the two sides there make one straight side */
+    const flat=straightCorners(),corners=path.length-flat.length;
+    const lineText=flat.map(k=>{const m=path.length,a=nm(path[(k+m-1)%m]),b=nm(path[k]),c=nm(path[(k+1)%m]);return `${b} lies on the straight line from ${a} to ${c}, so ${a}${b} and ${b}${c} make one straight side, ${a}${c}.`;}).join(" ");
+    if(corners!==4)return flat.length
+      ?{right:false,answer,tag:"three points on a line",text:`${lineText} Your shape has only ${corners} corners and ${corners} straight sides. A quadrilateral has 4 straight sides.`}
+      :{right:false,answer,tag:n+" sides",text:`Your shape is closed, and it has ${n} straight sides. A quadrilateral has 4 straight sides.`};
+    if(flat.length){const v=path.filter((_,k)=>!flat.includes(k)).map(i=>nm(i));
+      return {right:true,answer,tag:"quadrilateral with a point on a side",text:`${lineText} Your shape is closed, and it has 4 straight sides and 4 corners, ${v.join(", ").replace(/, ([^,]*)$/," and $1")}. It is a quadrilateral, and its vertices are ${v.join(", ").replace(/, ([^,]*)$/," and $1")}.`};}
     arcs=true;draw();
     return {right:true,answer,tag:"quadrilateral",text:`ABCD is closed, and it has 4 straight sides, AB, BC, CD and DA. ABCD is a quadrilateral. Its 4 corners, A, B, C and D, are its vertices. It has an angle at each vertex, ∠A, ∠B, ∠C and ∠D.`};}
   draw();

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Draw the diagonals of a quadrilateral</title>
+<!-- Student 2, quadrilaterals experience 3 of 7. 11 Nov 2026.
+     KI-ME-40 (Fact or term): a diagonal of a polygon is a line segment that joins two vertices that are not next to each
+     other (two vertices are next to each other when a side joins them). A quadrilateral has 2 diagonals.
+     Teacher name and rule: diagonal of a quadrilateral V0V1V2V3: the segments V0V2 and V1V3 (vertices i and j with
+     (i - j) mod 4 = 2). Segments Vi V(i+1) are sides.
+     Built from the approved screen study-materials/quadrilaterals/ki-me-40-screen.html (Bijit, 11 Nov). She taps one vertex and
+     then another; the line and its name appear in her tap order; nothing is judged until "My line is finished"; "Start this line
+     again" sits under the picture. One item = one line (or one choice).
+     Open point fixed (Bijit, 11 Nov): every shape in the screen was ABCD with A at the top left, so "join letters two apart"
+     or "top left to bottom right" worked without looking. Here the letters come from PQRS, KLMN or WXYZ, the lettering starts
+     at a different corner and runs either way round, and the shape is turned and mirrored each time.
+     Kinds: first (a diagonal of a convex shape), other (the other diagonal; the first is drawn and named), dart (a corner points
+     in; she draws the diagonal that lies outside the shape), which (a drawn line, side or diagonal, half each; a choice of 3),
+     howmany (how many diagonals; choice 1, 2 or 4; she may try lines first; once in the plan).
+     Shortcuts this set defeats: "a diagonal goes across the inside" (dart), "any line between two vertices is a diagonal" (which,
+     when the line is a side), "PQ and SP are not sides / letters two apart" (first, other, which: the wrap-around side),
+     "the same diagonal named the other way is a new one" and "4 diagonals" (other, howmany).
+     Contrast cases: "diagonal outside the shape" (dart), "a side is not a diagonal" (which with a side),
+     "the same diagonal named the other way" (other, planned wrong: the first diagonal again, named the other way round).
+     Engine and records: assets/quad-engine.js. -->
+<link rel="stylesheet" href="assets/quad.css">
+</head>
+<body>
+<div class="app">
+  <div class="top"><h1 id="h1">Draw the diagonals of a quadrilateral</h1><div class="tools"><button class="btn" id="readBtn" type="button">Read it</button><button class="btn" id="pauseBtn" type="button">Pause</button></div></div>
+  <div id="teacher" class="hide"></div>
+  <div class="card"><div id="pic"></div><div class="text"><div id="words"></div><div id="acts"></div></div></div>
+</div>
+<div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
+<script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/quad-engine.js"></script>
+<script>
+"use strict";
+const SETS=["PQRS","KLMN","WXYZ"];
+const RULE="Two vertices of a quadrilateral are next to each other when a side joins them. A diagonal is a line segment that joins two vertices that are not next to each other.";
+const same=(a,b)=>(a[0]===b[0]&&a[1]===b[1])||(a[0]===b[1]&&a[1]===b[0]);
+const pressFinish=()=>document.querySelector("#acts .decide").click();
+
+/* ---------- shapes: vertices V[0..3] in order around the shape; the letters start at any corner and run either way ---------- */
+const cross2=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+function convexOK(V){const s=[0,1,2,3].map(i=>cross2(V[i],V[(i+1)%4],V[(i+2)%4]));return s.every(x=>x>2500)||s.every(x=>x<-2500);}
+const CONVEX=[[[-125,-100],[125,-85],[140,105],[-130,110]],[[0,-140],[110,-30],[30,140],[-120,-40]],[[-70,-100],[80,-100],[140,110],[-140,110]],[[-130,-70],[60,-120],[130,60],[-60,120]]];
+function place(ctx,T,jr){const a=ctx.rng()*Math.PI*2,flip=ctx.pick([1,-1]),R=Math.max(...T.map(p=>Math.hypot(p[0],p[1]))),k=Math.min(1,135/R);
+  return T.map(p=>{const x=p[0]*flip*k,y=p[1]*k;return [Math.round(210+x*Math.cos(a)-y*Math.sin(a)+ctx.int(-jr,jr)),Math.round(190+x*Math.sin(a)+y*Math.cos(a)+ctx.int(-jr,jr))];});}
+function convexPoints(ctx){for(let n=0;n<40;n++){const V=place(ctx,ctx.pick(CONVEX),10);if(convexOK(V))return V;}return place(ctx,CONVEX[0],0);}
+function dartPoints(ctx){const T=[[-130,100],[0,-130],[130,100],[ctx.int(-25,25),ctx.int(0,25)]];return place(ctx,T,5);}   /* corner 3 points in; the diagonal V0V2 lies outside */
+function makeShape(ctx,V,dart,fix){fix=fix||{};const set=fix.set||ctx.pick(SETS),s=fix.s!==undefined?fix.s:ctx.int(0,3),d=fix.d||ctx.pick([1,-1]),lt=[];
+  for(let j=0;j<4;j++)lt[((s+d*j)%4+4)%4]=set[j];
+  const S={V,lt,name:set,dart:!!dart,out:dart?[0,2]:null,diags:[[0,2],[1,3]]};
+  S.nm=(i,j)=>lt[i]+lt[j];S.adj=(i,j)=>{const x=(i-j+4)%4;return x===1||x===3;};
+  const c=[0,1].map(k=>V.reduce((t,p)=>t+p[k],0)/4);
+  S.lab=V.map((p,i)=>{let dx=p[0]-c[0],dy=p[1]-c[1];if(dart&&i===3){const a=V[0],b=V[2];dx=(a[0]+b[0])/2-p[0];dy=(a[1]+b[1])/2-p[1];}
+    const n=Math.hypot(dx,dy)||1;return [Math.max(16,Math.min(404,p[0]+dx/n*30)),Math.max(24,Math.min(366,p[1]+dy/n*30+8))];});
+  return S;}
+
+/* ---------- the manipulative: tap one vertex, then another; the line and its name appear in tap order ---------- */
+function build(ctx,S,o){o=o||{};let kept=(o.kept||[]).map(p=>p.slice()),sel=null,line=null,tried=[];
+  const svg=ctx.svg("0 0 420 380","Quadrilateral "+S.name+". Tap one vertex, then another vertex, to draw a line.");
+  function seg(a,b,cls){const P=S.V[a],Q=S.V[b];svg.appendChild(ctx.el("line",{class:cls,x1:P[0],y1:P[1],x2:Q[0],y2:Q[1]}));
+    /* the name sits beside the line, a third of the way from its first vertex, so two crossing lines keep their names apart */
+    const mx=P[0]+(Q[0]-P[0])*.3,my=P[1]+(Q[1]-P[1])*.3,dx=Q[0]-P[0],dy=Q[1]-P[1],d=Math.hypot(dx,dy)||1;
+    const t=ctx.el("text",{class:"nm",x:Math.max(20,Math.min(400,mx-dy/d*20)),y:Math.max(20,Math.min(370,my+dx/d*20+6)),"text-anchor":"middle"});t.textContent=S.nm(a,b);svg.appendChild(t);}
+  function draw(){svg.innerHTML="";
+    svg.appendChild(ctx.el("polygon",{class:"side",points:S.V.map(p=>p.join(",")).join(" ")}));
+    kept.forEach(k=>seg(k[0],k[1],"kept"));tried.forEach(k=>seg(k[0],k[1],"kept"));
+    if(line)seg(line[0],line[1],"mine");
+    S.V.forEach((p,i)=>{const g=ctx.el("g",{class:"pt"+(sel===i?" sel":""),tabindex:0,role:"button","aria-label":"Vertex "+S.lt[i],"data-i":i});
+      g.appendChild(ctx.el("circle",{class:"hit",cx:p[0],cy:p[1],r:30}));g.appendChild(ctx.el("circle",{class:"pdot",cx:p[0],cy:p[1],r:11}));
+      g.addEventListener("click",()=>tap(i));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tap(i);}});
+      svg.appendChild(g);
+      const t=ctx.el("text",{class:"lbl",x:S.lab[i][0],y:S.lab[i][1],"text-anchor":"middle"});t.textContent=S.lt[i];svg.appendChild(t);});}
+  function tap(i){if(!ctx.open)return;ctx.clearNote();
+    if(o.explore){if(sel===null)sel=i;else if(sel===i)sel=null;else{if(!tried.some(m=>same(m,[sel,i])))tried.push([sel,i]);sel=null;}draw();return;}
+    if(line){line=null;sel=null;}                     /* a new tap after a finished line starts a new line */
+    if(sel===null)sel=i;else if(sel===i)sel=null;else{line=[sel,i];sel=null;}
+    draw();}
+  function again(){if(!ctx.open)return;line=null;sel=null;tried=[];ctx.clearNote();draw();}
+  function reveal(list){list.forEach(p=>{if(!kept.some(k=>same(k,p)))kept.push(p.slice());});tried=[];line=o.explore?null:line;if(line&&kept.some(k=>same(k,line)))line=null;draw();}
+  draw();
+  const b=document.createElement("button");b.type="button";b.className="btn";b.textContent=o.explore?"Clear my lines":"Start this line again";b.addEventListener("click",again);ctx.picBelow(b);
+  return {tap,again,reveal,get line(){return line},get kept(){return kept},get tried(){return tried}};}
+
+/* ---------- a task where she draws one line ---------- */
+function lineTask(ctx,S,o){/* o: kept (lines already drawn), target (the only right line), ask, good (the line the test draws), wrongs */
+  const B=build(ctx,S,{kept:o.kept});ctx.ask(o.ask);
+  ctx.button("My line is finished",()=>{const ln=B.line;
+    if(!ln)return ctx.note("You have not drawn a line yet. Tap one vertex, then tap another vertex.");
+    const [a,b]=ln,ab=S.nm(a,b),la=S.lt[a],lb=S.lt[b];let right=false,tag="",text="";
+    if(S.adj(a,b)){tag="a side";text=`You drew ${ab}. ${la} and ${lb} are next to each other, so ${ab} is a side of ${S.name}, not a diagonal.`;}
+    else{const dup=B.kept.find(k=>same(k,ln));
+      if(dup){const kn=S.nm(dup[0],dup[1]),rest=S.diags.find(p=>!same(p,dup));tag="the diagonal again";
+        text=`You drew ${ab}. `+(kn===ab?`${ab} is the diagonal already drawn.`:`${ab} is the same line segment as ${kn}, the diagonal already drawn.`)+` ${S.name} has one more diagonal, ${S.nm(rest[0],rest[1])}.`;}
+      else if(o.target&&!same(o.target,ln)){tag="diagonal inside the shape";
+        text=`You drew ${ab}. ${la} and ${lb} are not next to each other, so ${ab} is a diagonal of ${S.name}, and it lies inside the shape. The diagonal that lies outside the shape is ${S.nm(o.target[0],o.target[1])}. A diagonal does not have to lie inside the shape.`;}
+      else{right=true;tag=S.out&&same(S.out,ln)?"diagonal outside the shape":"a diagonal";
+        text=`${la} and ${lb} are not next to each other, so ${ab} is a diagonal of ${S.name}.`+(S.out&&same(S.out,ln)?` ${ab} lies outside the shape, and it is still a diagonal.`:"")
+          +(o.kept&&o.kept.length?` ${S.name} has 2 diagonals, ${S.nm(o.kept[0][0],o.kept[0][1])} and ${ab}.`:"");}}
+    if(!right)B.reveal(S.diags);
+    ctx.done({right,answer:ab,eq:"a diagonal joins 2 vertices that are not next to each other",tag,reply:text});});
+  const draws=p=>function(){B.again();B.tap(p[0]);B.tap(p[1]);pressFinish();};
+  ctx.auto({right:draws(o.good),wrongs:o.wrongs.map(w=>({expect:w.expect,fn:draws(w.pair)}))});
+  return B;}
+const SIDE="is a side of";
+
+/* ---------- worked examples ---------- */
+function W1(ctx){const V=[[95,95],[320,70],[345,290],[75,320]],S=makeShape(ctx,V,false,{set:"KLMN",s:1,d:-1});
+  ctx.say(RULE);
+  ctx.say(`In ${S.name}, ${S.lt[0]} and ${S.lt[1]} are next to each other, because the side ${S.nm(0,1)} joins them. ${S.lt[0]} and ${S.lt[2]} are not next to each other, so ${S.nm(0,2)} is a diagonal. ${S.nm(0,2)} is drawn here.`);
+  lineTask(ctx,S,{kept:[[0,2]],ask:`Draw the other diagonal of ${S.name}. Tap one vertex, then tap another vertex.`,good:[1,3],
+    wrongs:[{pair:[0,1],expect:SIDE},{pair:[2,0],expect:"same line segment"}]});}
+function W2(ctx){const V=[[80,310],[210,60],[340,310],[210,215]],S=makeShape(ctx,V,true,{set:"WXYZ",s:0,d:1});
+  ctx.say(`${S.name} has a corner that points in. ${S.nm(0,2)} joins ${S.lt[0]} and ${S.lt[2]}, which are not next to each other, so ${S.nm(0,2)} is a diagonal. ${S.nm(0,2)} lies outside the shape, and it is still a diagonal. ${S.nm(0,2)} is drawn here.`);
+  lineTask(ctx,S,{kept:[[0,2]],ask:`Draw the other diagonal of ${S.name}. Tap one vertex, then tap another vertex.`,good:[1,3],
+    wrongs:[{pair:[0,1],expect:SIDE},{pair:[2,0],expect:"same line segment"}]});}
+function SUP(ctx){const S=makeShape(ctx,convexPoints(ctx),false);
+  ctx.say(RULE,"say done");
+  ctx.say("Choose two vertices that no side joins. Tap one, then tap the other.","say done");
+  lineTask(ctx,S,{ask:`Draw a diagonal of ${S.name}.`,good:[0,2],wrongs:[{pair:[0,1],expect:SIDE},{pair:[3,0],expect:SIDE}]});}
+
+/* ---------- her own items ---------- */
+let whichN=null;
+const G={
+ first(ctx){const S=makeShape(ctx,convexPoints(ctx),false);
+   lineTask(ctx,S,{ask:`Draw a diagonal of ${S.name}. Tap one vertex, then tap another vertex.`,good:ctx.pick(S.diags),wrongs:[{pair:[0,1],expect:SIDE},{pair:[3,0],expect:SIDE}]});},
+ other(ctx){ctx.contrast="the same diagonal named the other way";const S=makeShape(ctx,convexPoints(ctx),false),k=ctx.int(0,1),first=ctx.rng()<.5?S.diags[k]:S.diags[k].slice().reverse(),second=S.diags[1-k];
+   lineTask(ctx,S,{kept:[first],ask:`Draw the other diagonal of ${S.name}. Tap one vertex, then tap another vertex.`,good:second,
+     wrongs:[{pair:[1,2],expect:SIDE},{pair:[first[1],first[0]],expect:"same line segment"}]});},
+ dart(ctx){ctx.contrast="diagonal outside the shape";const S=makeShape(ctx,dartPoints(ctx),true);
+   lineTask(ctx,S,{target:S.out,ask:`Draw the diagonal of ${S.name} that lies outside the shape. Tap one vertex, then tap another vertex.`,good:S.out.slice().reverse(),
+     wrongs:[{pair:[1,3],expect:"lies inside the shape"},{pair:[0,1],expect:SIDE}]});},
+ which(ctx){if(whichN===null)whichN=ctx.int(0,1);const isSide=(whichN++)%2===0;
+   const dart=ctx.rng()<.45,S=makeShape(ctx,dart?dartPoints(ctx):convexPoints(ctx),dart);
+   let pair;if(isSide){const i=ctx.int(0,3);pair=[i,(i+1)%4];ctx.contrast="a side is not a diagonal";}else pair=S.diags[ctx.int(0,1)].slice();
+   if(ctx.rng()<.5)pair.reverse();
+   const B=build(ctx,S,{kept:[pair]}),ab=S.nm(pair[0],pair[1]),la=S.lt[pair[0]],lb=S.lt[pair[1]],nm=S.name,outside=S.out&&same(S.out,pair);
+   ctx.ask(`Is the line ${ab} a side of ${nm}, a diagonal of ${nm}, or neither?`);
+   const words=["a side","a diagonal","neither"],correct=isSide?0:1;
+   function say(c){if(c===correct){return isSide?`${la} and ${lb} are next to each other, so ${ab} is a side of ${nm}, not a diagonal.`
+        :`${la} and ${lb} are not next to each other, so ${ab} is a diagonal of ${nm}.`+(outside?` ${ab} lies outside the shape, and it is still a diagonal.`:"");}
+     const you=c===2?`You chose that ${ab} is neither a side nor a diagonal.`:`You chose that ${ab} is ${words[c]}.`;
+     return you+(isSide?` ${la} and ${lb} are next to each other, so ${ab} is a side of ${nm}.`
+        :` ${la} and ${lb} are not next to each other, so no side joins them, and ${ab} is a diagonal of ${nm}.`+(outside?` ${ab} lies outside the shape, and it is still a diagonal.`:""));}
+   const w=ctx.choices(["a side of "+nm,"a diagonal of "+nm,"neither a side nor a diagonal of "+nm].map((t,c)=>({t:`${ab} is ${t}`,fn(){
+     ctx.done({right:c===correct,answer:words[c],eq:"a side joins vertices that are next to each other; a diagonal joins vertices that are not",tag:isSide?"a side":(outside?"diagonal outside the shape":"a diagonal"),reply:say(c)});}})));
+   const pick=c=>()=>w.children[c].click(),other=[0,1,2].filter(c=>c!==correct);
+   ctx.auto({right:pick(correct),wrongs:other.map(c=>({expect:c===2?"neither a side nor a diagonal":"You chose that "+ab+" is "+words[c],fn:pick(c)}))});},
+ howmany(ctx){const dart=ctx.rng()<.5,S=makeShape(ctx,dart?dartPoints(ctx):convexPoints(ctx),dart);
+   const B=build(ctx,S,{explore:true}),d0=S.nm(0,2),d1=S.nm(1,3),nm=S.name;
+   ctx.say("Tap two vertices to try a line. Then choose your answer.");
+   ctx.ask(`How many diagonals does ${nm} have?`);
+   const reply={1:`You chose 1 diagonal. ${S.lt[0]} and ${S.lt[2]} are not next to each other, and ${S.lt[1]} and ${S.lt[3]} are not next to each other. So ${d0} and ${d1} are 2 different diagonals.`,
+     2:`${nm} has 2 diagonals, ${d0} and ${d1}. Each joins two vertices that are not next to each other.`,
+     4:`You chose 4 diagonals. ${d0} and ${S.nm(2,0)} are the same line segment, and ${d1} and ${S.nm(3,1)} are the same line segment. ${nm} has 2 diagonals, ${d0} and ${d1}.`};
+   const w=ctx.choices([1,2,4].map(n=>({t:n+(n===1?" diagonal":" diagonals"),fn(){B.reveal(S.diags);ctx.done({right:n===2,answer:String(n),eq:"a quadrilateral has 2 diagonals",tag:n===2?"2 diagonals":n+" diagonals",reply:reply[n]});}})));
+   const pick=c=>()=>w.children[c].click();
+   ctx.auto({right:pick(1),wrongs:[{expect:"You chose 1 diagonal",fn:pick(0)},{expect:"You chose 4 diagonals",fn:pick(2)}]});}
+};
+
+QE.start({set:"ki-me-40",ki:"KI-ME-40",title:"Draw the diagonals of a quadrilateral",version:"quadrilaterals-3 1.0 (11 Nov 2026)",
+  teacher:"Diagonal of a quadrilateral V0V1V2V3: a segment joining two non-adjacent vertices, Vi and Vj with (i - j) mod 4 = 2, so V0V2 and V1V3 (2 diagonals). A segment ViV(i+1) is a side. A diagonal may lie outside the shape (concave quadrilateral).",
+  worked:[W1,W2],sup:SUP,gen:G,
+  plan:["first","which","other","dart","which","first","other","which","howmany","dart","which","other"],
+  contrasts:["diagonal outside the shape","a side is not a diagonal","the same diagonal named the other way"],
+  contrastKind:{"diagonal outside the shape":"dart","a side is not a diagonal":"which","the same diagonal named the other way":"other"},gates:{}});
+</script>
+</body>
+</html>

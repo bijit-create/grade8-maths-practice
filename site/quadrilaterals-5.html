@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find the missing angle of a quadrilateral</title>
+<!-- Student 2, quadrilaterals experience 5 of 7. 11 Nov 2026.
+     SK-GE-08 (Skill): find the fourth angle of a quadrilateral from the other three.
+     Teacher name: angle sum of a quadrilateral, ∠A + ∠B + ∠C + ∠D = 360°, so ∠D = 360° − (∠A + ∠B + ∠C).
+     Needs KI-GE-23 (the 4 angles add up to 360°, page 4).
+     Built from the DRAFT screen study-materials/quadrilaterals/sk-ge-08-screen.html parts 2 and 3. NOT approved by Bijit.
+     Changes from the draft (all listed in the report): engine flow (worked examples, one item with the working lines, her own
+     items, two misses end the day); the picture sentence; four kinds of wrong reply added (triangle rule, 90° on a shape that
+     looks rectangular, the angle outside a reflex corner, slip of 10); concave shapes; letters vary on the no-picture items;
+     the answer shows in the picture after a right answer. The worked answer is added to the second wrong answer in a row.
+     Kinds: pictureD (hidden angle at D), pictureOther (hidden at A, B or C), looksRight (nearly rectangular, hidden angle
+     89° or 91°), reflex (a concave shape; the hidden angle is more than 180°), noPicture (text only, letters vary).
+     Shortcuts this set defeats: "the hidden angle is always at D" and "the answer is the angle at one place" (pictureOther);
+     "it looks like 90°" (looksRight); "an angle in a quadrilateral is less than 180°" (reflex); "I need the picture"
+     (noPicture). Wrong answers read: sum of the three, triangle rule (180°), 90° by look, slip of 10, outside angle.
+     Her action: she reads the three angles and writes the fourth; nothing in the picture is moved.
+     Engine and records: assets/quad-engine.js. -->
+<link rel="stylesheet" href="assets/quad.css">
+</head>
+<body>
+<div class="app">
+  <div class="top"><h1 id="h1">Find the missing angle of a quadrilateral</h1><div class="tools"><button class="btn" id="readBtn" type="button">Read it</button><button class="btn" id="pauseBtn" type="button">Pause</button></div></div>
+  <div id="teacher" class="hide"></div>
+  <div class="card"><div id="pic"></div><div class="text"><div id="words"></div><div id="acts"></div></div></div>
+</div>
+<div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
+<script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/quad-engine.js"></script>
+<script>
+"use strict";
+const RULE="The 4 angles of a quadrilateral add up to 360°.";
+const SETS=["PQRS","KLMN","WXYZ","EFGH","STUV"];
+
+/* ---------- geometry: interior angles, also for a shape with a corner that points in ---------- */
+function geom(P){const n=4;let area=0;for(let i=0;i<n;i++){const a=P[i],b=P[(i+1)%n];area+=a[0]*b[1]-b[0]*a[1];}
+  return P.map((v,i)=>{const a=P[(i+3)%n],b=P[(i+1)%n];
+    const ua=Math.atan2(a[1]-v[1],a[0]-v[0]),ub=Math.atan2(b[1]-v[1],b[0]-v[0]);
+    const ux=a[0]-v[0],uy=a[1]-v[1],wx=b[0]-v[0],wy=b[1]-v[1];
+    const raw=Math.acos(Math.max(-1,Math.min(1,(ux*wx+uy*wy)/Math.hypot(ux,uy)/Math.hypot(wx,wy))));
+    const cr=(v[0]-a[0])*(b[1]-v[1])-(v[1]-a[1])*(b[0]-v[0]);
+    const convex=Math.sign(cr)===Math.sign(area)&&Math.abs(cr)>400;
+    const interior=convex?raw:2*Math.PI-raw;
+    let delta=(ua-ub)%(2*Math.PI);if(delta<0)delta+=2*Math.PI;
+    const asc=Math.abs(delta-interior)<1e-4,start=asc?ub:ua,end=asc?ua:ub;
+    return {interior,deg:interior*180/Math.PI,convex,start,end,bis:start+interior/2};});}
+/* whole degrees that add to exactly 360 (largest remainder), as in the draft */
+function whole(G){const r=G.map(g=>g.deg),f=r.map(Math.floor);let left=360-f.reduce((s,x)=>s+x,0);
+  r.map((x,i)=>[x-Math.floor(x),i]).sort((p,q)=>q[0]-p[0]).slice(0,left).forEach(([,i])=>f[i]++);return f;}
+const rot=(a,k)=>a.slice(k).concat(a.slice(0,k));
+const inBox=P=>P.every(p=>p[0]>=45&&p[0]<=375&&p[1]>=45&&p[1]<=335);
+const pol=(a,r)=>[Math.round(210+r*Math.cos(a)*1.2),Math.round(190+r*Math.sin(a))];
+
+/* ---------- fresh shapes ---------- */
+function genConvex(ctx){for(let t=0;t<400;t++){const a0=ctx.rng()*2*Math.PI;
+  const P=[0,1,2,3].map(k=>pol(a0+k*Math.PI/2+(ctx.rng()-.5)*.8,95+ctx.rng()*45));
+  if(!inBox(P))continue;const G=geom(P);if(G.every(g=>g.convex&&g.deg>=40&&g.deg<=145))return P;}
+  return [[70,120],[300,50],[370,300],[130,320]];}
+function genLooks(ctx,h){for(let t=0;t<4000;t++){const w=ctx.int(220,280),ht=ctx.int(170,220),x0=210-w/2,y0=190-ht/2;
+  const P=[[x0,y0],[x0+w,y0],[x0+w,y0+ht],[x0,y0+ht]].map(p=>[Math.round(p[0])+ctx.int(-6,6),Math.round(p[1])+ctx.int(-6,6)]);
+  const G=geom(P);if(!G.every(g=>g.convex))continue;const A=whole(G);
+  if((A[h]===89||A[h]===91)&&A.every((x,i)=>i===h||(x>=85&&x<=95)))return P;}
+  return [[80,80],[340,86],[338,300],[76,296]];}
+function genReflex(ctx){for(let t=0;t<800;t++){const a0=ctx.rng()*2*Math.PI;
+  const T=[0,1,2].map(k=>pol(a0+k*2*Math.PI/3+(ctx.rng()-.5)*.6,125+ctx.rng()*30));
+  const w=[.2+ctx.rng()*.25,.2+ctx.rng()*.25,.2+ctx.rng()*.25],s=w[0]+w[1]+w[2];
+  const inside=[0,1].map(c=>Math.round((T[0][c]*w[0]+T[1][c]*w[1]+T[2][c]*w[2])/s));
+  const k=ctx.int(0,3),P=rot(T.concat([inside]),k),h=(3-k+4)%4;
+  if(!inBox(P))continue;const G=geom(P);
+  if(!G[h].convex&&G[h].deg>=195&&G[h].deg<=290&&G.every((g,i)=>i===h||(g.convex&&g.deg>=22)))return {P,h};}
+  return {P:[[210,40],[360,300],[210,230],[60,300]],h:2};}
+
+/* ---------- the picture: 3 angles written, one "?" ---------- */
+function draw(ctx,P,ang,h,reveal){const L="ABCD",G=geom(P),svg=ctx.svg("0 0 420 380","Quadrilateral ABCD with 3 of its angles written and the angle to find marked with a question mark.");
+  svg.appendChild(ctx.el("polygon",{class:"side",points:P.map(p=>p.join(",")).join(" ")}));
+  G.forEach((g,i)=>{const v=P[i],r=26,p1=[v[0]+r*Math.cos(g.start),v[1]+r*Math.sin(g.start)],p2=[v[0]+r*Math.cos(g.end),v[1]+r*Math.sin(g.end)];
+    svg.appendChild(ctx.el("path",{class:"arc",d:`M${p1[0]},${p1[1]} A${r},${r} 0 ${g.interior>Math.PI?1:0} 1 ${p2[0]},${p2[1]}`}));
+    const R=g.convex?58:50,t=ctx.el("text",{class:"ang",x:v[0]+R*Math.cos(g.bis),y:v[1]+R*Math.sin(g.bis)+6,"text-anchor":"middle"});
+    t.textContent=(i===h&&!reveal)?"?":ang[i]+"°";svg.appendChild(t);
+    const l=ctx.el("text",{class:"lbl",x:v[0]-30*Math.cos(g.bis),y:v[1]-30*Math.sin(g.bis)+8,"text-anchor":"middle"});l.textContent=L[i];svg.appendChild(l);});
+  return svg;}
+
+/* ---------- one item: the question, the number box, the replies ---------- */
+let missed=false;                    /* the item before this one of her own was not right */
+const deg=a=>a+"°";
+function item(ctx,it,o){o=o||{};const N=it.names,h=it.h,hn="∠"+N[h],right=it.ang[h];
+  const known=it.ang.filter((_,i)=>i!==h),kn=N.split("").filter((_,i)=>i!==h),ks=known[0]+known[1]+known[2];
+  const pairs=[known[0]+known[1],known[1]+known[2],known[0]+known[2]].map(s=>180-s).filter(v=>v>0&&v!==right&&v!==ks);
+  const sum3=known.map(deg).join(" + ");
+  const termsFor=x=>N.split("").map((_,i)=>deg(i===h?x:it.ang[i])).join(" + ");
+  const working=`${hn} = 360° − (${sum3}) = 360° − ${ks}° = ${right}°`;
+  function classify(x){const S=ks+x;let text=`You wrote ${x}°. Then ${termsFor(x)} = ${S}°, not 360°.`,tag="other",expect="not 360°";
+    if(x===ks){tag="sum of the three";
+      if(o.reflex){expect="angle outside the shape";text+=` ${x}° is ${kn.map(n=>"∠"+n).join(" + ")} added together. It is also the angle outside the shape at ${N[h]}.`;}
+      else{expect="is "+kn.map(n=>"∠"+n).join(" + ");text+=` ${x}° is ${kn.map(n=>"∠"+n).join(" + ")}, the 3 angles shown added together.`;}}
+    else if(o.looks&&x===90){tag="90 by look";expect="It looks like a right angle, but";text=`You wrote 90°. It looks like a right angle, but a picture cannot show whether an angle is exactly 90°. Then ${termsFor(90)} = ${ks+90}°, not 360°.`;}
+    else if(pairs.includes(x)){tag="triangle rule";expect="angles of a triangle";text+=` The 3 angles of a triangle add up to 180°. The 4 angles of a quadrilateral add up to 360°.`;}
+    else if(Math.abs(x-right)===10){tag="slip of 10";}
+    return {tag,expect,text};}
+  const p=document.createElement("p");   /* not used */
+  const inp=ctx.numberBox("Your answer in degrees",(x)=>{
+    if(x===null)return ctx.note("Write a number of degrees, like 75.");
+    const eq=`${hn} = 360° − (${sum3})`;
+    if(x===right){if(ctx.role==="own")missed=false;
+      let t=`Yes. ${hn} = ${x}°. The 4 angles add up to 360°, so ${working}. Adding the 4 angles gives ${termsFor(x)} = 360°.`;
+      if(o.looks)t+=` ${hn} is ${x}°, not 90°, though it looks like a right angle.`;
+      if(o.reflex)t+=` ${hn} is more than 180°. The corner at ${N[h]} points in, and the angle inside the shape is the one that is asked for.`;
+      ctx.done({right:true,answer:x+"°",eq,tag:"right",reply:t});if(it.P)draw(ctx,it.P,it.ang,h,true);return;}
+    const c=classify(x);let t=c.text;
+    if(ctx.role==="own"){if(missed)t+=` Here is the answer. ${working}.`;missed=true;}
+    ctx.done({right:false,answer:x+"°",eq,tag:c.tag,reply:t});});
+  const press=()=>document.querySelector("#acts .decide").click();
+  const cands=[ks];if(o.looks)cands.push(90);if(pairs.length)cands.push(pairs[0]);cands.push(right+10);if(right>10)cands.push(right-10);
+  const wrongs=[...new Set(cands)].filter(v=>v!==right).map(v=>({expect:classify(v).expect,fn(){inp.value=v;press();}}));
+  ctx.auto({right(){inp.value=right;press();},wrongs});
+  window.__item={ang:it.ang,h,names:N,right,ks};
+  return inp;}
+function pictureItem(ctx,P,ang,h,o,lines){o=o||{};const it={P,ang,h,names:"ABCD"};
+  draw(ctx,P,ang,h,false);
+  ctx.say(RULE);ctx.say("The picture shows 3 angles of ABCD. The angle with a ? is the one to find.");
+  const known=ang.filter((_,i)=>i!==h);
+  if(lines==="sum"){ctx.say(`The 3 angles shown add up to ${known.map(deg).join(" + ")} = ${known[0]+known[1]+known[2]}°.`);
+    ctx.say(`The angle with a ? is what is left of 360°, so ∠${"ABCD"[h]} = 360° − ${known[0]+known[1]+known[2]}°.`);}
+  if(lines==="steps"){ctx.say(`∠A + ∠B + ∠C + ∠D = 360°`);ctx.say(`∠${"ABCD"[h]} = 360° − (${known.map(deg).join(" + ")})`);}
+  ctx.ask(`How many degrees is ∠${"ABCD"[h]}?`);
+  item(ctx,it,o);}
+function textItem(ctx){const N=ctx.pick(SETS),h=ctx.int(0,3);let ang;
+  for(;;){const a=[ctx.int(52,128),ctx.int(52,128),ctx.int(52,128)].map(x=>x+(x===90?ctx.pick([-7,7]):0));const d=360-a[0]-a[1]-a[2];if(d>=35&&d<=150&&d!==90){ang=a;ang.splice(h,0,d);break;}}
+  const shown=N.split("").map((n,i)=>i===h?null:`∠${n} = ${ang[i]}°`).filter(Boolean);
+  ctx.contrast="no picture";ctx.say(RULE);
+  ctx.ask(`In quadrilateral ${N}, ${shown[0]}, ${shown[1]} and ${shown[2]}. How many degrees is ∠${N[h]}?`);
+  item(ctx,{ang,h,names:N},{});}
+const anglesOf=P=>whole(geom(P));
+
+/* ---------- worked examples and the item with the working lines ---------- */
+function W1(ctx){const P=[[70,120],[300,50],[370,300],[130,320]];pictureItem(ctx,P,anglesOf(P),3,{},"sum");}
+function W2(ctx){const P=[[60,140],[260,50],[370,260],[120,320]];pictureItem(ctx,P,anglesOf(P),1,{},"steps");}
+function SUP(ctx){const P=genConvex(ctx);pictureItem(ctx,P,anglesOf(P),0,{},"steps");}
+
+/* ---------- her own items ---------- */
+const G={
+ pictureD(ctx){const P=genConvex(ctx);pictureItem(ctx,P,anglesOf(P),3,{});},
+ pictureOther(ctx){ctx.contrast="hidden angle not at D";const P=genConvex(ctx);pictureItem(ctx,P,anglesOf(P),ctx.int(0,2),{});},
+ looksRight(ctx){ctx.contrast="looks like a right angle";const h=ctx.int(0,3),P=genLooks(ctx,h);pictureItem(ctx,P,anglesOf(P),h,{looks:true});},
+ reflex(ctx){ctx.contrast="angle more than 180°";const r=genReflex(ctx);pictureItem(ctx,r.P,anglesOf(r.P),r.h,{reflex:true});},
+ noPicture:textItem
+};
+
+QE.start({set:"sk-ge-08",ki:"SK-GE-08",title:"Find the missing angle of a quadrilateral",version:"quadrilaterals-5 1.0 (11 Nov 2026)",
+  teacher:"Angle sum of a quadrilateral: ∠A + ∠B + ∠C + ∠D = 360°, so the fourth angle is 360° − (sum of the other three); interior angles of a concave quadrilateral include one reflex angle (more than 180°).",
+  worked:[W1,W2],sup:SUP,gen:G,
+  plan:["pictureD","pictureOther","noPicture","pictureD","looksRight","reflex","pictureOther","noPicture","looksRight","reflex","pictureD"],
+  contrasts:["looks like a right angle","hidden angle not at D","angle more than 180°","no picture"],
+  contrastKind:{"looks like a right angle":"looksRight","hidden angle not at D":"pictureOther","angle more than 180°":"reflex","no picture":"noPicture"},gates:{}});
+</script>
+</body>
+</html>

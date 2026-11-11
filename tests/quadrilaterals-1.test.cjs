@@ -17,6 +17,13 @@ require("./quad-test-lib.cjs").run({page:"quadrilaterals-1.html",phoneShots:["w1
   /* the decision button with no side yet: an honest note, nothing judged */
   await p.goto(URL0+"?screen=five");await p.getByRole("button",{name:"My shape is finished"}).click();
   ok(await p.locator("#words .reply[data-unreadable]").count()===1&&!(await lastAnswer(p)),"no side yet: a note, no answer recorded");
+  /* line item: all 5 points joined around the shape is a quadrilateral (the point on a side is not a corner) */
+  for(const seed of [3,8,21]){await p.goto(URL0+"?seed="+seed+"&screen=line");
+   const ord=await p.evaluate(()=>{const pts=[...document.querySelectorAll("#pic .pt")].map(g=>{const c=g.querySelector(".pdot");return [+c.getAttribute("cx"),+c.getAttribute("cy")];});
+     const cx=pts.reduce((s,q)=>s+q[0],0)/5,cy=pts.reduce((s,q)=>s+q[1],0)/5;return [0,1,2,3,4].sort((i,j)=>Math.atan2(pts[i][1]-cy,pts[i][0]-cx)-Math.atan2(pts[j][1]-cy,pts[j][0]-cx));});
+   for(const i of ord.concat([ord[0]]))await p.locator(`#pic .pt[data-i="${i}"]`).click();
+   await p.getByRole("button",{name:"My shape is finished"}).click();const r=await lastReply(p);
+   ok(r.includes("make one straight side")&&r.includes("It is a quadrilateral")&&(await lastAnswer(p)).right===1,"line seed "+seed+": all 5 points around is a quadrilateral with 4 sides: "+r.slice(0,80));}
   /* Start again clears her drawing */
-  await p.locator('#pic .pt[data-i="1"]').click();await p.getByRole("button",{name:"Start again"}).click();ok(await p.locator("#pic .side").count()===0,"Start again clears her shape");
+  await p.goto(URL0+"?screen=five");await p.locator('#pic .pt[data-i="1"]').click();await p.getByRole("button",{name:"Start again"}).click();ok(await p.locator("#pic .side").count()===0,"Start again clears her shape");
  }});
