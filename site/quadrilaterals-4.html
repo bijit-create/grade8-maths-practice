@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find out what the 4 angles of a quadrilateral add up to</title>
+<!-- Student 2, quadrilaterals experience 4 of 7. 11 Nov 2026.
+     KI-GE-23 (Principle): the four angles of a quadrilateral add up to 360 degrees.
+     Teacher name: angle sum of a quadrilateral, ∠A + ∠B + ∠C + ∠D = 360°.
+     Taught through KI-GE-66 (angle sum of a triangle, 180°), as Bijit decided on 11 Nov 2026: a diagonal cuts the
+     quadrilateral into 2 triangles, so 180° + 180° = 360°.
+     Source for the dragging and the angle labels: study-materials/quadrilaterals/sk-ge-08-screen.html part 1 (drag a
+     vertex, the 4 angles are measured in whole degrees that always add to 360 by largest remainder, and written at the
+     vertices while she drags; only convex shapes can be dragged).
+     W1: ABCD with diagonal AC, 2 shaded triangles, 6 angles written; her step is the sum of the 6 angles.
+     W2: she drags a vertex and puts the 4 angles of 3 different shapes in a table; her step is the sum in every row.
+     Supported item: the same picture as "two triangles" with the triangle rule written beside it.
+     Kinds (her own items):
+       tri      two triangles: the line cuts the shape in 2 triangles and the 6 angles are written; she finds the sum of
+                the 4 angles, or one angle of the shape from its 2 parts (letters and diagonal AC or BD vary).
+       drag     she drags a vertex, then adds the 4 angles now written (a drag is needed before the answer is read).
+       poss     can a quadrilateral have these 4 angles? Three answers: yes, no (more than 360°), no (less than 360°),
+                so the reason is chosen with the answer. About half are possible.
+       concave  a shape with a corner that points in (one angle between 195° and 250°); she taps that vertex, then adds.
+       rect     a rectangle or square; she taps each vertex to mark its right angle, then adds 4 × 90°.
+     Shortcuts this set defeats: "the sum changes with the shape" (drag), "only convex shapes add to 360°" (concave),
+     "any 4 equal angles will do" (poss, with 4 equal angles that are not 90°), "one triangle is 180° so a quadrilateral
+     is 180°" (tri), "the sum is 4 × the first angle I see" (rect, poss).
+     Engine and records: assets/quad-engine.js. -->
+<link rel="stylesheet" href="assets/quad.css">
+<style>
+.tri0{fill:rgba(31,111,178,.16);stroke:none}
+.tri1{fill:rgba(196,85,58,.16);stroke:none}
+.ang.t0{fill:var(--accent)}
+.ang.t1{fill:var(--shape)}
+.diag{stroke:var(--diag);stroke-width:5;stroke-dasharray:10 6;stroke-linecap:round}
+#pic svg text{pointer-events:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><h1 id="h1">Find out what the 4 angles of a quadrilateral add up to</h1><div class="tools"><button class="btn" id="readBtn" type="button">Read it</button><button class="btn" id="pauseBtn" type="button">Pause</button></div></div>
+  <div id="teacher" class="hide"></div>
+  <div class="card"><div id="pic"></div><div class="text"><div id="words"></div><div id="acts"></div></div></div>
+</div>
+<div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
+<script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/quad-engine.js"></script>
+<script>
+"use strict";
+const SETS=["ABCD","PQRS","KLMN","WXYZ"];
+const pickL=ctx=>ctx.pick(SETS);
+const deg=a=>a+"°";
+const joinDeg=a=>a.map(deg).join(" + ");
+const angSum=L=>[...L].map(c=>"∠"+c).join(" + ")+" = 360°";
+
+/* ---------- geometry ---------- */
+const unit=(x,y)=>{const d=Math.hypot(x,y)||1;return [x/d,y/d];};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const orient=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);
+function crosses(a,b,c,d){const s=Math.sign;return s(orient(a,b,c))*s(orient(a,b,d))<0&&s(orient(c,d,a))*s(orient(c,d,b))<0;}
+function simple(P){return !crosses(P[0],P[1],P[2],P[3])&&!crosses(P[1],P[2],P[3],P[0]);}
+/* interior angle at each vertex of a simple quadrilateral, in degrees (more than 180 at a corner that points in) */
+function turnAngles(P){const t=P.map((v,i)=>{const a=P[(i+3)%4],b=P[(i+1)%4],d1=[v[0]-a[0],v[1]-a[1]],d2=[b[0]-v[0],b[1]-v[1]];
+    return Math.atan2(d1[0]*d2[1]-d1[1]*d2[0],d1[0]*d2[0]+d1[1]*d2[1])*180/Math.PI;});
+  const s=Math.sign(t.reduce((x,y)=>x+y,0))||1;return t.map(x=>180-s*x);}
+function lr(raws,total){const f=raws.map(Math.floor);const left=total-f.reduce((s,x)=>s+x,0);
+  const ord=raws.map((x,i)=>[x-f[i],i]).sort((a,b)=>b[0]-a[0]);for(let j=0;j<left&&j<ord.length;j++)f[ord[j][1]]++;return f;}
+const angles=P=>lr(turnAngles(P),360);   /* whole degrees that always add to 360 */
+function convexQuad(P,lo,hi){let s=0;for(let i=0;i<4;i++){const a=P[i],b=P[(i+1)%4],c=P[(i+2)%4];const cr=orient(a,b,c);if(Math.abs(cr)<900)return false;const sg=Math.sign(cr);if(s&&sg!==s)return false;s=sg;}
+  return turnAngles(P).every(x=>x>=lo&&x<=hi);}
+const angBetween=(v,a,b)=>{const u=[a[0]-v[0],a[1]-v[1]],w=[b[0]-v[0],b[1]-v[1]];return Math.acos((u[0]*w[0]+u[1]*w[1])/Math.hypot(...u)/Math.hypot(...w))*180/Math.PI;};
+/* the diagonal from vertex d to vertex d+2 cuts a convex quadrilateral into 2 triangles; each triangle's 3 angles add to 180 */
+function split(P,d){const i=k=>(d+k)%4,r=(v,a,b)=>angBetween(P[i(v)],P[i(a)],P[i(b)]);
+  return {t1:lr([r(0,1,2),r(1,0,2),r(2,1,0)],180),t2:lr([r(2,3,0),r(3,2,0),r(0,3,2)],180)};}
+const jit=(ctx,p,r)=>[Math.round(p[0]+ctx.int(-r,r)),Math.round(p[1]+ctx.int(-r,r))];
+function turnAround(ctx,P){const k=ctx.int(0,3);let Q=P.slice(k).concat(P.slice(0,k));if(ctx.rng()<.5)Q=Q.reverse();return Q;}
+
+const CONVEX=[[[80,70],[340,90],[360,300],[60,320]],[[60,120],[250,50],[370,280],[130,330]],[[200,45],[365,170],[270,335],[55,230]],
+  [[90,60],[360,150],[310,320],[50,270]],[[70,300],[110,80],[330,60],[370,310]]];
+function convexShape(ctx){for(let n=0;n<60;n++){const P=ctx.pick(CONVEX).map(p=>jit(ctx,p,16));if(convexQuad(P,40,145))return turnAround(ctx,P);}
+  return CONVEX[0].map(p=>p.slice());}
+const TRI=[[[60,320],[210,50],[360,320]],[[70,70],[360,120],[140,340]],[[330,70],[60,160],[300,330]]];
+function concaveShape(ctx){for(let n=0;n<80;n++){const t=ctx.pick(TRI).map(p=>jit(ctx,p,14));
+    const M=[(t[2][0]+t[0][0])/2,(t[2][1]+t[0][1])/2],f=.3+ctx.rng()*.3;
+    const q=[Math.round(M[0]+(t[1][0]-M[0])*f+ctx.int(-10,10)),Math.round(M[1]+(t[1][1]-M[1])*f+ctx.int(-10,10))];
+    const P=[t[0],t[1],t[2],q],raw=turnAngles(P),refl=raw.filter(x=>x>180);
+    if(refl.length===1&&refl[0]>=195&&refl[0]<=250&&raw.every(x=>x>=18)&&simple(P))return turnAround(ctx,P);}
+  return [[60,320],[210,50],[360,320],[210,239]];}
+function rectShape(ctx){const sq=ctx.rng()<.25,hw=sq?ctx.int(70,100):ctx.int(80,130),hh=sq?hw:ctx.int(55,90),th=(ctx.rng()-.5)*.7,c=Math.cos(th),s=Math.sin(th);
+  const P=[[-hw,-hh],[hw,-hh],[hw,hh],[-hw,hh]].map(p=>[Math.round(210+p[0]*c-p[1]*s),Math.round(190+p[0]*s+p[1]*c)]);return turnAround(ctx,P);}
+
+/* ---------- drawing ---------- */
+/* an angle at v between the rays to a and b: an arc and its number inside the angle */
+function wedge(ctx,svg,v,a,b,text,o){o=o||{};const R=o.R||24,u=unit(a[0]-v[0],a[1]-v[1]),w=unit(b[0]-v[0],b[1]-v[1]);
+  if(!o.noArc){let sweep=(u[0]*w[1]-u[1]*w[0])>0?1:0,large=0;if(o.reflex){large=1;sweep=1-sweep;}
+    svg.appendChild(ctx.el("path",{class:"arc",d:`M${v[0]+u[0]*R} ${v[1]+u[1]*R} A${R} ${R} 0 ${large} ${sweep} ${v[0]+w[0]*R} ${v[1]+w[1]*R}`}));}
+  if(text===null)return;let m=unit(u[0]+w[0],u[1]+w[1]);if(o.reflex)m=[-m[0],-m[1]];const r=o.r||52;
+  const t=ctx.el("text",{class:"ang"+(o.cls||""),x:clamp(v[0]+m[0]*r,20,400),y:clamp(v[1]+m[1]*r+6,22,372),"text-anchor":"middle"});t.textContent=text;svg.appendChild(t);}
+/* the picture of the quadrilateral. mode: "drag" (convex shapes only), "tap" (vertices are tapped) or "none" */
+function board(ctx,P,L,o){
+  const svg=ctx.svg("0 0 420 380",o.label||("The quadrilateral "+L+" and its vertices."));
+  const st={sel:new Set(),moved:0,frozen:false};let dragI=null;
+  function draw(){svg.innerHTML="";const raw=turnAngles(P),ang=angles(P);
+    (o.tris||[]).forEach((t,k)=>svg.appendChild(ctx.el("polygon",{class:"tri"+k,points:t.map(i=>P[i].join(",")).join(" ")})));
+    svg.appendChild(ctx.el("polygon",{class:"side",points:P.map(p=>p.join(",")).join(" ")}));
+    if(o.diag)svg.appendChild(ctx.el("line",{class:"diag",x1:P[o.diag[0]][0],y1:P[o.diag[0]][1],x2:P[o.diag[1]][0],y2:P[o.diag[1]][1]}));
+    P.forEach((v,i)=>{const a=P[(i+3)%4],b=P[(i+1)%4],reflex=raw[i]>180;let m=unit(unit(a[0]-v[0],a[1]-v[1])[0]+unit(b[0]-v[0],b[1]-v[1])[0],unit(a[0]-v[0],a[1]-v[1])[1]+unit(b[0]-v[0],b[1]-v[1])[1]);if(reflex)m=[-m[0],-m[1]];
+      const t=ctx.el("text",{class:"lbl",x:clamp(v[0]-m[0]*28,16,404),y:clamp(v[1]-m[1]*28+8,24,372),"text-anchor":"middle"});t.textContent=L[i];svg.appendChild(t);
+      if(o.angles!==false){const txt=o.angText?o.angText(i,st):ang[i]+"°";if(txt!==null)wedge(ctx,svg,v,a,b,txt,{reflex,r:raw[i]<70?64:(reflex?46:52),noArc:o.arc===false});}});
+    o.extra&&o.extra(svg,st);
+    if(o.mode!=="none")P.forEach((v,i)=>{const g=ctx.el("g",{class:"pt"+(st.sel.has(i)?" sel":"")+(dragI===i?" drag":""),tabindex:0,role:"button","aria-label":"Vertex "+L[i],"data-i":i});
+      g.appendChild(ctx.el("circle",{class:"hit",cx:v[0],cy:v[1],r:30}));g.appendChild(ctx.el("circle",{class:"pdot",cx:v[0],cy:v[1],r:11}));svg.appendChild(g);});}
+  function moveTo(i,x,y){if(o.mode!=="drag"||!ctx.open||st.frozen)return false;const Q=P.map(p=>p.slice());Q[i]=[Math.round(clamp(x,20,400)),Math.round(clamp(y,24,356))];
+    if(!convexQuad(Q,25,160)||(Q[i][0]===P[i][0]&&Q[i][1]===P[i][1]))return false;P[i]=Q[i];st.moved++;draw();o.onChange&&o.onChange();return true;}
+  function tap(i){if(o.mode!=="tap"||!ctx.open)return;o.onTap(i);}
+  const vertexOf=e=>{const g=e.target.closest&&e.target.closest("g.pt");return g?+g.dataset.i:null;};
+  svg.addEventListener("pointerdown",e=>{if(o.mode!=="drag"||!ctx.open||st.frozen)return;const i=vertexOf(e);if(i===null)return;dragI=i;try{svg.setPointerCapture(e.pointerId);}catch(x){}e.preventDefault();draw();});
+  svg.addEventListener("pointermove",e=>{if(dragI===null)return;const r=svg.getBoundingClientRect(),s=420/r.width;moveTo(dragI,(e.clientX-r.left)*s,(e.clientY-r.top)*s);});
+  const end=()=>{if(dragI!==null){dragI=null;draw();}};svg.addEventListener("pointerup",end);svg.addEventListener("pointercancel",end);
+  svg.addEventListener("click",e=>{const i=vertexOf(e);if(i!==null)tap(i);});
+  svg.addEventListener("keydown",e=>{const i=vertexOf(e);if(i===null)return;
+    if(o.mode==="drag"){const d={ArrowLeft:[-6,0],ArrowRight:[6,0],ArrowUp:[0,-6],ArrowDown:[0,6]}[e.key];if(d){e.preventDefault();moveTo(i,P[i][0]+d[0],P[i][1]+d[1]);const g=svg.querySelector(`g.pt[data-i="${i}"]`);g&&g.focus();}}
+    else if(o.mode==="tap"&&(e.key==="Enter"||e.key===" ")){e.preventDefault();tap(i);const g=svg.querySelector(`g.pt[data-i="${i}"]`);g&&g.focus();}});
+  draw();return {svg,st,draw,moveTo,tap,P};}
+
+/* ---------- answers ---------- */
+function numQ(ctx,judge){ctx.numberBox("Your answer in degrees",v=>{
+  if(v===null)return ctx.note("Write a whole number of degrees in the box, like 75.");
+  const r=judge(v);if(r)ctx.done(r);});}
+const setAns=v=>{document.querySelector("#words .ans input").value=String(v);};
+const pressDecide=()=>document.querySelector("#acts .decide").click();
+const answer=v=>{setAns(v);pressDecide();};
+const reply0=(ok,x)=>ok?"Yes. ":`You wrote ${x}°. `;
+
+/* ---------- two triangles ---------- */
+function triBoard(ctx,P,L,d,S){const i=k=>(d+k)%4;
+  return board(ctx,P,L,{mode:"none",angles:false,tris:[[i(0),i(1),i(2)],[i(2),i(3),i(0)]],diag:[i(0),i(2)],
+    extra:svg=>{const W=(v,a,b,val,k,r)=>wedge(ctx,svg,P[i(v)],P[i(a)],P[i(b)],deg(val),{cls:" t"+k,r,R:24});
+      W(0,1,2,S.t1[0],0,68);W(1,0,2,S.t1[1],0,52);W(2,1,0,S.t1[2],0,68);W(2,3,0,S.t2[0],1,68);W(3,2,0,S.t2[1],1,52);W(0,3,2,S.t2[2],1,68);}});}
+function triNames(L,d){const i=k=>(d+k)%4,nm=a=>[...a].sort((x,y)=>L.indexOf(x)-L.indexOf(y)).join("");
+  return {T1:nm(L[i(0)]+L[i(1)]+L[i(2)]),T2:nm(L[i(0)]+L[i(2)]+L[i(3)]),DG:nm(L[i(0)]+L[i(2)])};}
+function triSumReply(x,L,d,S,withParts){const N=triNames(L,d),i=k=>(d+k)%4;
+  if(x===360){let s=`Yes. The 6 angles are the angles of 2 triangles, and 180° + 180° = 360°. `;
+    if(withParts)s+=`The 6 angles make up the 4 angles of ${L}. ∠${L[i(0)]} = ${S.t1[0]}° + ${S.t2[2]}° = ${S.t1[0]+S.t2[2]}° and ∠${L[i(2)]} = ${S.t1[2]}° + ${S.t2[0]}° = ${S.t1[2]+S.t2[0]}°. `;
+    return s+angSum(L)+".";}
+  let s=`You wrote ${x}°. `;
+  if(x%180===0&&x>0){const k=x/180;s+=k===1?"That is the 3 angles of one triangle. ":`That is ${k} × 180°, the angles of ${k} triangles. `;
+    s+=`The line ${N.DG} cuts ${L} into 2 triangles, so the 4 angles add up to 180° + 180° = 360°.`;return s;}
+  return s+`The 6 angles written are the 3 angles of triangle ${N.T1}, which add up to 180°, and the 3 angles of triangle ${N.T2}, which add up to 180°. 180° + 180° = 360°, so the 4 angles of ${L} add up to 360°.`;}
+
+function W1(ctx){const L="ABCD",P=[[70,90],[330,60],[355,300],[85,320]],S=split(P,0);
+  triBoard(ctx,P,L,0,S);
+  ctx.say("The line AC cuts ABCD into 2 triangles. Triangle ABC is shaded blue and triangle ACD is shaded orange.");
+  ctx.say(`The 3 angles of triangle ABC are ${S.t1[0]}°, ${S.t1[1]}° and ${S.t1[2]}°. They add up to 180°. The 3 angles of triangle ACD are ${S.t2[2]}°, ${S.t2[1]}° and ${S.t2[0]}°. They add up to 180°.`);
+  ctx.say("∠A is made of 2 parts, ∠BAC and ∠CAD. ∠C is made of 2 parts, ∠BCA and ∠ACD.");
+  ctx.ask("What do the 6 angles written in the picture add up to?");
+  numQ(ctx,x=>({right:x===360,answer:x+"°",eq:"6 triangle angles",tag:x===360?"sum 360":"wrote "+x,reply:triSumReply(x,L,0,S,true)}));
+  ctx.auto({right(){answer(360);},wrongs:[{expect:"the 3 angles of one triangle",fn(){answer(180);}},{expect:"You wrote 540°",fn(){answer(540);}}]});}
+
+const START=[[90,90],[320,70],[350,300],[70,320]];
+function W2(ctx){const L="ABCD",P=START.map(p=>p.slice()),rows=[];let q;
+  const tbl=document.createElement("table");tbl.className="rows hide";
+  tbl.innerHTML="<thead><tr><th>Shape</th>"+[...L].map(c=>`<th>∠${c}</th>`).join("")+"</tr></thead><tbody></tbody>";
+  const B=board(ctx,P,L,{mode:"drag",onChange:()=>ctx.clearNote()});ctx.picBelow(tbl);
+  ctx.say("The number at each vertex is the angle of ABCD at that vertex, in degrees. Drag a vertex to change the shape. The angles change with the shape.");
+  q=ctx.ask("Make a shape. Then put its 4 angles in the table.");
+  ctx.button("Put these 4 angles in the table",addRow);
+  function addRow(){const A=angles(P);
+    if(rows.some(r=>r.every((v,k)=>v===A[k])))return ctx.note("These 4 angles are already in the table. Drag a vertex to make a different shape first.");
+    rows.push(A);ctx.clearNote();tbl.classList.remove("hide");const tr=document.createElement("tr");tr.innerHTML=`<td>${rows.length}</td>`+A.map(x=>`<td>${x}°</td>`).join("");tbl.querySelector("tbody").appendChild(tr);
+    if(rows.length<3){q.textContent=rows.length===1?"Drag a vertex to make a different shape. Then put its 4 angles in the table.":"Make one more different shape. Then put its 4 angles in the table.";return;}
+    B.st.frozen=true;q.remove();ctx.ask("Add the 4 angles in each row of the table. What do the 4 angles in each row add up to?");
+    numQ(ctx,x=>{const right=x===360,all=rows.reduce((s,w)=>s+w[0]+w[1]+w[2]+w[3],0);
+      let s=reply0(right,x);if(right)s+="In each row, ∠A + ∠B + ∠C + ∠D = 360°. The 4 angles of a quadrilateral add up to 360°, whatever its shape.";
+      else{if(x===all)s+="That is all 3 rows added together. Each row has its own 4 angles. ";
+        s+=rows.map((w,k)=>`In row ${k+1}, ${joinDeg(w)} = 360°.`).join(" ")+" In each row, the 4 angles add up to 360°.";}
+      return {right,answer:x+"°",eq:"sum of 4 angles in each row",tag:right?"sum 360":"wrote "+x,reply:s};});}
+  const rowsNow=()=>{for(let n=0;n<3;n++){const before=rows.length;
+      for(const [i,dx,dy] of [[0,16,12],[1,-14,18],[2,-16,-12],[3,14,-14],[0,-16,-12],[1,12,-16],[2,16,10],[3,-14,12]]){if(B.moveTo(i,P[i][0]+dx,P[i][1]+dy)){pressDecide();if(rows.length>before)break;}}}};
+  ctx.auto({right(){rowsNow();answer(360);},wrongs:[{expect:"all 3 rows added together",fn(){rowsNow();answer(1080);}},{expect:"You wrote 350°",fn(){rowsNow();answer(350);}}]});}
+
+function triTask(ctx,o){o=o||{};
+  const L=o.L||pickL(ctx),P=convexShape(ctx),d=ctx.int(0,1),variant=o.variant||ctx.pick(["sum","angle"]),i=k=>(d+k)%4,S=split(P,d),N=triNames(L,d);
+  triBoard(ctx,P,L,d,S);
+  ctx.say(`The line ${N.DG} cuts ${L} into triangle ${N.T1} and triangle ${N.T2}. The 6 angles written are the angles of the 2 triangles.`);
+  if(o.help)ctx.say("The 3 angles of a triangle add up to 180°. Add the 3 angles of one triangle, then the 3 angles of the other triangle.","say done");
+  if(variant==="sum"){
+    ctx.ask(`What do the 4 angles of ${L} add up to?`);
+    numQ(ctx,x=>({right:x===360,answer:x+"°",eq:"6 triangle angles",tag:x===360?"sum 360":"wrote "+x,reply:triSumReply(x,L,d,S,false)}));
+    ctx.auto({right(){answer(360);},wrongs:[{expect:"the 3 angles of one triangle",fn(){answer(180);}},{expect:"You wrote 720°",fn(){answer(720);}},{expect:"You wrote 350°",fn(){answer(350);}}]});return;}
+  const first=ctx.rng()<.5,vtx=first?i(0):i(2),p1=first?S.t1[0]:S.t1[2],p2=first?S.t2[2]:S.t2[0],right=p1+p2;
+  const n1=first?`∠${L[i(1)]}${L[i(0)]}${L[i(2)]}`:`∠${L[i(1)]}${L[i(2)]}${L[i(0)]}`,n2=first?`∠${L[i(2)]}${L[i(0)]}${L[i(3)]}`:`∠${L[i(0)]}${L[i(2)]}${L[i(3)]}`,A="∠"+L[vtx];
+  ctx.say(`${A} is made of 2 parts, ${n1} and ${n2}.`);
+  ctx.ask(`How many degrees is ${A}?`);
+  numQ(ctx,x=>{const ok=x===right;let s=reply0(ok,x);
+    if(ok)s+=`${A} is made of ${n1} and ${n2}. ${A} = ${p1}° + ${p2}° = ${right}°.`;
+    else if(x===p1||x===p2)s+=`That is ${x===p1?n1:n2} only, one of the 2 parts of ${A}. ${A} is made of ${n1} and ${n2}, so add the 2 parts.`;
+    else s+=`${A} is made of ${n1} = ${p1}° and ${n2} = ${p2}°. ${p1}° + ${p2}° = ${right}°, not ${x}°.`;
+    return {right:ok,answer:x+"°",eq:A+" from its 2 parts",tag:ok?"parts added":"wrote "+x,reply:s};});
+  ctx.auto({right(){answer(right);},wrongs:[{expect:"one of the 2 parts",fn(){answer(p1);}},{expect:"not "+(right+10)+"°",fn(){answer(right+10);}}]});}
+
+/* ---------- she drags a vertex, then says what the sum is ---------- */
+function dragTask(ctx){ctx.contrast="shape changes, sum does not";const L=pickL(ctx),P=convexShape(ctx);
+  const B=board(ctx,P,L,{mode:"drag",onChange:()=>ctx.clearNote()});
+  ctx.say(`The number at each vertex is the angle of ${L} at that vertex. Drag a vertex to change the shape.`);
+  ctx.ask(`After the shape has changed, what do the 4 angles of ${L} add up to?`);
+  numQ(ctx,x=>{if(B.st.moved===0){ctx.note("Drag a vertex first, so that the shape changes. Then write what the 4 angles add up to.");return null;}
+    const A=angles(P),ok=x===360;let s=reply0(ok,x);
+    s+=ok?`${joinDeg(A)} = 360°. The shape changed, and the 4 angles still add up to 360°.`:`The 4 angles written now are ${A[0]}°, ${A[1]}°, ${A[2]}° and ${A[3]}°. They add up to 360°. The 4 angles of a quadrilateral add up to 360°, whatever its shape.`;
+    return {right:ok,answer:x+"°",eq:"sum of 4 angles after a drag",tag:ok?"sum 360":"wrote "+x,reply:s};});
+  const nudge=()=>{for(const [i,dx,dy] of [[0,14,10],[1,-12,16],[2,-14,-10],[3,12,-12],[0,-14,-10],[1,10,-14],[2,12,12]])if(B.moveTo(i,P[i][0]+dx,P[i][1]+dy))return;};
+  ctx.auto({right(){nudge();answer(360);},wrongs:[{expect:"You wrote 350°",fn(){nudge();answer(350);}},{expect:"You wrote 180°",fn(){nudge();answer(180);}}]});}
+
+/* ---------- can a quadrilateral have these angles? ---------- */
+let possN=-1,possStart=0;
+function possAngles(ctx,yes){const r5=(a,b)=>5*ctx.int(a/5,b/5);
+  for(let n=0;n<200;n++){let a;
+    if(yes){const big=ctx.rng()<.3,x=big?r5(195,230):r5(45,140),y=big?r5(40,80):r5(45,140),z=big?r5(40,80):r5(45,140),w=360-x-y-z;
+      if(w>=30&&w<=(big?80:180))a=[x,y,z,w];}
+    else if(ctx.rng()<.45){const v=ctx.pick([70,75,80,85,95,100,105,110]);a=[v,v,v,v];}
+    else{const x=r5(50,140),y=r5(50,140),z=r5(50,140),w=r5(40,150),s=x+y+z+w;if(Math.abs(s-360)>=20&&Math.abs(s-360)<=120)a=[x,y,z,w];}
+    if(a)return a.map(v=>[ctx.rng(),v]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);}
+  return yes?[100,80,110,70]:[100,100,100,100];}
+function possTask(ctx){if(possN<0){possStart=ctx.int(0,1);possN=0;}const yes=((possN++)+possStart)%2===0;
+  const ang=possAngles(ctx,yes),sum=ang.reduce((s,x)=>s+x,0),right=sum===360?0:(sum>360?1:2),eq=`${joinDeg(ang)} = ${sum}°`;
+  if(sum!==360)ctx.contrast="four angles that cannot be";
+  ctx.ask(`Can a quadrilateral have the 4 angles ${ang.slice(0,3).map(deg).join(", ")} and ${deg(ang[3])}?`);
+  const T=["Yes, a quadrilateral can have these angles","No, these 4 angles add up to more than 360°","No, these 4 angles add up to less than 360°"];
+  const replyFor=idx=>{if(idx===right)return sum===360?`That is right. ${eq}, and the 4 angles of a quadrilateral add up to 360°. A quadrilateral can have these angles.`
+        :`That is right. ${eq}, which is ${sum>360?"more":"less"} than 360°. The 4 angles of a quadrilateral add up to 360°, so a quadrilateral cannot have these angles.`;
+      if(idx===0)return `Your answer was yes, but ${eq}. The 4 angles of a quadrilateral add up to 360°, so a quadrilateral cannot have these angles.`;
+      if(sum===360)return `Your answer was no, but ${eq}. The 4 angles of a quadrilateral add up to 360°, so a quadrilateral can have these angles.`;
+      return `Your answer was no, but ${eq}. That is ${sum>360?"more":"less"} than 360°, not ${sum>360?"less":"more"}.`;};
+  const pick=idx=>ctx.done({right:idx===right,answer:T[idx],eq:"sum of 4 angles "+sum,tag:sum===360?"possible":"cannot be",reply:replyFor(idx)});
+  ctx.choices(T.map((t,idx)=>({t,fn:()=>pick(idx)})));
+  const click=idx=>document.querySelectorAll("#words .ch")[idx].click();
+  ctx.auto({right(){click(right);},wrongs:[0,1,2].filter(x=>x!==right).map(idx=>({expect:idx===0?"Your answer was yes, but":"Your answer was no, but",fn(){click(idx);}}))});}
+
+/* ---------- a corner points in ---------- */
+function concaveTask(ctx){ctx.contrast="a corner points in";const L=pickL(ctx),P=concaveShape(ctx),raw=turnAngles(P),R=raw.findIndex(x=>x>180),A=angles(P);let sel=null;
+  const B=board(ctx,P,L,{mode:"tap",onTap:i=>{sel=i;B.st.sel=new Set([i]);B.draw();ctx.clearNote();}});
+  ctx.say(`One vertex of ${L} points in. Tap that vertex.`);
+  ctx.ask(`What do the 4 angles of ${L} add up to?`);
+  numQ(ctx,x=>{if(sel===null){ctx.note("Tap the vertex that points in first. Then write what the 4 angles add up to.");return null;}
+    const r=A[R],V=L[R];let ok=x===360&&sel===R,s,tag="wrote "+x;
+    if(ok)s=`Yes. ${joinDeg(A)} = 360°. ∠${V} = ${r}° is more than 180° because ${V} points in. The 4 angles of a quadrilateral still add up to 360°.`;
+    else if(x===360){tag="wrong vertex tapped";s=`You wrote 360°, and the 4 angles written do add up to 360°. But the vertex that points in is ${V}, not ${L[sel]}. ∠${V} = ${r}° is more than 180°.`;}
+    else if(x===360-r)s=`You wrote ${x}°. That adds only the 3 angles at the other vertices. ∠${V} = ${r}° is the 4th angle. Add all 4 angles.`;
+    else if(x===720-2*r)s=`You wrote ${x}°. That is what you get with ${360-r}° at ${V}. The angle of ${L} at ${V} is the ${r}° inside the shape, which is more than 180°.`;
+    else s=`You wrote ${x}°. The 4 angles written are ${A[0]}°, ${A[1]}°, ${A[2]}° and ${A[3]}°. They add up to 360°, even though ∠${V} is more than 180°.`;
+    return {right:ok,answer:x+"°",eq:"sum of 4 angles with a reflex angle",tag,reply:s};});
+  const r=A[R],other=(R+1)%4;
+  ctx.auto({right(){B.tap(R);answer(360);},wrongs:[{expect:"That adds only the 3 angles",fn(){B.tap(R);answer(360-r);}},{expect:"That is what you get with",fn(){B.tap(R);answer(720-2*r);}},{expect:"the vertex that points in is",fn(){B.tap(other);answer(360);}}]});}
+
+/* ---------- a rectangle ---------- */
+function rectTask(ctx){const L=pickL(ctx),P=rectShape(ctx);
+  const B=board(ctx,P,L,{mode:"tap",arc:false,angText:(i,st)=>st.sel.has(i)?"90°":null,
+    extra:(svg,st)=>{st.sel.forEach(i=>{const v=P[i],u=unit(P[(i+3)%4][0]-v[0],P[(i+3)%4][1]-v[1]),w=unit(P[(i+1)%4][0]-v[0],P[(i+1)%4][1]-v[1]),k=16;
+      svg.appendChild(ctx.el("path",{class:"arc",d:`M${v[0]+u[0]*k} ${v[1]+u[1]*k} L${v[0]+(u[0]+w[0])*k} ${v[1]+(u[1]+w[1])*k} L${v[0]+w[0]*k} ${v[1]+w[1]*k}`}));});},
+    onTap:i=>{const s=B.st.sel;if(s.has(i))s.delete(i);else s.add(i);B.draw();ctx.clearNote();}});
+  ctx.say(`${L} is a rectangle. All 4 of its angles are right angles. Tap each vertex to mark its angle.`);
+  ctx.ask(`What do the 4 angles of ${L} add up to?`);
+  numQ(ctx,x=>{if(B.st.sel.size<4){ctx.note("Tap all 4 vertices to mark the angles first. Then write what the 4 angles add up to.");return null;}
+    const ok=x===360;let s=reply0(ok,x);
+    if(ok)s+=`${L} has 4 right angles. 90° + 90° + 90° + 90° = 4 × 90° = 360°. The 4 angles of every quadrilateral add up to 360°, and a rectangle is a quadrilateral.`;
+    else if(x===90||x===180||x===270){const k=x/90;s+=`That is ${k} right angle${k>1?"s":""}. ${L} has 4 right angles, so 90° + 90° + 90° + 90° = 360°.`;}
+    else s+=`${L} has 4 right angles. 90° + 90° + 90° + 90° = 4 × 90° = 360°.`;
+    return {right:ok,answer:x+"°",eq:"4 × 90°",tag:ok?"sum 360":"wrote "+x,reply:s};});
+  const mark=()=>[0,1,2,3].forEach(i=>B.tap(i));
+  ctx.auto({right(){mark();answer(360);},wrongs:[{expect:"That is 1 right angle",fn(){mark();answer(90);}},{expect:"That is 2 right angles",fn(){mark();answer(180);}},{expect:"That is 3 right angles",fn(){mark();answer(270);}}]});}
+
+QE.start({set:"ki-ge-23",ki:"KI-GE-23",title:"Find out what the 4 angles of a quadrilateral add up to",version:"quadrilaterals-4 1.0 (11 Nov 2026)",
+  teacher:"Angle sum of a quadrilateral: ∠A + ∠B + ∠C + ∠D = 360°. Taught through KI-GE-66 (angle sum of a triangle, 180°): a diagonal cuts a quadrilateral into 2 triangles, 2 × 180° = 360°.",
+  worked:[W1,W2],sup:ctx=>triTask(ctx,{help:true,variant:"sum",L:"ABCD"}),
+  gen:{tri:triTask,drag:dragTask,poss:possTask,concave:concaveTask,rect:rectTask},
+  plan:["tri","poss","drag","concave","tri","rect","poss","drag","concave","tri","poss"],
+  contrasts:["a corner points in","four angles that cannot be","shape changes, sum does not"],
+  contrastKind:{"a corner points in":"concave","four angles that cannot be":"poss","shape changes, sum does not":"drag"},gates:{}});
+</script>
+</body>
+</html>
