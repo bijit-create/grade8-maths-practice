@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make a quadrilateral</title>
+<!-- Student 2, quadrilaterals experience 1 of 7. 11 Nov 2026.
+     KI-GE-21 (Concept): a quadrilateral is a closed figure in a plane bounded by four line segments that meet only at
+     their end points (sides do not cross; Bijit, 11 Nov 2026), with four sides, four vertices and four angles.
+     Built from the approved screen study-materials/quadrilaterals/ki-ge-21-screen.html (Bijit, 11 Nov: "Yes, this screen").
+     Manipulative: points she taps in turn; each side is drawn and named as she makes it; tapping the first point closes
+     the shape. Nothing is judged until "My shape is finished".
+     Kinds: five (5 points), four (4 points; an order across the shape crosses), concave (one point inside the other three),
+     line (a point on the straight line between two others).
+     Shortcuts this set defeats: "join the points in the order I see them" (four), "it must look like a square"
+     (concave), "4 points tapped is 4 corners" (line).
+     Engine and records: assets/quad-engine.js. -->
+<link rel="stylesheet" href="assets/quad.css">
+</head>
+<body>
+<div class="app">
+  <div class="top"><h1 id="h1">Make a quadrilateral</h1><div class="tools"><button class="btn" id="readBtn" type="button">Read it</button><button class="btn" id="pauseBtn" type="button">Pause</button></div></div>
+  <div id="teacher" class="hide"></div>
+  <div class="card"><div id="pic"></div><div class="text"><div id="words"></div><div id="acts"></div></div></div>
+</div>
+<div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
+<script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/quad-engine.js"></script>
+<script>
+"use strict";
+const L="ABCDEFG";
+const RULE="A quadrilateral is a closed shape with 4 straight sides. Its sides meet only at its corners.";
+
+/* ---------- geometry ---------- */
+const orient=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);
+function crosses(a,b,c,d){const s=Math.sign;return s(orient(a,b,c))*s(orient(a,b,d))<0&&s(orient(c,d,a))*s(orient(c,d,b))<0;}
+function onLine(p,q,r){const d=Math.hypot(r[0]-p[0],r[1]-p[1]);return Math.abs(orient(p,q,r))/d<6;}   /* q within 6 px of line pr */
+function aroundOrder(P,idx){const cx=idx.reduce((s,i)=>s+P[i][0],0)/idx.length,cy=idx.reduce((s,i)=>s+P[i][1],0)/idx.length;
+  return idx.slice().sort((i,j)=>Math.atan2(P[i][1]-cy,P[i][0]-cx)-Math.atan2(P[j][1]-cy,P[j][0]-cx));}
+const jit=(ctx,p,r)=>[Math.round(p[0]+ctx.int(-r,r)),Math.round(p[1]+ctx.int(-r,r))];
+
+/* ---------- point sets (fresh each time) ---------- */
+function pointsFive(ctx){const c=[210,190],R=145,a0=ctx.rng()*Math.PI*2;
+  return [...Array(5).keys()].map(k=>{const a=a0+k*2*Math.PI/5+(ctx.rng()-.5)*.35,r=R*(.85+ctx.rng()*.2);return [Math.round(c[0]+r*Math.cos(a)),Math.round(c[1]+r*Math.sin(a))];});}
+function pointsFour(ctx){/* 4 corners of a tilted, uneven quadrilateral, listed so that a left-to-right reading order crosses */
+  const base=ctx.pick([[[70,90],[350,110],[90,320],[330,300]],[[90,70],[330,320],[350,90],[70,300]],[[60,200],[360,180],[200,50],[210,340]]]);
+  return base.map(p=>jit(ctx,p,18));}
+function pointsConcave(ctx){const t=ctx.pick([[[60,320],[210,50],[360,320]],[[70,70],[360,120],[140,340]]]).map(p=>jit(ctx,p,15));
+  const cx=(t[0][0]+t[1][0]+t[2][0])/3,cy=(t[0][1]+t[1][1]+t[2][1])/3;const inside=[Math.round(cx+ctx.int(-15,15)),Math.round(cy+ctx.int(5,30))];
+  const pts=t.concat([inside]);const k=ctx.int(0,3);return pts.slice(k).concat(pts.slice(0,k));}
+function pointsLine(ctx){/* a rectangle-like set with one more point exactly on the middle of one side */
+  const w=ctx.int(230,290),h=ctx.int(190,240),x0=210-w/2,y0=190-h/2;
+  const c=[[x0,y0],[x0+w,y0],[x0+w,y0+h],[x0,y0+h]].map(p=>[Math.round(p[0]),Math.round(p[1])]);
+  const s=ctx.int(0,3),a=c[s],b=c[(s+1)%4],mid=[Math.round((a[0]+b[0])/2),Math.round((a[1]+b[1])/2)];
+  return {P:[c[0],c[1],c[2],c[3],mid],mid:4,ends:[s,(s+1)%4]};}
+
+/* ---------- the manipulative: tap points in turn, close by tapping the first point ---------- */
+function build(ctx,P,opts){
+  opts=opts||{};let path=opts.path?opts.path.slice():[],closed=!!opts.closed,fixed=!!opts.fixed,arcs=false,marks=null;
+  const svg=ctx.svg("0 0 420 380","Points to join into a shape. The letters follow the order of your taps.");
+  const nm=i=>L[path.indexOf(i)];
+  const segs=()=>{const s=[];for(let i=1;i<path.length;i++)s.push([path[i-1],path[i]]);if(closed)s.push([path[path.length-1],path[0]]);return s;};
+  function crossing(){const s=segs();for(let i=0;i<s.length;i++)for(let j=i+2;j<s.length;j++){if(i===0&&j===s.length-1)continue;
+    if(crosses(P[s[i][0]],P[s[i][1]],P[s[j][0]],P[s[j][1]]))return [s[i],s[j]];}return null;}
+  function straightCorner(){if(!closed)return null;const n=path.length;for(let k=0;k<n;k++){const a=P[path[(k+n-1)%n]],b=P[path[k]],c=P[path[(k+1)%n]];if(onLine(a,b,c))return k;}return null;}
+  function draw(){svg.innerHTML="";const cx=P.reduce((a,p)=>a+p[0],0)/P.length,cy=P.reduce((a,p)=>a+p[1],0)/P.length,bad=closed?crossing():null;
+    for(const [a,b] of segs()){const isX=bad&&bad.some(s=>s[0]===a&&s[1]===b);
+      svg.appendChild(ctx.el("line",{class:"side"+(isX?" cross":""),x1:P[a][0],y1:P[a][1],x2:P[b][0],y2:P[b][1]}));
+      /* a crossing side has its name a third of the way along it, so two crossing sides keep their names apart */
+      const f=isX?0.3:0.5,mx=P[a][0]+(P[b][0]-P[a][0])*f,my=P[a][1]+(P[b][1]-P[a][1])*f;let dx=mx-cx,dy=my-cy;if(isX){dx=-(P[b][1]-P[a][1]);dy=P[b][0]-P[a][0];}const d=Math.hypot(dx,dy)||1;
+      const t=ctx.el("text",{class:"slbl",x:mx+dx/d*22,y:my+dy/d*22+6,"text-anchor":"middle"});t.textContent=nm(a)+nm(b);svg.appendChild(t);}
+    if(arcs)path.forEach((i,k)=>{const p=P[i],q=P[path[(k+1)%4]],r=P[path[(k+3)%4]];
+      const u=[q[0]-p[0],q[1]-p[1]],w=[r[0]-p[0],r[1]-p[1]],nu=Math.hypot(...u),nw=Math.hypot(...w),R=28;
+      const s=[p[0]+u[0]/nu*R,p[1]+u[1]/nu*R],e=[p[0]+w[0]/nw*R,p[1]+w[1]/nw*R];let sweep=(u[0]*w[1]-u[1]*w[0])>0?1:0,large=0;
+      const area=path.reduce((t,j,m)=>{const A=P[j],Bq=P[path[(m+1)%4]];return t+A[0]*Bq[1]-Bq[0]*A[1];},0);
+      if(Math.sign(orient(r,p,q))!==Math.sign(area)){large=1;sweep=1-sweep;}   /* a corner that points in: the arc goes the long way, inside the shape */
+      svg.appendChild(ctx.el("path",{class:"arc",d:`M${s[0]} ${s[1]} A${R} ${R} 0 ${large} ${sweep} ${e[0]} ${e[1]}`}));});
+    P.forEach((p,i)=>{const used=path.includes(i);const g=ctx.el("g",{class:"pt"+(used?" used":""),tabindex:fixed?-1:0,role:"button","aria-label":used?"Point "+nm(i):"A point","data-i":i});
+      g.appendChild(ctx.el("circle",{class:"hit",cx:p[0],cy:p[1],r:30}));g.appendChild(ctx.el("circle",{class:"pdot",cx:p[0],cy:p[1],r:11}));
+      if(used){const dx=p[0]-cx,dy=p[1]-cy,d=Math.hypot(dx,dy)||1;const t=ctx.el("text",{class:"lbl",x:p[0]+dx/d*30,y:p[1]+dy/d*30+8,"text-anchor":"middle"});t.textContent=nm(i);svg.appendChild(t);}
+      if(!fixed){g.addEventListener("click",()=>tap(i));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tap(i);}});}
+      svg.appendChild(g);});}
+  function tap(i){if(fixed||closed||!ctx.open)return;
+    if(path.length===0)path.push(i);else if(i===path[0]&&path.length>=3)closed=true;else if(!path.includes(i))path.push(i);
+    ctx.clearNote();draw();}
+  function again(){if(fixed||!ctx.open)return;path=[];closed=false;ctx.clearNote();draw();}
+  /* what she made, in words; right when it is a quadrilateral */
+  function judge(){const n=segs().length,first=L[0],last=L[path.length-1];
+    if(path.length<2)return {none:true,text:"You have not drawn a side yet. Tap a point to start."};
+    const answer=path.map(i=>nm(i)).join("")+(closed?" closed":" open");
+    if(!closed)return {right:false,answer,tag:"not closed",text:`Your shape is not closed. Its last side ends at ${last}, and the shape started at ${first}. Your shape has ${n} straight side${n===1?"":"s"}. A quadrilateral is closed.`};
+    if(n!==4)return {right:false,answer,tag:n+" sides",text:`Your shape is closed, and it has ${n} straight sides. A quadrilateral has 4 straight sides.`};
+    const x=crossing();if(x){const [s,t]=x;return {right:false,answer,tag:"sides cross",text:`Your shape has 4 sides, but side ${nm(s[0])}${nm(s[1])} crosses side ${nm(t[0])}${nm(t[1])}. The sides of a quadrilateral meet only at its corners.`};}
+    const k=straightCorner();if(k!==null){const n2=path.length,a=nm(path[(k+n2-1)%n2]),b=nm(path[k]),c=nm(path[(k+1)%n2]);
+      return {right:false,answer,tag:"three points on a line",text:`${b} lies on the straight line from ${a} to ${c}, so ${a}${b} and ${b}${c} make one straight side, ${a}${c}. Your shape has only 3 corners and 3 straight sides. A quadrilateral has 4 straight sides.`};}
+    arcs=true;draw();
+    return {right:true,answer,tag:"quadrilateral",text:`ABCD is closed, and it has 4 straight sides, AB, BC, CD and DA. ABCD is a quadrilateral. Its 4 corners, A, B, C and D, are its vertices. It has an angle at each vertex, ∠A, ∠B, ∠C and ∠D.`};}
+  draw();
+  if(!fixed){const b=document.createElement("button");b.type="button";b.className="btn";b.textContent="Start again";b.addEventListener("click",again);ctx.picBelow(b);}
+  return {tap,again,judge,draw,setArcs(v){arcs=v;draw();},get path(){return path},get closed(){return closed}};
+}
+/* the decision button; judged only here */
+function finishButton(ctx,B){ctx.button("My shape is finished",()=>{const j=B.judge();if(j.none)return ctx.note(j.text);ctx.done({right:j.right,answer:j.answer,tag:j.tag,eq:"make a quadrilateral",reply:j.text});});}
+function tapAll(B,order,close){order.forEach(i=>B.tap(i));if(close)B.tap(order[0]);}
+const pressFinish=()=>document.querySelector("#acts .decide").click();
+/* how the test gives a right answer and each planned wrong one (calls the same functions as her taps) */
+function autoFor(ctx,B,good,wrongs){ctx.auto({right(){B.again();tapAll(B,good,true);pressFinish();},
+  wrongs:wrongs.map(w=>({expect:w.expect,fn(){B.again();tapAll(B,w.order,w.close);pressFinish();}}))});}
+function standardWrongs(good,P){const [a,b,c,d]=good;return [
+  {order:[a,b,c,d],close:false,expect:"Your shape is not closed"},
+  {order:[a,b,c],close:true,expect:"it has 3 straight sides"},
+  {order:[a,c,b,d],close:true,expect:"crosses side"}];}
+
+/* ---------- worked examples ---------- */
+function W1(ctx){const P=[[80,90],[330,70],[355,300],[70,320],[220,200]];
+  ctx.say(RULE);
+  ctx.say("Here, 4 points were tapped in turn, A, B, C and then D. The sides AB, BC and CD are drawn. To close the shape, the last side must go from D back to A.");
+  const B=build(ctx,P,{path:[0,1,2,3]});
+  ctx.ask("Tap A to close the shape. Then tap My shape is finished.");
+  finishButton(ctx,B);
+  ctx.auto({right(){B.tap(0);pressFinish();},wrongs:[{expect:"Your shape is not closed",fn(){pressFinish();}}]});}
+function W2(ctx){const P=[[80,90],[340,90],[80,310],[340,310]];
+  ctx.say("These 4 points were joined in the order A, B, C, D and back to A. Side BC crosses side DA, so this shape is not a quadrilateral. The sides of a quadrilateral meet only at its corners.");
+  const B=build(ctx,P,{path:[0,1,2,3],closed:true});
+  ctx.ask("Tap Start again. Then join the same 4 points so that no sides cross, and close the shape.");
+  finishButton(ctx,B);
+  autoFor(ctx,B,[0,1,3,2],[{order:[0,1,2,3],close:true,expect:"crosses side"}]);}
+function SUP(ctx){const P=pointsFive(ctx);
+  ctx.say(RULE,"say done");
+  ctx.say("Tap 4 points in turn. Then tap the first point again to close the shape. Make sure no sides cross.","say done");
+  const B=build(ctx,P);ctx.ask("Make a quadrilateral from 4 of these points.");finishButton(ctx,B);
+  const good=aroundOrder(P,[0,1,2,3,4]).slice(0,4);autoFor(ctx,B,good,standardWrongs(good,P));}
+
+/* ---------- her own items ---------- */
+const G={
+ five(ctx){const P=pointsFive(ctx);const B=build(ctx,P);ctx.ask("Make a quadrilateral from 4 of these 5 points.");finishButton(ctx,B);
+   const good=aroundOrder(P,[0,1,2,3,4]).slice(0,4);autoFor(ctx,B,good,standardWrongs(good,P));},
+ four(ctx){ctx.contrast="order across the shape";const P=pointsFour(ctx);const B=build(ctx,P);ctx.ask("Make a quadrilateral from these 4 points.");finishButton(ctx,B);
+   const good=aroundOrder(P,[0,1,2,3]);autoFor(ctx,B,good,standardWrongs(good,P));},
+ concave(ctx){ctx.contrast="a corner points in";const P=pointsConcave(ctx);const B=build(ctx,P);ctx.ask("Make a quadrilateral from these 4 points.");finishButton(ctx,B);
+   /* any order of these 4 points makes a quadrilateral */
+   const good=[0,1,2,3];autoFor(ctx,B,good,[{order:good,close:false,expect:"Your shape is not closed"},{order:good.slice(0,3),close:true,expect:"it has 3 straight sides"}]);},
+ line(ctx){ctx.contrast="three points on a line";const X=pointsLine(ctx),P=X.P;const B=build(ctx,P);ctx.ask("Make a quadrilateral from 4 of these 5 points.");finishButton(ctx,B);
+   const [s,e]=X.ends,o=[0,1,2,3];const rest=o.filter(i=>i!==s&&i!==e);   /* s, mid, e on one line */
+   const good=aroundOrder(P,[0,1,2,3]);
+   const bad=aroundOrder(P,[s,X.mid,e,rest[0],rest[1]]);const k=bad.indexOf(X.mid);const four=[bad[(k+4)%5],X.mid,bad[(k+1)%5],bad[(k+2)%5]];
+   autoFor(ctx,B,good,[{order:four,close:true,expect:"lies on the straight line"},{order:good,close:false,expect:"Your shape is not closed"}]);}
+};
+
+QE.start({set:"q1-make",ki:"KI-GE-21",title:"Make a quadrilateral from 4 points",version:"quadrilaterals-1 1.0 (11 Nov 2026)",
+  teacher:"Quadrilateral: a simple closed plane figure bounded by 4 line segments (sides meet only at end points; no 3 consecutive vertices collinear); 4 sides, 4 vertices, 4 angles.",
+  worked:[W1,W2],sup:SUP,gen:G,
+  plan:["five","four","five","concave","line","four","five","concave","line","five"],
+  contrasts:["order across the shape","a corner points in","three points on a line"],
+  contrastKind:{"order across the shape":"four","a corner points in":"concave","three points on a line":"line"},gates:{}});
+</script>
+</body>
+</html>
