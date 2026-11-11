@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quadrilaterals (prototype)</title>
+<!-- 11 Nov 2026. PROTOTYPE, local only, ONE screen for Bijit to look at before anything else is built.
+     Item: KI-GE-21 (Concept): "A quadrilateral is a closed figure in a plane bounded by four line segments, and it has
+     four sides, four vertices and four angles." (Student 2 graph, 24 Oct 2026.)
+     Pattern: Student 1's manipulative rules (CLAUDE.md, Manipulatives) and ladder prototype layout (11 Nov):
+     picture on the left, text column on the right; she makes the shape herself; each side is drawn and named as she makes it;
+     nothing is judged until she presses the button; a wrong shape gets a reply that describes what she made, and her next
+     tap starts the step again. IT RECORDS NOTHING AND SENDS NOTHING. -->
+<style>
+:root{--bg:#F4F6F8;--card:#FFFFFF;--ink:#1A2430;--muted:#5B6878;--line:#D3DAE2;--accent:#1F6FB2;--soft:#EEF3F8;--ok:#2E7D4F;--oksoft:#E5F3EA;--warn:#9A6A00;--warnsoft:#FBF0D6;--shape:#C4553A;--f:system-ui,"Segoe UI",Roboto,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121820;--card:#1A222C;--ink:#E6ECF2;--muted:#9AA8B6;--line:#2E3A47;--accent:#6BAEF0;--soft:#1F2934;--ok:#7FD3A4;--oksoft:#173226;--warn:#E8C063;--warnsoft:#3A2E12;--shape:#E98B72;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:18px/1.45 var(--f)}
+.app{max-width:1000px;margin:0 auto;padding:12px 16px;display:grid;gap:10px}
+h1{font-size:1.15rem;margin:0}
+.btn{font:600 1rem var(--f);border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:10px 16px;min-height:48px;min-width:48px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;grid-template-columns:minmax(0,420px) minmax(0,460px);justify-content:center;column-gap:32px;row-gap:16px;align-items:start}
+@media (max-width:760px){.card{grid-template-columns:minmax(0,1fr)}}
+.pic{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+svg{width:100%;max-width:420px;height:auto;display:block;touch-action:manipulation;user-select:none}
+.text{display:flex;flex-direction:column;gap:12px;padding-top:8px}
+.say{font-size:1.12rem;margin:0}
+.q{font-size:1.2rem;font-weight:700;color:var(--accent);margin:0}
+.fb{margin:0;padding:10px 12px;border-left:4px solid var(--accent);background:var(--soft);border-radius:8px}
+.fb.ok{border-color:var(--ok);background:var(--oksoft)}.fb.info{border-color:var(--warn);background:var(--warnsoft)}
+.hide{display:none!important}
+.pt{cursor:pointer}.pt circle.hit{fill:transparent}
+.pt circle.dot{fill:var(--card);stroke:var(--ink);stroke-width:3}
+.pt.used circle.dot{fill:var(--shape);stroke:var(--shape)}
+.pt:focus{outline:none}.pt:focus-visible circle.dot{stroke:var(--accent);stroke-width:5}
+.side{stroke:var(--shape);stroke-width:5;stroke-linecap:round}
+.side.cross{stroke-dasharray:10 8}
+.lbl{font:700 22px var(--f);fill:var(--ink)}
+.slbl{font:600 17px var(--f);fill:var(--muted)}
+.arc{fill:none;stroke:var(--accent);stroke-width:3}
+.old .side,.old .lbl,.old .slbl{opacity:.6}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>Make a quadrilateral from 4 points</h1>
+  <div class="card">
+    <div class="pic">
+      <svg id="svg" viewBox="0 0 420 380" role="img" aria-label="Five points. Tap points to draw straight sides."></svg>
+      <button class="btn" id="again" type="button">Start again</button>
+    </div>
+    <div class="text">
+      <p class="say">A quadrilateral is a closed shape with 4 straight sides. Its sides meet only at its corners.</p>
+      <p class="q" id="task">Make a quadrilateral. Tap 4 of the points, one after the other. Then tap the first point again to close the shape.</p>
+      <p class="fb hide" id="fb"></p>
+      <div><button class="btn primary" id="done" type="button">My shape is finished</button></div>
+    </div>
+  </div>
+</div>
+<script>
+const P=[[70,90],[255,45],[360,200],[215,330],[55,265]];   /* five points; any 4 joined in order around them make a quadrilateral */
+const L="ABCDE", NS="http://www.w3.org/2000/svg";
+const svg=document.getElementById('svg'), fb=document.getElementById('fb'), task=document.getElementById('task');
+let path=[], closed=false, old=false, solved=0;
+const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const nm=i=>L[path.indexOf(i)];
+function segs(){const s=[];for(let i=1;i<path.length;i++)s.push([path[i-1],path[i]]);if(closed)s.push([path[path.length-1],path[0]]);return s;}
+function cross(a,b,c,d){const o=(p,q,r)=>Math.sign((q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]));
+  return o(a,b,c)*o(a,b,d)<0&&o(c,d,a)*o(c,d,b)<0;}
+function crossing(){const s=segs();for(let i=0;i<s.length;i++)for(let j=i+2;j<s.length;j++){if(i===0&&j===s.length-1)continue;
+  if(cross(P[s[i][0]],P[s[i][1]],P[s[j][0]],P[s[j][1]]))return [s[i],s[j]];}return null;}
+function draw(arcs){
+  svg.innerHTML='';const g=el('g',{class:old?'old':''});svg.appendChild(g);
+  const cx=P.reduce((a,p)=>a+p[0],0)/5, cy=P.reduce((a,p)=>a+p[1],0)/5, bad=closed?crossing():null;
+  for(const [a,b] of segs()){const isX=bad&&bad.some(s=>s[0]===a&&s[1]===b);
+    g.appendChild(el('line',{class:'side'+(isX?' cross':''),x1:P[a][0],y1:P[a][1],x2:P[b][0],y2:P[b][1]}));
+    const mx=(P[a][0]+P[b][0])/2, my=(P[a][1]+P[b][1])/2, dx=mx-cx, dy=my-cy, d=Math.hypot(dx,dy)||1;
+    const t=el('text',{class:'slbl',x:mx+dx/d*22,y:my+dy/d*22+6,'text-anchor':'middle'});t.textContent=nm(a)+nm(b);g.appendChild(t);}
+  if(arcs)path.forEach((i,k)=>{const p=P[i],q=P[path[(k+1)%4]],r=P[path[(k+3)%4]];
+    const u=[q[0]-p[0],q[1]-p[1]],w=[r[0]-p[0],r[1]-p[1]],nu=Math.hypot(...u),nw=Math.hypot(...w),R=30;
+    const s=[p[0]+u[0]/nu*R,p[1]+u[1]/nu*R],e=[p[0]+w[0]/nw*R,p[1]+w[1]/nw*R];
+    const sweep=(u[0]*w[1]-u[1]*w[0])>0?1:0;
+    svg.appendChild(el('path',{class:'arc',d:`M${s[0]} ${s[1]} A${R} ${R} 0 0 ${sweep} ${e[0]} ${e[1]}`}));});
+  P.forEach((p,i)=>{const used=path.includes(i);const gp=el('g',{class:'pt'+(used&&!old?' used':''),tabindex:0,role:'button','aria-label':used?'Point '+nm(i):'A point'});
+    gp.appendChild(el('circle',{class:'hit',cx:p[0],cy:p[1],r:26}));gp.appendChild(el('circle',{class:'dot',cx:p[0],cy:p[1],r:11}));
+    if(used){const dx=p[0]-cx,dy=p[1]-cy,d=Math.hypot(dx,dy);const t=el('text',{class:'lbl',x:p[0]+dx/d*30,y:p[1]+dy/d*30+8,'text-anchor':'middle'});t.textContent=nm(i);g.appendChild(t);}
+    gp.addEventListener('click',()=>tap(i));gp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tap(i);}});
+    svg.appendChild(gp);});
+}
+function reset(){path=[];closed=false;old=false;fb.className='fb hide';draw();}
+function tap(i){
+  if(old||fb.classList.contains('ok')){reset();}      /* after a reply, her next tap starts the step again */
+  if(closed)return;
+  if(path.length===0){path.push(i);}
+  else if(i===path[0]&&path.length>=3){closed=true;}
+  else if(!path.includes(i)){path.push(i);}
+  draw();
+}
+/* Judged only here, when she says the shape is finished. Each reply says what she made. */
+function done(){
+  const n=segs().length, last=L[path.length-1];
+  let msg, ok=false;
+  if(path.length<2){msg='You have not drawn a side yet. Tap a point to start.';}
+  else if(!closed){msg=`Your shape is not closed. Its last side ends at ${last}, and the shape started at A. Your shape has ${n} straight side${n===1?'':'s'}.`;}
+  else if(n!==4){msg=`Your shape is closed, and it has ${n} straight sides. A quadrilateral has 4 straight sides.`;}
+  else if(crossing()){const [s,t]=crossing();msg=`Your shape has 4 straight sides, but side ${nm(s[0])}${nm(s[1])} crosses side ${nm(t[0])}${nm(t[1])}. The sides of a quadrilateral meet only at its corners.`;}
+  else{ok=true;solved++;
+    msg=`ABCD is closed, and it has 4 straight sides: AB, BC, CD and DA. ABCD is a quadrilateral. Its 4 corners, A, B, C and D, are its vertices. It has an angle at each vertex: ∠A, ∠B, ∠C and ∠D.`;}
+  fb.textContent=msg;fb.className='fb '+(ok?'ok':'info');
+  if(ok){draw(true);task.textContent='Make a different quadrilateral. Use a different set of 4 points.';}
+  else{old=true;draw();}
+}
+document.getElementById('done').addEventListener('click',done);
+document.getElementById('again').addEventListener('click',reset);
+window.__q={tap,done,reset,state:()=>({path:[...path],closed,fb:fb.textContent,task:task.textContent})};
+draw();
+</script>
+</body>
+</html>

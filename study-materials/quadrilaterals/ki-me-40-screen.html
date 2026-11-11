@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagonals (prototype)</title>
+<!-- 11 Nov 2026. PROTOTYPE, local only, ONE screen for Bijit to look at. IT RECORDS NOTHING AND SENDS NOTHING.
+     Item: KI-ME-40 (Fact or term): "A diagonal of a polygon is a line segment that joins two vertices that are not next to
+     each other." Needs KI-GE-21 (approved screens ki-ge-21-screen.html, ki-ge-21-near-miss-screen.html).
+     She draws: tap one vertex, then another; the line and its name appear as she makes it. Judged only at
+     "My line is finished". Near miss: a side (two vertices next to each other). Also caught: the same diagonal twice.
+     Three quadrilaterals, two diagonals each: a plain one, a tilted kite, a dart whose diagonal AC lies outside the shape
+     (defeats "a diagonal goes across the inside"). Wrong: a reply that says what she drew; her next tap starts the line again.
+     Two wrong in a row: the worked answer and a saved stop (CLAUDE.md). -->
+<style>
+:root{--bg:#F4F6F8;--card:#FFFFFF;--ink:#1A2430;--muted:#5B6878;--line:#D3DAE2;--accent:#1F6FB2;--soft:#EEF3F8;--ok:#2E7D4F;--oksoft:#E5F3EA;--warn:#9A6A00;--warnsoft:#FBF0D6;--shape:#C4553A;--diag:#1F6FB2;--f:system-ui,"Segoe UI",Roboto,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121820;--card:#1A222C;--ink:#E6ECF2;--muted:#9AA8B6;--line:#2E3A47;--accent:#6BAEF0;--soft:#1F2934;--ok:#7FD3A4;--oksoft:#173226;--warn:#E8C063;--warnsoft:#3A2E12;--shape:#E98B72;--diag:#6BAEF0;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:18px/1.45 var(--f)}
+.app{max-width:1000px;margin:0 auto;padding:12px 16px;display:grid;gap:10px}
+h1{font-size:1.15rem;margin:0}
+.btn{font:600 1rem var(--f);border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:10px 16px;min-height:48px;min-width:48px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;grid-template-columns:minmax(0,420px) minmax(0,460px);justify-content:center;column-gap:32px;row-gap:16px;align-items:start}
+@media (max-width:760px){.card{grid-template-columns:minmax(0,1fr)}}
+.pic{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+svg{width:100%;max-width:420px;height:auto;display:block;touch-action:manipulation;user-select:none}
+.text{display:flex;flex-direction:column;gap:12px;padding-top:8px}
+.say{font-size:1.12rem;margin:0}
+.q{font-size:1.2rem;font-weight:700;color:var(--accent);margin:0}
+.fb{margin:0;padding:10px 12px;border-left:4px solid var(--accent);background:var(--soft);border-radius:8px}
+.fb.ok{border-color:var(--ok);background:var(--oksoft)}.fb.info{border-color:var(--warn);background:var(--warnsoft)}
+.hide{display:none!important}
+.side{stroke:var(--shape);stroke-width:5;stroke-linecap:round;fill:none}
+.mine{stroke:var(--diag);stroke-width:7;stroke-linecap:round}
+.mine.old{opacity:1}
+.kept{stroke:var(--diag);stroke-width:5;stroke-linecap:round}
+.pt{cursor:pointer}.pt circle.hit{fill:transparent}
+.pt circle.dot{fill:var(--card);stroke:var(--ink);stroke-width:3}
+.pt.sel circle.dot{fill:var(--diag);stroke:var(--diag)}
+.pt:focus{outline:none}.pt:focus-visible circle.dot{stroke:var(--accent);stroke-width:5}
+.lbl{font:700 22px var(--f);fill:var(--ink)}
+.nm{font:700 18px var(--f);fill:var(--diag);paint-order:stroke;stroke:var(--card);stroke-width:5}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>Draw the diagonals of a quadrilateral</h1>
+  <div class="card">
+    <div class="pic">
+      <svg id="svg" viewBox="0 0 420 380" role="img" aria-label="A quadrilateral ABCD. Tap two vertices to draw a line."></svg>
+      <button class="btn" id="again" type="button">Start this line again</button>
+    </div>
+    <div class="text">
+      <p class="say">Two vertices of a quadrilateral are next to each other when a side joins them. A diagonal is a line segment that joins two vertices that are not next to each other.</p>
+      <p class="fb hide" id="fb"></p>
+      <p class="q" id="task"></p>
+      <div><button class="btn primary" id="done" type="button">My line is finished</button></div>
+      <div><button class="btn primary hide" id="next" type="button">Show the next quadrilateral</button></div>
+    </div>
+  </div>
+</div>
+<script>
+const NS="http://www.w3.org/2000/svg";
+/* Vertices in order around the shape: [x,y,labelX,labelY]. 'out' = a diagonal that lies outside the shape. */
+const SHAPES=[
+ {p:{A:[90,90,68,80],B:[330,70,352,62],C:[350,300,372,326],D:[70,320,48,344]}},
+ {p:{A:[210,40,210,24],B:[340,150,366,154],C:[250,340,262,368],D:[80,180,54,184]}},
+ {p:{A:[80,310,58,338],B:[210,60,210,40],C:[340,310,362,338],D:[210,215,210,254]},out:'AC'}
+];
+const K="ABCD";
+const svg=document.getElementById('svg'),fb=document.getElementById('fb'),task=document.getElementById('task'),
+      doneB=document.getElementById('done'),nextB=document.getElementById('next'),again=document.getElementById('again');
+let si=0, kept=[], sel=null, line=null, old=false, wrongRow=0, phase='draw';
+const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const S=()=>SHAPES[si];
+const nextTo=(a,b)=>{const d=Math.abs(K.indexOf(a)-K.indexOf(b));return d===1||d===3;};
+const same=(x,y)=>[...x].sort().join('')===[...y].sort().join('');
+function seg(a,b,cls,noName){const P=S().p[a],Q=S().p[b];svg.appendChild(el('line',{class:cls,x1:P[0],y1:P[1],x2:Q[0],y2:Q[1]}));
+  /* the name sits beside the line, a third of the way from its first vertex, so two crossing diagonals keep their names apart */
+  const mx=P[0]+(Q[0]-P[0])*0.3,my=P[1]+(Q[1]-P[1])*0.3,dx=Q[0]-P[0],dy=Q[1]-P[1],d=Math.hypot(dx,dy);
+  if(noName)return;
+  const t=el('text',{class:'nm',x:mx-dy/d*20,y:my+dx/d*20+6,'text-anchor':'middle'});t.textContent=a+b;svg.appendChild(t);}
+function draw(){
+  svg.innerHTML='';const p=S().p;
+  svg.appendChild(el('polygon',{class:'side',points:K.split('').map(k=>p[k][0]+','+p[k][1]).join(' ')}));
+  kept.forEach(x=>seg(x[0],x[1],'kept'));
+  if(line)seg(line[0],line[1],'mine'+(old?' old':''),kept.some(x=>same(x,line)));
+  for(const k of K){const [x,y,lx,ly]=p[k];
+    const g=el('g',{class:'pt'+(sel===k?' sel':''),tabindex:0,role:'button','aria-label':'Vertex '+k});
+    g.appendChild(el('circle',{class:'hit',cx:x,cy:y,r:32}));g.appendChild(el('circle',{class:'dot',cx:x,cy:y,r:11}));
+    g.addEventListener('click',()=>tap(k));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tap(k);}});
+    svg.appendChild(g);
+    const t=el('text',{class:'lbl',x:lx,y:ly,'text-anchor':'middle'});t.textContent=k;svg.appendChild(t);}
+}
+function setTask(){task.textContent=kept.length===0
+  ?'Draw a diagonal of ABCD. Tap one vertex, then tap another vertex.'
+  :'Draw the other diagonal of ABCD. Tap one vertex, then tap another vertex.';}
+function tap(k){
+  if(phase!=='draw')return;
+  if(old||fb.classList.contains('info')){line=old?null:line;old=false;fb.className='fb hide';}      /* after a reply, her next tap starts the line again */
+  if(line){line=null;sel=null;}                              /* a new tap after a finished line starts a new line */
+  if(sel===null){sel=k;}
+  else if(sel===k){sel=null;}
+  else{line=sel+k;sel=null;}
+  draw();
+}
+function startAgain(){if(phase!=='draw')return;line=null;sel=null;old=false;fb.className='fb hide';draw();}
+/* Judged only here. Each reply says what she drew. */
+function done(){
+  if(phase!=='draw')return;
+  let msg, ok=false;
+  if(!line){msg='You have not drawn a line yet. Tap one vertex, then tap another vertex.';fb.textContent=msg;fb.className='fb info';return;}
+  const [a,b]=line;
+  if(nextTo(a,b)){msg=`You drew ${line}. ${a} and ${b} are next to each other, so ${line} is a side of ABCD, not a diagonal.`;}
+  else if(kept.some(x=>same(x,line))){{const k=kept.find(x=>same(x,line));msg=`You drew ${line}. `+(k===line?`${line} is the diagonal you have already drawn.`:`${line} is the same line segment as ${k}, the diagonal you have already drawn.`)+` ABCD has one more diagonal.`;}}
+  else{ok=true;}
+  if(!ok){wrongRow++;
+    if(wrongRow>=2){                                          /* two wrong in a row: worked answer and a saved stop */
+      for(const w of ['AC','BD'])if(!kept.some(y=>same(y,w)))kept.push(w);line=null;old=false;phase='stop';
+      msg+=` Here are the 2 diagonals of ABCD, AC and BD. A and C are not next to each other, and B and D are not next to each other. We stop here for today. Your place is kept. Next time, you start with new shapes.`;
+      doneB.classList.add('hide');again.classList.add('hide');task.classList.add('hide');}
+    else old=true;
+    fb.textContent=msg;fb.className='fb info';draw();return;}
+  wrongRow=0;kept.push(line);line=null;
+  msg=`${a} and ${b} are not next to each other, so ${a}${b} is a diagonal of ABCD.`;
+  if(S().out&&same(S().out,a+b))msg+=` ${a}${b} lies outside the shape, and it is still a diagonal.`;
+  if(kept.length===2){
+    msg+=` ABCD has 2 diagonals, ${kept[0]} and ${kept[1]}.`;phase='shown';
+    doneB.classList.add('hide');again.classList.add('hide');task.classList.add('hide');nextB.classList.remove('hide');}
+  else setTask();
+  fb.textContent=msg;fb.className='fb ok';draw();
+}
+function next(){
+  si++;kept=[];sel=null;line=null;old=false;phase='draw';fb.className='fb hide';nextB.classList.add('hide');
+  if(si>=SHAPES.length){phase='end';svg.innerHTML='';task.classList.add('hide');doneB.classList.add('hide');again.classList.add('hide');
+    fb.textContent='There are no more quadrilaterals today. Next time, you start with new shapes.';fb.className='fb';return;}
+  doneB.classList.remove('hide');again.classList.remove('hide');task.classList.remove('hide');setTask();draw();
+}
+doneB.addEventListener('click',done);nextB.addEventListener('click',next);again.addEventListener('click',startAgain);
+window.__q={tap,done,next,state:()=>({si,kept:[...kept],line,phase,fb:fb.textContent,task:task.textContent})};
+setTask();draw();
+</script>
+</body>
+</html>

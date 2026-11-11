@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quadrilateral or not (prototype)</title>
+<!-- 11 Nov 2026. PROTOTYPE, local only, ONE screen for Bijit to look at. IT RECORDS NOTHING AND SENDS NOTHING.
+     Item: KI-GE-21 (Concept): "A quadrilateral is a closed figure in a plane bounded by four line segments, and it has
+     four sides, four vertices and four angles." Near-miss test, after the approved build screen (ki-ge-21-screen.html).
+     Shortcuts it must defeat: "it looks like a square" and "4 corners is enough".
+     Order (HANDOVER.md): concave dart (yes), 4 points joined but not closed (no), triangle (no), 4 sides with one curved (no),
+     tilted kite (yes), pentagon shaped like a house (no). The no-shapes look like squares or have 4 lettered points.
+     A wrong answer: a reply that describes the shape, marks drawn on the picture (straight sides numbered, the curved side
+     coloured, the gap ringed), then a fresh shape of the same kind. Wrong again: worked answer and a saved stop
+     (two in a row not right ends practice for the day; CLAUDE.md). -->
+<style>
+:root{--bg:#F4F6F8;--card:#FFFFFF;--ink:#1A2430;--muted:#5B6878;--line:#D3DAE2;--accent:#1F6FB2;--soft:#EEF3F8;--ok:#2E7D4F;--oksoft:#E5F3EA;--warn:#9A6A00;--warnsoft:#FBF0D6;--shape:#C4553A;--mark:#7A3FB0;--f:system-ui,"Segoe UI",Roboto,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121820;--card:#1A222C;--ink:#E6ECF2;--muted:#9AA8B6;--line:#2E3A47;--accent:#6BAEF0;--soft:#1F2934;--ok:#7FD3A4;--oksoft:#173226;--warn:#E8C063;--warnsoft:#3A2E12;--shape:#E98B72;--mark:#C9A2EE;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:18px/1.45 var(--f)}
+.app{max-width:1000px;margin:0 auto;padding:12px 16px;display:grid;gap:10px}
+h1{font-size:1.15rem;margin:0}
+.btn{font:600 1rem var(--f);border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:10px 16px;min-height:48px;min-width:48px;cursor:pointer;text-align:left}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;grid-template-columns:minmax(0,420px) minmax(0,460px);justify-content:center;column-gap:32px;row-gap:16px;align-items:start}
+@media (max-width:760px){.card{grid-template-columns:minmax(0,1fr)}}
+svg{width:100%;max-width:420px;height:auto;display:block;user-select:none}
+.text{display:flex;flex-direction:column;gap:12px;padding-top:8px}
+.say{font-size:1.12rem;margin:0}
+.q{font-size:1.2rem;font-weight:700;color:var(--accent);margin:0}
+.fb{margin:0;padding:10px 12px;border-left:4px solid var(--accent);background:var(--soft);border-radius:8px}
+.fb.ok{border-color:var(--ok);background:var(--oksoft)}.fb.info{border-color:var(--warn);background:var(--warnsoft)}
+.choices{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.hide{display:none!important}
+.side{stroke:var(--shape);stroke-width:5;stroke-linecap:round;fill:none}
+.side.curve.marked{stroke:var(--mark);stroke-width:7}
+.dot{fill:var(--shape)}
+.lbl{font:700 22px var(--f);fill:var(--ink)}
+.num{font:700 17px var(--f);fill:#fff}
+.numbg{fill:var(--mark)}
+.gap{fill:none;stroke:var(--mark);stroke-width:3;stroke-dasharray:6 6}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>Decide whether each shape is a quadrilateral</h1>
+  <div class="card">
+    <svg id="svg" viewBox="0 0 420 380" role="img" aria-label="A shape with lettered corners"></svg>
+    <div class="text">
+      <p class="say">A quadrilateral is a closed shape with 4 straight sides. Its sides meet only at its corners.</p>
+      <p class="q" id="q">Is this shape a quadrilateral?</p>
+      <div class="choices" id="choices">
+        <button class="btn" id="yes" type="button">Yes, it is a quadrilateral</button>
+        <button class="btn" id="no" type="button">No, it is not a quadrilateral</button>
+      </div>
+      <p class="fb hide" id="fb"></p>
+      <div><button class="btn primary hide" id="next" type="button">Show the next shape</button></div>
+    </div>
+  </div>
+</div>
+<script>
+const NS="http://www.w3.org/2000/svg";
+/* Each shape: points [x,y,labelX,labelY]; sides in order; c = control point for a curved side; open = no side from last back to first. */
+const SH={
+ concave:{yes:true,p:{A:[80,310,58,338],B:[210,60,210,40],C:[340,310,362,338],D:[210,215,210,254]},s:[['A','B'],['B','C'],['C','D'],['D','A']],inward:'D'},
+ concave2:{yes:true,p:{A:[60,110,38,102],B:[360,70,382,62],C:[230,190,266,184],D:[300,330,318,358]},s:[['A','B'],['B','C'],['C','D'],['D','A']],inward:'C'},
+ open:{yes:false,p:{A:[90,310,66,334],B:[90,90,66,80],C:[320,90,344,80],D:[320,310,344,334]},s:[['A','B'],['B','C'],['C','D']],open:true},
+ open2:{yes:false,p:{A:[150,330,140,360],B:[60,150,36,142],C:[240,60,244,38],D:[350,220,376,224]},s:[['A','B'],['B','C'],['C','D']],open:true},
+ triangle:{yes:false,p:{A:[70,300,48,326],B:[250,70,254,48],C:[360,300,382,326]},s:[['A','B'],['B','C'],['C','A']]},
+ triangle2:{yes:false,p:{A:[100,80,78,66],B:[350,150,376,150],C:[150,330,134,358]},s:[['A','B'],['B','C'],['C','A']]},
+ curved:{yes:false,p:{A:[110,90,88,78],B:[330,90,352,78],C:[330,310,352,334],D:[110,310,88,334]},s:[['A','B'],['B','C'],['C','D'],['D','A',[20,200]]]},
+ curved2:{yes:false,p:{A:[210,50,210,30],B:[350,190,376,196],C:[210,330,210,362],D:[70,190,44,196]},s:[['A','B'],['B','C',[350,330]],['C','D'],['D','A']]},
+ kite:{yes:true,p:rot([[0,-150],[90,-40],[0,150],[-90,-40]],30,210,190),s:[['A','B'],['B','C'],['C','D'],['D','A']],tilted:true},
+ kite2:{yes:true,p:rot([[-70,-80],[70,-80],[140,80],[-140,80]],-20,210,190),s:[['A','B'],['B','C'],['C','D'],['D','A']],tilted:true},
+ pentagon:{yes:false,p:{A:[90,330,66,354],B:[90,160,64,156],C:[210,60,210,38],D:[330,160,356,156],E:[330,330,354,354]},s:[['A','B'],['B','C'],['C','D'],['D','E'],['E','A']]},
+ pentagon2:{yes:false,p:{A:[90,90,66,78],B:[250,90,250,68],C:[330,170,356,166],D:[330,320,354,346],E:[90,320,66,346]},s:[['A','B'],['B','C'],['C','D'],['D','E'],['E','A']]}
+};
+function rot(pts,deg,cx,cy){const a=deg*Math.PI/180,o={};pts.forEach(([x,y],i)=>{const X=cx+x*Math.cos(a)-y*Math.sin(a),Y=cy+x*Math.sin(a)+y*Math.cos(a),d=Math.hypot(X-cx,Y-cy);
+  o['ABCD'[i]]=[Math.round(X),Math.round(Y),Math.round(X+(X-cx)/d*28),Math.round(Y+(Y-cy)/d*28+8)];});return o;}
+const ORDER=['concave','open','triangle','curved','kite','pentagon'];
+const svg=document.getElementById('svg'),fb=document.getElementById('fb'),q=document.getElementById('q'),
+      choices=document.getElementById('choices'),next=document.getElementById('next');
+let i=0, alt=false, phase='ask';
+const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const key=()=>ORDER[i]+(alt?'2':'');
+const name=s=>Object.keys(s.p).join('');
+const list=a=>a.length<3?a.join(' and '):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+
+function draw(marks){
+  const s=SH[key()];svg.innerHTML='';let n=0;
+  for(const [a,b,c] of s.s){const P=s.p[a],Q=s.p[b];
+    if(c){svg.appendChild(el('path',{class:'side curve'+(marks?' marked':''),d:`M${P[0]} ${P[1]} Q${c[0]} ${c[1]} ${Q[0]} ${Q[1]}`}));continue;}
+    svg.appendChild(el('line',{class:'side',x1:P[0],y1:P[1],x2:Q[0],y2:Q[1]}));
+    if(marks){n++;const mx=(P[0]+Q[0])/2,my=(P[1]+Q[1])/2;
+      svg.appendChild(el('circle',{class:'numbg',cx:mx,cy:my,r:14}));
+      const t=el('text',{class:'num',x:mx,y:my+6,'text-anchor':'middle'});t.textContent=n;svg.appendChild(t);}}
+  if(marks&&s.open){const ks=Object.keys(s.p),P=s.p[ks[ks.length-1]],Q=s.p[ks[0]];
+    for(const E of [P,Q])svg.appendChild(el('circle',{class:'gap',cx:E[0],cy:E[1],r:14}));}   /* the two loose ends */
+  for(const k in s.p){const [x,y,lx,ly]=s.p[k];svg.appendChild(el('circle',{class:'dot',cx:x,cy:y,r:6}));
+    const t=el('text',{class:'lbl',x:lx,y:ly,'text-anchor':'middle'});t.textContent=k;svg.appendChild(t);}
+}
+
+/* Each reply says what the shape is: closed or not, how many straight sides, which side is curved. */
+function reply(s,right){
+  const N=name(s), ks=Object.keys(s.p);
+  const straight=s.s.filter(x=>!x[2]).map(x=>x[0]+x[1]), curve=s.s.find(x=>x[2]);
+  const k=straight.length, sides=`${k} straight sides, numbered 1 to ${k} on the shape: ${list(straight)}`;
+  /* a wrong answer first says what her answer said, then what the shape is */
+  const lead=right?(s.yes?`Yes, ${N} is a quadrilateral. `:`No, ${N} is not a quadrilateral. `)
+                  :(s.yes?`Your answer was no, but ${N} is a quadrilateral. `:`Your answer was yes, but ${N} is not a quadrilateral. `);
+  const a=ks[ks.length-1], b=ks[0];
+  if(s.open)return lead+`${N} is not closed. Its ends, ${a} and ${b}, are ringed on the shape, and there is no side from ${a} back to ${b}. So it has only ${sides}. A quadrilateral is closed and has 4 straight sides, so ${N} is not a quadrilateral.`;
+  if(curve)return lead+`${N} is closed, and it has 4 sides, but side ${curve[0]+curve[1]} is curved. Only 3 of its sides are straight, numbered 1 to 3 on the shape: ${list(straight)}. A quadrilateral has 4 straight sides, so ${N} is not a quadrilateral.`;
+  if(!s.yes)return lead+`${N} is closed, but it has ${sides}. A quadrilateral has 4 straight sides, so ${N} is not a quadrilateral.`;
+  let m=lead+`${N} is closed, and it has ${sides}. Its sides meet only at its corners, so ${N} is a quadrilateral.`;
+  if(s.inward)m+=right?` The corner at ${s.inward} points into the shape, and ${N} is still a quadrilateral.`:` A quadrilateral does not have to look like a square. The corner at ${s.inward} points into the shape, and ${N} is still a quadrilateral.`;
+  if(s.tilted&&!right)m+=` A quadrilateral does not have to look like a square. It can be tilted, and its sides can have different lengths.`;
+  return m;
+}
+
+function show(){phase='ask';draw(false);fb.className='fb hide';choices.classList.remove('hide');next.classList.add('hide');q.classList.remove('hide');
+  q.textContent='Is this shape a quadrilateral?';}
+function answer(sayYes){
+  if(phase!=='ask')return;
+  const s=SH[key()], right=(sayYes===s.yes);
+  draw(true);choices.classList.add('hide');
+  let m=reply(s,right);
+  if(right){phase='replied';next.textContent='Show the next shape';}
+  else if(!alt){phase='wrong';next.textContent='Show a different shape';}
+  else{phase='stop';m+=' We stop here for today. Your place is kept. Next time, you start with new shapes.';}
+  fb.textContent=m;fb.className='fb '+(right?'ok':'info');
+  next.classList.toggle('hide',phase==='stop');q.classList.toggle('hide',phase==='stop');
+}
+next.addEventListener('click',()=>{
+  if(phase==='wrong'){alt=true;show();return;}
+  if(phase==='replied'){alt=false;i++;
+    if(i>=ORDER.length){phase='end';svg.innerHTML='';choices.classList.add('hide');next.classList.add('hide');
+      q.classList.add('hide');fb.textContent='There are no more shapes today. Next time, you start with new shapes.';fb.className='fb';return;}
+    show();}
+});
+document.getElementById('yes').addEventListener('click',()=>answer(true));
+document.getElementById('no').addEventListener('click',()=>answer(false));
+window.__q={answer,next:()=>next.click(),state:()=>({key:key(),phase,fb:fb.textContent,q:q.textContent,next:next.textContent})};
+show();
+</script>
+</body>
+</html>

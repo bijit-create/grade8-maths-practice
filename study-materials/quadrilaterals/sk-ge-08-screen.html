@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angles of a quadrilateral (prototype)</title>
+<!-- 11 Nov 2026. PROTOTYPE, local only, ONE screen for review. IT RECORDS NOTHING AND SENDS NOTHING.
+     Skill SK-GE-08: find the fourth angle of a quadrilateral from the other three.
+     Taught inside it: KI-GE-23 (Principle) "The four angles of a quadrilateral add up to 360°." Needs KI-GE-21 (approved).
+     Teacher name: angle sum of a quadrilateral, ∠A + ∠B + ∠C + ∠D = 360°, so ∠D = 360° − (∠A + ∠B + ∠C).
+     Part 1, she makes shapes: she drags a vertex; the 4 angles are measured and written at the vertices while she drags.
+       "Write down the 4 angles" adds a row to the table. After 3 different shapes she adds a row and says what she gets.
+     Part 2, picture items: 3 angles shown, one hidden (not always the same vertex). She types the hidden angle.
+       Shortcut defeated: judging by look. One shape looks like a rectangle but its hidden angle is 91°, not 90°.
+     Part 3, no picture: PQRS with 3 angles given.
+     Wrong: the reply says what her 4 angles would add up to. "Try another one" gives a fresh item (a helped answer).
+     Two wrong in a row: the worked answer and a saved stop (CLAUDE.md).
+     Measurement: angles are rounded to whole degrees so that the 4 shown always add to exactly 360 (largest remainder). -->
+<style>
+:root{--bg:#F4F6F8;--card:#FFFFFF;--ink:#1A2430;--muted:#5B6878;--line:#D3DAE2;--accent:#1F6FB2;--soft:#EEF3F8;--ok:#2E7D4F;--oksoft:#E5F3EA;--warn:#9A6A00;--warnsoft:#FBF0D6;--shape:#C4553A;--arc:#1F6FB2;--f:system-ui,"Segoe UI",Roboto,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121820;--card:#1A222C;--ink:#E6ECF2;--muted:#9AA8B6;--line:#2E3A47;--accent:#6BAEF0;--soft:#1F2934;--ok:#7FD3A4;--oksoft:#173226;--warn:#E8C063;--warnsoft:#3A2E12;--shape:#E98B72;--arc:#6BAEF0;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:18px/1.45 var(--f)}
+.app{max-width:1000px;margin:0 auto;padding:12px 16px;display:grid;gap:10px}
+h1{font-size:1.15rem;margin:0}
+.btn{font:600 1rem var(--f);border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:10px 16px;min-height:48px;min-width:48px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;grid-template-columns:minmax(0,420px) minmax(0,460px);justify-content:center;column-gap:32px;row-gap:16px;align-items:start}
+@media (max-width:760px){.card{grid-template-columns:minmax(0,1fr)}}
+.pic{display:flex;flex-direction:column;gap:10px}
+svg{width:100%;max-width:420px;height:auto;display:block;touch-action:none;user-select:none}
+.text{display:flex;flex-direction:column;gap:12px;padding-top:8px}
+.say{font-size:1.12rem;margin:0}
+.q{font-size:1.2rem;font-weight:700;color:var(--accent);margin:0}
+.fb{margin:0;padding:10px 12px;border-left:4px solid var(--accent);background:var(--soft);border-radius:8px}
+.fb.ok{border-color:var(--ok);background:var(--oksoft)}.fb.info{border-color:var(--warn);background:var(--warnsoft)}
+.hide{display:none!important}
+.side{stroke:var(--shape);stroke-width:5;stroke-linejoin:round;fill:none}
+.arc{stroke:var(--arc);stroke-width:3;fill:none}
+.ang{font:700 17px var(--f);fill:var(--arc);paint-order:stroke;stroke:var(--card);stroke-width:4}
+.lbl{font:700 22px var(--f);fill:var(--ink)}
+.v circle.dot{fill:var(--card);stroke:var(--ink);stroke-width:3}
+.v.drag{cursor:grab}.v.drag circle.dot{fill:var(--accent);stroke:var(--accent)}
+.v:focus{outline:none}.v:focus-visible circle.dot{stroke-width:6}
+.v circle.hit{fill:transparent}
+table{border-collapse:collapse;font-variant-numeric:tabular-nums;width:100%;max-width:420px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center}
+th{font-weight:700;background:var(--soft)}
+.ans{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.ans input{font:600 1.1rem var(--f);width:110px;min-height:48px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1 id="title">Find out what the 4 angles of a quadrilateral add up to</h1>
+  <div class="card">
+    <div class="pic">
+      <svg id="svg" viewBox="0 0 420 380" role="img" aria-label="A quadrilateral ABCD with its 4 angles written at its vertices."></svg>
+      <table id="tbl" class="hide"><thead><tr><th>Shape</th><th>∠A</th><th>∠B</th><th>∠C</th><th>∠D</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div class="text">
+      <p class="say" id="say"></p>
+      <p class="fb hide" id="fb"></p>
+      <p class="q" id="task"></p>
+      <div class="ans hide" id="ansRow"><input id="ans" inputmode="numeric" autocomplete="off" aria-label="Your answer in degrees"><span>°</span></div>
+      <div><button class="btn primary" id="act" type="button"></button></div>
+      <div><button class="btn primary hide" id="next" type="button"></button></div>
+    </div>
+  </div>
+</div>
+<script>
+const NS="http://www.w3.org/2000/svg",K="ABCD";
+const $=id=>document.getElementById(id);
+const svg=$('svg'),say=$('say'),fb=$('fb'),task=$('task'),act=$('act'),nextB=$('next'),ansRow=$('ansRow'),ans=$('ans'),tbl=$('tbl'),tbody=tbl.querySelector('tbody');
+const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+
+/* ---------- geometry ---------- */
+function rawAngles(P){return K.split('').map((k,i)=>{const v=P[k],a=P[K[(i+3)%4]],b=P[K[(i+1)%4]];
+  const ux=a[0]-v[0],uy=a[1]-v[1],wx=b[0]-v[0],wy=b[1]-v[1];
+  return Math.acos((ux*wx+uy*wy)/Math.hypot(ux,uy)/Math.hypot(wx,wy))*180/Math.PI;});}
+function angles(P){const r=rawAngles(P),f=r.map(Math.floor);let left=360-f.reduce((s,x)=>s+x,0);
+  const order=r.map((x,i)=>[x-Math.floor(x),i]).sort((p,q)=>q[0]-p[0]);for(let j=0;j<left;j++)f[order[j][1]]++;return f;}
+function convex(P){let s=0;for(let i=0;i<4;i++){const a=P[K[i]],b=P[K[(i+1)%4]],c=P[K[(i+2)%4]];
+  const cr=(b[0]-a[0])*(c[1]-b[1])-(b[1]-a[1])*(c[0]-b[0]);if(Math.abs(cr)<900)return false;const sg=Math.sign(cr);if(s&&sg!==s)return false;s=sg;}
+  return rawAngles(P).every(x=>x>=25&&x<=160);}
+const same=(x,y)=>x.every((v,i)=>v===y[i]);
+
+/* ---------- content ---------- */
+const START={A:[90,90],B:[320,70],C:[350,300],D:[70,320]};
+const PIC=[ /* picture items: shape and the hidden vertex */
+ {P:{A:[70,120],B:[300,50],C:[370,300],D:[130,320]},hide:'D'},
+ {P:{A:[80,80],B:[340,86],C:[338,300],D:[76,296]},hide:'B'},   /* looks like a rectangle; hidden angle is not 90° */
+ {P:{A:[210,40],B:[360,190],C:[230,340],D:[60,170]},hide:'C'}];
+const PIC_SPARE=[
+ {P:{A:[60,140],B:[260,50],C:[370,260],D:[120,320]},hide:'A'},
+ {P:{A:[100,60],B:[370,110],C:[300,330],D:[60,260]},hide:'D'}];
+const TXT=[[105,70,120],[48,132,95]];
+const TXT_SPARE=[[90,115,80],[64,128,101]];
+
+/* ---------- state ---------- */
+let P=JSON.parse(JSON.stringify(START)),rows=[],part=1,item=null,picI=0,txtI=0,spareP=0,spareT=0,wrongRow=0,phase='play',dragK=null;
+
+function draw(hidden){
+  svg.innerHTML='';
+  if(part===3){svg.classList.add('hide');return;}svg.classList.remove('hide');
+  const A=angles(P);
+  svg.appendChild(el('polygon',{class:'side',points:K.split('').map(k=>P[k].join(',')).join(' ')}));
+  const cx=K.split('').reduce((s,k)=>s+P[k][0],0)/4,cy=K.split('').reduce((s,k)=>s+P[k][1],0)/4;
+  K.split('').forEach((k,i)=>{const v=P[k],a=P[K[(i+3)%4]],b=P[K[(i+1)%4]];
+    const ua=Math.atan2(a[1]-v[1],a[0]-v[0]),ub=Math.atan2(b[1]-v[1],b[0]-v[0]),r=26;
+    const p1=[v[0]+r*Math.cos(ua),v[1]+r*Math.sin(ua)],p2=[v[0]+r*Math.cos(ub),v[1]+r*Math.sin(ub)];
+    let d=ub-ua;while(d<=-Math.PI)d+=2*Math.PI;while(d>Math.PI)d-=2*Math.PI;
+    svg.appendChild(el('path',{class:'arc',d:`M${p1[0]},${p1[1]} A${r},${r} 0 0 ${d>0?1:0} ${p2[0]},${p2[1]}`}));
+    const bis=ua+d/2,t=el('text',{class:'ang',x:v[0]+58*Math.cos(bis),y:v[1]+58*Math.sin(bis)+6,'text-anchor':'middle'});
+    t.textContent=(hidden===k?'?':A[i]+'°');svg.appendChild(t);
+    const lx=v[0]+(v[0]-cx)/Math.hypot(v[0]-cx,v[1]-cy)*26,ly=v[1]+(v[1]-cy)/Math.hypot(v[0]-cx,v[1]-cy)*26+8;
+    const g=el('g',{class:'v'+(part===1&&phase==='play'?' drag':''),'aria-label':'Vertex '+k});
+    if(part===1&&phase==='play'){g.setAttribute('tabindex',0);g.setAttribute('role','button');
+      g.addEventListener('pointerdown',e=>{dragK=k;svg.setPointerCapture(e.pointerId);e.preventDefault();});
+      g.addEventListener('keydown',e=>{const m={ArrowLeft:[-6,0],ArrowRight:[6,0],ArrowUp:[0,-6],ArrowDown:[0,6]}[e.key];if(m){e.preventDefault();moveTo(k,P[k][0]+m[0],P[k][1]+m[1]);}});}
+    g.appendChild(el('circle',{class:'hit',cx:v[0],cy:v[1],r:26}));g.appendChild(el('circle',{class:'dot',cx:v[0],cy:v[1],r:11}));svg.appendChild(g);
+    const L=el('text',{class:'lbl',x:lx,y:ly,'text-anchor':'middle'});L.textContent=k;svg.appendChild(L);});
+}
+function moveTo(k,x,y){x=Math.max(20,Math.min(400,x));y=Math.max(20,Math.min(360,y));
+  const Q=JSON.parse(JSON.stringify(P));Q[k]=[Math.round(x),Math.round(y)];if(!convex(Q))return;P=Q;
+  fb.className='fb hide';draw();if(dragK){const n=svg.querySelectorAll('.v')[K.indexOf(dragK)];n&&n.focus&&0;}}
+svg.addEventListener('pointermove',e=>{if(!dragK)return;const r=svg.getBoundingClientRect(),s=420/r.width;moveTo(dragK,(e.clientX-r.left)*s,(e.clientY-r.top)*s);});
+svg.addEventListener('pointerup',()=>{dragK=null;});svg.addEventListener('pointercancel',()=>{dragK=null;});
+
+function show(btn,text){btn.textContent=text;btn.classList.remove('hide');}
+function reply(msg,kind){fb.textContent=msg;fb.className='fb '+kind;}
+function readAns(){const m=ans.value.replace(/°/g,'').trim();return /^\d{1,4}$/.test(m)?+m:null;}
+
+/* ---------- part 1: she makes shapes ---------- */
+function part1(){part=1;phase='play';$('title').textContent='Find out what the 4 angles of a quadrilateral add up to';
+  say.textContent='The number at each vertex tells how many degrees the angle of ABCD is at that vertex. Drag a vertex to change the shape. The angles change as the shape changes.';
+  task.textContent='Make a shape, then put its 4 angles in the table.';show(act,'Put these 4 angles in the table');nextB.classList.add('hide');ansRow.classList.add('hide');draw();}
+function writeRow(){const A=angles(P);
+  if(rows.some(r=>same(r,A))){reply('These 4 angles are already in the table. Drag a vertex to make a different shape first.','info');return;}
+  rows.push(A);tbl.classList.remove('hide');const tr=document.createElement('tr');tr.innerHTML=`<td>${rows.length}</td>`+A.map(x=>`<td>${x}°</td>`).join('');tbody.appendChild(tr);
+  fb.className='fb hide';
+  if(rows.length<3){task.textContent=rows.length===1?'Drag a vertex to make a different shape. Then put its 4 angles in the table.':'Make one more different shape. Then put its 4 angles in the table.';return;}
+  phase='ask';draw();task.textContent='Add the 4 angles in each row of the table. What do the 4 angles add up to, in each row?';
+  ansRow.classList.remove('hide');ans.value='';act.textContent='Check my answer';}
+function checkSum(){const x=readAns();if(x===null){reply('Write a number of degrees in the box, like 200.','info');return;}
+  if(x===360){wrongRow=0;reply('Yes. In every row, ∠A + ∠B + ∠C + ∠D = 360°. The 4 angles of a quadrilateral add up to 360°, whatever its shape.','ok');
+    act.classList.add('hide');ansRow.classList.add('hide');task.textContent='';show(nextB,'Next question');phase='done';return;}
+  const r=rows[0];wrongRow++;
+  if(wrongRow>=2){reply(`You wrote ${x}°. Here is the answer. `+rows.map((w,i)=>`Row ${i+1}: ${w.join('° + ')}° = 360°.`).join(' ')+
+      ` In every row, the 4 angles add up to 360°. We stop here for today. Your place is kept. Next time, you start with new shapes.`,'info');
+    act.classList.add('hide');ansRow.classList.add('hide');task.classList.add('hide');phase='stop';return;}
+  const all=rows.reduce((s,w)=>s+w[0]+w[1]+w[2]+w[3],0);
+  reply(x===all?`You wrote ${x}°. That is all 3 rows added together. Add the 4 angles of one row only: ${r[0]}° + ${r[1]}° + ${r[2]}° + ${r[3]}°. Then do the same for the other rows.`
+    :`You wrote ${x}°. Add the 4 angles in row 1 again: ${r[0]}° + ${r[1]}° + ${r[2]}° + ${r[3]}°. Then add the other rows, and write your answer again.`,'info');}
+
+/* ---------- parts 2 and 3: find the missing angle ---------- */
+function loadPic(it){part=2;phase='ask';item=it;P=JSON.parse(JSON.stringify(it.P));tbl.classList.add('hide');
+  $('title').textContent='Find the missing angle of a quadrilateral';
+  say.textContent='The 4 angles of a quadrilateral add up to 360°. Three angles of ABCD are shown.';
+  task.textContent=`How many degrees is ∠${it.hide}?`;fb.className='fb hide';nextB.classList.add('hide');
+  ansRow.classList.remove('hide');ans.value='';show(act,'Check my answer');draw(it.hide);}
+function loadTxt(t){part=3;phase='ask';const s=t[0]+t[1]+t[2];item={t,hide:'S',ang:[t[0],t[1],t[2],360-s],names:'PQRS'};
+  say.textContent='The 4 angles of a quadrilateral add up to 360°.';
+  task.textContent=`In quadrilateral PQRS, ∠P = ${t[0]}°, ∠Q = ${t[1]}° and ∠R = ${t[2]}°. How many degrees is ∠S?`;
+  fb.className='fb hide';nextB.classList.add('hide');ansRow.classList.remove('hide');ans.value='';show(act,'Check my answer');draw();}
+function itemAngles(){if(part===2){return {ang:angles(P),names:'ABCD',hide:item.hide};}return {ang:item.ang,names:'PQRS',hide:'S'};}
+function checkMissing(){if(phase!=='ask')return;const x=readAns();if(x===null){reply('Write a number of degrees in the box, like 75.','info');return;}
+  const {ang,names,hide}=itemAngles(),h=names.indexOf(hide),right=ang[h];
+  const known=ang.filter((_,i)=>i!==h),ks=known[0]+known[1]+known[2],kn=names.split('').filter(n=>n!==hide);
+  const terms=names.split('').map((n,i)=>i===h?x:ang[i]);
+  if(x===right){wrongRow=0;reply(`Yes. ∠${hide} = ${x}°. ${terms.map(a=>a+'°').join(' + ')} = 360°.`,'ok');
+    if(part===2)draw();act.classList.add('hide');ansRow.classList.add('hide');phase='done';show(nextB,'Next question');return;}
+  wrongRow++;
+  let msg=`You wrote ${x}°. Then ${terms.map(a=>a+'°').join(' + ')} = ${ks+x}°, not 360°.`;
+  if(x===ks)msg+=` ${x}° is ∠${kn[0]} + ∠${kn[1]} + ∠${kn[2]}.`;
+  if(wrongRow>=2){msg+=` Here is the answer. ∠${hide} = 360° − (${known.join('° + ')}°) = 360° − ${ks}° = ${right}°. We stop here for today. Your place is kept. Next time, you start with new questions.`;
+    if(part===2)draw();reply(msg,'info');act.classList.add('hide');ansRow.classList.add('hide');task.classList.add('hide');phase='stop';return;}
+  reply(msg,'info');act.classList.add('hide');ansRow.classList.add('hide');phase='retry';show(nextB,'Try another one');}
+function next(){task.classList.remove('hide');
+  if(part===1){loadPic(PIC[picI++]);return;}
+  if(phase==='retry'){ if(part===2&&spareP<PIC_SPARE.length){loadPic(PIC_SPARE[spareP++]);return;}
+                       if(part===3&&spareT<TXT_SPARE.length){loadTxt(TXT_SPARE[spareT++]);return;} }
+  if(part===2&&picI<PIC.length){loadPic(PIC[picI++]);return;}
+  if(txtI<TXT.length){svg.innerHTML='';$('title').textContent='Find the missing angle of a quadrilateral';loadTxt(TXT[txtI++]);return;}
+  part=4;svg.classList.add('hide');act.classList.add('hide');nextB.classList.add('hide');ansRow.classList.add('hide');task.textContent='';say.textContent='';
+  reply('There are no more questions today. Next time, you start with new questions.','');}
+act.addEventListener('click',()=>{if(part===1&&phase==='play')writeRow();else if(part===1)checkSum();else checkMissing();});
+ans.addEventListener('keydown',e=>{if(e.key==='Enter')act.click();});
+nextB.addEventListener('click',next);
+window.__q={P:()=>P,angles:()=>angles(P),moveTo,writeRow,state:()=>({part,phase,rows:rows.length,fb:fb.textContent,task:task.textContent}),
+  answer:v=>{ans.value=v;act.click();},next};
+part1();
+</script>
+</body>
+</html>
