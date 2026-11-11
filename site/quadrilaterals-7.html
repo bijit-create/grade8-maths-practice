@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Find the angles of a quadrilateral written with x</title>
+<title>Find the angles of a quadrilateral when they are written with x</title>
 <!-- Student 2, quadrilaterals experience 7 of 7. 11 Nov 2026.
      SK-GE-09: find the angles of a quadrilateral from angles written as expressions in x.
      Statement: the four angles are written as c·x + e (for example x, 2x, 3x, 4x, or x + 10°, x − 20°, 2x, x).
@@ -26,7 +26,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="top"><h1 id="h1">Find the angles of a quadrilateral written with x</h1><div class="tools"><button class="btn" id="readBtn" type="button">Read it</button><button class="btn" id="pauseBtn" type="button">Pause</button></div></div>
+  <div class="top"><h1 id="h1">Find the angles of a quadrilateral when they are written with x</h1><div class="tools"><button class="btn" id="readBtn" type="button">Read it</button><button class="btn" id="pauseBtn" type="button">Pause</button></div></div>
   <div id="teacher" class="hide"></div>
   <div class="card"><div id="pic"></div><div class="text"><div id="words"></div><div id="acts"></div></div></div>
 </div>
@@ -217,7 +217,7 @@ const G={
    ctx.auto({right(){go(good)();},wrongs:[{expect:badc.reply.slice(0,18),fn(){go(badc)();}}]});}
 };
 
-QE.start({set:"sk-ge-09",ki:"SK-GE-09",title:"Find the angles of a quadrilateral written with x",version:"quadrilaterals-7 1.0 (11 Nov 2026)",
+QE.start({set:"sk-ge-09",ki:"SK-GE-09",title:"Find the angles of a quadrilateral when they are written with x",version:"quadrilaterals-7 1.0 (11 Nov 2026)",
   teacher:"Angle sum of a quadrilateral applied to a linear equation: Σ(ci·x + ei) = 360°, so x = (360° − Σei) ÷ Σci, and each angle = ci·x + ei.",
   worked:[W1,W2],sup:SUP,gen:G,
   plan:["equation","findx","angle","findx","check","constants","equation","angle","constants","check","findx"],
