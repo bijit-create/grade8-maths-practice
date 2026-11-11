@@ -36,3 +36,13 @@ that branch first, or ask Bijit. Vercel prod deploys need Bijit's go-ahead (he a
 | Page | Built | Test | Review |
 |---|---|---|---|
 | 1 make | this chat | 474 passed | FIX (5 points with one on a side), fixed |
+| 2 near misses | agent | 692 passed | READY |
+| 3 diagonals | agent | 528 passed | READY; side/diagonal/neither made random (rule), fixed |
+| 4 angle sum 360° | agent | 615 passed | READY (note: every number answer there is 360; only the "possible or not" items defeat typing 360) |
+| 5 fourth angle | agent | 921 passed | READY (built from the unapproved SK-GE-08 draft) |
+| 6 angle beside it | agent | 806 passed | FIX (two angles drawn as one arc, invisible tap targets), fixed |
+| 7 angles with x | agent | 576 passed | READY; title made plainer |
+
+Deployed to production on Bijit's word ("Production now", 11 Nov) from this branch: the quadrilateral pages are reachable
+by URL (/quadrilaterals-1 ... /quadrilaterals-7); the home page has no links yet, and the equations session's pages are
+not in this deploy. Next deploy must come from the merged branches.

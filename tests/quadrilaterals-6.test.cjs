@@ -59,6 +59,8 @@ require("./quad-test-lib.cjs").run({page:"quadrilaterals-6.html",phoneShots:["w1
   ok(await p.locator("#pic .pt").count()===0&&await p.locator("#pic text.ang",{hasText:"?"}).count()===1,"without the picture job the inside angle is marked ?");
   await p.locator("#words input").fill(String(180-o3));await check();
   ok((await lastReply(p)).startsWith("Yes."),"the item still works without the tap");
+  await p.goto(URL0+"?seed=9&screen=outBig");ok(await p.locator("#pic text.ang",{hasText:"?"}).count()===1,"the inside angle is marked ? on a tap item too");
+  ok(await p.locator('#pic path[fill="var(--accent)"]').count()===2,"both angles are shaded faintly before she taps");
   /* the picture job fades in the plan: early own items have it, later ones do not */
   await p.goto(URL0+"?seed=3");await p.evaluate(()=>localStorage.clear());await p.goto(URL0+"?seed=3");
   let sawTap=false,sawNoTap=false,g2=0;

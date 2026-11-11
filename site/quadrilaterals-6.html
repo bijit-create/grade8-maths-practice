@@ -63,7 +63,7 @@ function attempt(rnd,I){
 function layout(rnd,I,v){for(let n=0;n<1500;n++){const P=attempt(rnd,I);if(!P)continue;
   const V=P[v],pv=P[(v+3)%4],nx=P[(v+1)%4],dE=unit(pv,V),dp=unit(V,pv),dn=unit(V,nx);
   if(!inB(at(V,dE,LEN+20),14,406,22,362))continue;
-  if(!inB(at(V,bis(dp,dn),labR(dp,dn)+8),24,396,28,356)||!inB(at(V,bis(dE,dn),labR(dE,dn)+8),24,396,28,356))continue;
+  if(!inB(at(V,bis(dp,dn),Math.max(labR(dp,dn),50)+8),24,396,28,356)||!inB(at(V,bis(dE,dn),Math.max(labR(dE,dn),68)+8),24,396,28,356))continue;
   return P;}
   throw new Error("no layout");}
 /* four whole-number angles, the one at v being T */
@@ -78,7 +78,7 @@ function newItem(ctx,vs,T0,T1){for(let n=0;n<100;n++){const v=ctx.pick(vs),T=ctx
 /* ---------- the picture: the two angles at the extended vertex, the dashed line, the angles that are written ---------- */
 function scene(ctx,P,o){
   const v=o.v,V=P[v],pv=P[(v+3)%4],nx=P[(v+1)%4],dp=unit(V,pv),dn=unit(V,nx),dE=unit(pv,V),E=at(V,dE,LEN);
-  const bin=bis(dp,dn),bout=bis(dE,dn),rin=labR(dp,dn),rout=labR(dE,dn),cen=[0,1,2,3].reduce((s,k)=>[s[0]+P[k][0]/4,s[1]+P[k][1]/4],[0,0]);
+  const bin=bis(dp,dn),bout=bis(dE,dn),rin=Math.max(labR(dp,dn),50),rout=Math.max(labR(dE,dn),68),cen=[0,1,2,3].reduce((s,k)=>[s[0]+P[k][0]/4,s[1]+P[k][1]/4],[0,0]);
   const svg=ctx.svg("0 0 420 380",`A quadrilateral ABCD. Side ${LET[(v+3)%4]}${LET[v]} is carried straight on past ${LET[v]} to the point E by a dashed line.`);
   let sel=null;const shown={};
   const marks=o.marks||[];   /* {k, text}: an angle written inside the shape at vertex k */
@@ -87,12 +87,12 @@ function scene(ctx,P,o){
   function label(p,t){const e=ctx.el("text",{class:"ang",x:f1(p[0]),y:f1(p[1]+6),"text-anchor":"middle"});e.textContent=t;svg.appendChild(e);return e;}
   function draw(focus){svg.innerHTML="";
     const parts=[{w:"in",d1:dp,d2:dn,b:bin},{w:"out",d1:dE,d2:dn,b:bout}];
-    parts.forEach(q=>{const w=wedge(V,q.d1,q.d2,40),fp=ctx.el("path",{d:w.fill,fill:sel===q.w?"var(--mark)":"none","fill-opacity":".35",stroke:"none"});svg.appendChild(fp);});
+    parts.forEach(q=>{const w=wedge(V,q.d1,q.d2,q.w==="in"?30:46),fp=ctx.el("path",{d:w.fill,fill:sel===q.w?"var(--mark)":(o.tap?"var(--accent)":"none"),"fill-opacity":sel===q.w?".45":".12",stroke:"none"});svg.appendChild(fp);});
     for(let k=0;k<4;k++)svg.appendChild(ctx.el("line",{class:"side",x1:P[k][0],y1:P[k][1],x2:P[(k+1)%4][0],y2:P[(k+1)%4][1]}));
     svg.appendChild(ctx.el("line",{class:"gap",x1:V[0],y1:V[1],x2:E[0],y2:E[1]}));
     svg.appendChild(ctx.el("circle",{class:"dot",cx:f1(E[0]),cy:f1(E[1]),r:6}));
     {const t=ctx.el("text",{class:"lbl",x:f1(E[0]+dE[0]*20),y:f1(E[1]+dE[1]*20+8),"text-anchor":"middle"});t.textContent="E";svg.appendChild(t);}
-    parts.forEach(q=>{const w=wedge(V,q.d1,q.d2,40),a=ctx.el("path",{class:"arc",d:w.arc});
+    parts.forEach(q=>{const w=wedge(V,q.d1,q.d2,q.w==="in"?30:46),a=ctx.el("path",{class:"arc",d:w.arc});
       if(sel===q.w){a.style.stroke="var(--diag)";a.style.strokeWidth="5";}svg.appendChild(a);});
     marks.forEach(m=>{const Pk=P[m.k],d1=unit(Pk,P[(m.k+3)%4]),d2=unit(Pk,P[(m.k+1)%4]),w=wedge(Pk,d1,d2,24);
       svg.appendChild(ctx.el("path",{class:"arc",d:w.arc}));label(at(Pk,bis(d1,d2),48),shown["m"+m.k]||m.text);});
@@ -128,7 +128,7 @@ function judgeSingle(item,sel,n,tap){const {v,out}=item,V=LET[v],nx=LET[(v+1)%4]
   else{body=`You wrote ${n}°. Then ∠${V} + ${X} would be ${n}° + ${out}° = ${n+out}°. Angles on a straight line add up to 180°, so ∠${V} + ${X} should be 180°.`;tag="other number";}
   return {right:false,answer:ans,tag,eq:`${inn} = 180 − ${out}`,reply:lead+body};}
 function single(ctx,item,cfg){cfg=cfg||{};const tap=cfg.tap,{v,out}=item,V=LET[v],pv=LET[(v+3)%4],nx=LET[(v+1)%4],X=`∠${nx}${V}E`,inn=180-out;
-  const B=scene(ctx,item.P,{v,out,tap,q:!tap});
+  const B=scene(ctx,item.P,{v,out,tap,q:true});
   if(cfg.lead)cfg.lead.forEach(t=>ctx.say(t,cfg.leadCls));
   ctx.say(`The dashed line carries side ${pv}${V} straight on past ${V}, to the point E. ${X} is ${out}°.`);
   if(cfg.lines)cfg.lines.forEach(t=>ctx.say(t,cfg.linesCls||"say done"));
