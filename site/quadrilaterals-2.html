@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decide whether each shape is a quadrilateral</title>
+<!-- Student 2, quadrilaterals experience 2 of 7. 11 Nov 2026.
+     KI-GE-21 (Concept), tested with near misses: a quadrilateral is a closed figure in a plane bounded by four line segments
+     that meet only at their end points (sides do not cross; Bijit, 11 Nov 2026), with four sides, four vertices and four angles.
+     Not a quadrilateral: open, 3 or 5 straight sides, a curved side, or sides that cross.
+     Built from the approved screen study-materials/quadrilaterals/ki-ge-21-near-miss-screen.html (shapes, marks after an answer,
+     reply wording kept). New (Bijit, 11 Nov): crossed 4-sided shape, answer no, the reply names the two crossing sides.
+     Her action: she looks at the shape and says Yes or No; nothing is judged until she presses a button.
+     Kinds: concave (yes), kite (yes; a kite or a tilted trapezium), irregular (yes; convex, unequal sides), open (no),
+     triangle (no), curved (one curved side, no), pentagon (no), crossed (no).
+     Shortcuts this set defeats: "it must look like a square" (concave, kite, irregular: yes), "4 corners is enough" (open, curved,
+     crossed: no), "always answer no" (the plan has 6 yes and 6 no, in a mixed order).
+     Contrast cases: a corner points in (concave), tilted with unequal sides (kite), one side curved (curved), sides cross (crossed).
+     Every shape is fresh each time: the template is stretched, mirrored, turned, jittered, and its lettering starts at a
+     different corner with a different set of letters.
+     Engine and records: assets/quad-engine.js. -->
+<link rel="stylesheet" href="assets/quad.css">
+</head>
+<body>
+<div class="app">
+  <div class="top"><h1 id="h1">Decide whether each shape is a quadrilateral</h1><div class="tools"><button class="btn" id="readBtn" type="button">Read it</button><button class="btn" id="pauseBtn" type="button">Pause</button></div></div>
+  <div id="teacher" class="hide"></div>
+  <div class="card"><div id="pic"></div><div class="text"><div id="words"></div><div id="acts"></div></div></div>
+</div>
+<div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
+<script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/quad-engine.js"></script>
+<script>
+"use strict";
+const NS="http://www.w3.org/2000/svg";
+const YES="Yes, it is a quadrilateral",NO="No, it is not a quadrilateral";
+const RULE="A quadrilateral is a closed shape with 4 straight sides. Its sides meet only at its corners.";
+const QUESTION="Is this shape a quadrilateral?";
+const LET=["ABCDE","PQRST","KLMNO","UVWXY"];
+
+/* ---------- geometry ---------- */
+const orient=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);
+function crosses(a,b,c,d){const s=Math.sign;return s(orient(a,b,c))*s(orient(a,b,d))<0&&s(orient(c,d,a))*s(orient(c,d,b))<0;}
+function inter(a,b,c,d){const d1=[b[0]-a[0],b[1]-a[1]],d2=[d[0]-c[0],d[1]-c[1]],den=d1[0]*d2[1]-d1[1]*d2[0],t=((c[0]-a[0])*d2[1]-(c[1]-a[1])*d2[0])/den;return [a[0]+t*d1[0],a[1]+t*d1[1]];}
+function segCross(P,n,open){const m=open?n-1:n;for(let i=0;i<m;i++)for(let j=i+2;j<m;j++){if(!open&&i===0&&j===m-1)continue;
+  if(crosses(P[i],P[(i+1)%n],P[j],P[(j+1)%n]))return [i,j];}return null;}
+const area=P=>P.reduce((t,p,i)=>{const q=P[(i+1)%P.length];return t+p[0]*q[1]-q[0]*p[1];},0)/2;
+const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+function distSeg(p,a,b){const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((p[0]-a[0])*dx+(p[1]-a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(p[0]-a[0]-t*dx,p[1]-a[1]-t*dy);}
+const list=a=>a.length<3?a.join(" and "):a.slice(0,-1).join(", ")+" and "+a[a.length-1];
+const jit=(ctx,p,r)=>[p[0]+ctx.int(-r,r),p[1]+ctx.int(-r,r)];
+
+/* A shape from a template: stretch, mirror, turn, start the lettering at another corner, curve one side, fit into the picture. */
+function shapeFrom(base,o){
+  const sx=o.sx||1,sy=o.sy||1,a=(o.rot||0)*Math.PI/180,ca=Math.cos(a),sa=Math.sin(a),n=base.length;
+  let P=base.map(([x,y])=>{x=x*sx*(o.mirror?-1:1);y=y*sy;return [x*ca-y*sa,x*sa+y*ca];});
+  if(!o.open&&o.shift){const k=o.shift%n;P=P.slice(k).concat(P.slice(0,k));}
+  const curve=o.curve==null?-1:o.curve;let ctrl=null,peak=null;
+  if(curve>=0){const A=P[curve],B=P[(curve+1)%n],cx=P.reduce((s,p)=>s+p[0],0)/n,cy=P.reduce((s,p)=>s+p[1],0)/n,mx=(A[0]+B[0])/2,my=(A[1]+B[1])/2;
+    let nx=-(B[1]-A[1]),ny=B[0]-A[0];const d=Math.hypot(nx,ny);nx/=d;ny/=d;if(nx*(mx-cx)+ny*(my-cy)<0){nx=-nx;ny=-ny;}
+    ctrl=[mx+nx*(o.off||90),my+ny*(o.off||90)];peak=[.25*A[0]+.5*ctrl[0]+.25*B[0],.25*A[1]+.5*ctrl[1]+.25*B[1]];}
+  const all=P.concat(peak?[peak]:[]),xs=all.map(p=>p[0]),ys=all.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  const sc=Math.min(310/(x1-x0),270/(y1-y0),1.25),tr=p=>[Math.round(210+(p[0]-(x0+x1)/2)*sc),Math.round(190+(p[1]-(y0+y1)/2)*sc)];
+  const s={n,pts:P.map(tr),ctrl:ctrl&&tr(ctrl),curve,open:!!o.open,yes:!!o.yes,tilted:!!o.tilted,letters:o.letters||LET[0],kind:o.kind||""};
+  s.cross=segCross(s.pts,n,s.open);s.inward=-1;
+  if(!s.open&&!s.cross){const A=area(s.pts);for(let k=0;k<n;k++){const a1=s.pts[(k+n-1)%n],b1=s.pts[k],c1=s.pts[(k+1)%n],cr=(b1[0]-a1[0])*(c1[1]-b1[1])-(b1[1]-a1[1])*(c1[0]-b1[0]);if(Math.sign(cr)!==Math.sign(A)&&Math.abs(cr)>400){s.inward=k;break;}}}
+  return s;}
+
+/* a shape is usable when it is clear: sides long enough, corners wide enough, no corner close to a side it is not on */
+function usable(s){const P=s.pts,n=s.n,m=s.open?n-1:n;
+  for(let i=0;i<m;i++)if(dist(P[i],P[(i+1)%n])<55)return false;
+  for(let k=0;k<n;k++){if(s.open&&(k===0||k===n-1))continue;const a=P[(k+n-1)%n],b=P[k],c=P[(k+1)%n],u=[a[0]-b[0],a[1]-b[1]],w=[c[0]-b[0],c[1]-b[1]];
+    if(Math.acos((u[0]*w[0]+u[1]*w[1])/(Math.hypot(...u)*Math.hypot(...w)))*180/Math.PI<28)return false;}
+  for(let k=0;k<n;k++)for(let i=0;i<m;i++){if(i===k||(i+1)%n===k)continue;if(distSeg(P[k],P[i],P[(i+1)%n])<28)return false;}
+  return true;}
+
+/* ---------- the eight kinds of shape (fresh each time) ---------- */
+function attempt(ctx,kind,letters){
+  const o={kind,letters:letters||ctx.pick(LET),sx:ctx.int(80,120)/100,sy:ctx.int(80,120)/100,mirror:ctx.rng()<.5,rot:ctx.int(0,359),shift:ctx.int(0,4),yes:false};let base;
+  if(kind==="concave"){o.yes=true;const h=ctx.int(105,130),w=ctx.int(110,140);base=[[-w,h],[ctx.int(-40,40),-h],[w,h],[ctx.int(-18,18),ctx.int(5,50)]];}
+  else if(kind==="kite"){o.yes=true;o.tilted=true;o.rot=ctx.int(20,70)+90*ctx.int(0,3);
+    if(ctx.rng()<.5){const wy=ctx.int(-60,-10),hf=ctx.int(60,100);base=[[0,-ctx.int(100,150)],[hf,wy],[0,ctx.int(100,150)],[-hf,wy]];}
+    else{const a=ctx.int(40,80),b=ctx.int(110,150);base=[[-a,-100],[a,-100],[b,100],[-b,100]];}}
+  else if(kind==="irregular"){o.yes=true;o.tilted=true;base=[0,1,2,3].map(k=>{const t=(k*90+ctx.int(-28,28))*Math.PI/180,r=ctx.int(80,150);return [r*Math.cos(t),r*Math.sin(t)];});}
+  else if(kind==="open"){o.open=true;base=ctx.pick([[[-110,110],[-110,-110],[110,-110],[110,110]],[[-20,125],[-110,-35],[85,-110],[145,50]]]).map(p=>jit(ctx,p,15));}
+  else if(kind==="triangle"){base=[[-150,100],[0,-130],[150,100]].map(p=>jit(ctx,p,25));}
+  else if(kind==="curved"){base=[[-110,-100],[110,-100],[110,100],[-110,100]].map(p=>jit(ctx,p,18));o.curve=ctx.int(0,3);o.off=ctx.int(80,110);}
+  else if(kind==="pentagon"){if(ctx.rng()<.5)base=[[-110,110],[-110,-10],[0,-120],[110,-10],[110,110]].map(p=>jit(ctx,p,12));
+    else{const a0=ctx.rng()*6;base=[0,1,2,3,4].map(k=>{const t=a0+k*2*Math.PI/5+(ctx.rng()-.5)*.3,r=ctx.int(120,150);return [r*Math.cos(t),r*Math.sin(t)];});}}
+  else if(kind==="crossed"){base=[[-110,-100],[110,100],[110,-100],[-110,100]].map(p=>jit(ctx,p,25));}
+  return shapeFrom(base,o);}
+function good(s,kind){if(!usable(s))return false;const P=s.pts,n=s.n;
+  if(kind==="crossed"){if(!s.cross)return false;const [i,j]=s.cross,x=inter(P[i],P[i+1],P[j],P[(j+1)%n]);return [P[i],P[i+1],P[j],P[(j+1)%n]].every(q=>dist(x,q)>=35);}
+  if(s.cross)return false;
+  if(kind==="concave"){if(s.inward<0)return false;const k=s.inward,a=P[(k+n-1)%n],b=P[(k+1)%n];return distSeg(P[k],a,b)>=35;}
+  if(kind==="kite"||kind==="irregular"||kind==="triangle"||kind==="pentagon"){if(s.inward>=0)return false;}
+  if(kind==="irregular"){const L=P.map((p,i)=>dist(p,P[(i+1)%n]));return Math.max(...L)/Math.min(...L)>=1.4;}
+  if(kind==="open")return dist(P[0],P[n-1])>=90;
+  if(kind==="curved")return dist(P[s.curve],P[(s.curve+1)%n])>=90;
+  return true;}
+function shapeOf(ctx,kind,letters){let s;for(let t=0;t<120;t++){s=attempt(ctx,kind,letters);if(good(s,kind))return s;}return s;}
+
+/* ---------- drawing ---------- */
+const sideName=(s,i)=>s.letters[i]+s.letters[(i+1)%s.n];
+function labelAt(s,k){const P=s.pts,n=s.n,v=P[k],cx=P.reduce((t,p)=>t+p[0],0)/n,cy=P.reduce((t,p)=>t+p[1],0)/n;let dx=v[0]-cx,dy=v[1]-cy;
+  if(!s.open&&!s.cross){const a=P[(k+n-1)%n],c=P[(k+1)%n],u=[v[0]-a[0],v[1]-a[1]],w=[v[0]-c[0],v[1]-c[1]],lu=Math.hypot(...u),lw=Math.hypot(...w);
+    let bx=u[0]/lu+w[0]/lw,by=u[1]/lu+w[1]/lw;if(Math.hypot(bx,by)>.2){const cr=(v[0]-a[0])*(c[1]-v[1])-(v[1]-a[1])*(c[0]-v[0]);if(Math.sign(cr)!==Math.sign(area(P))){bx=-bx;by=-by;}dx=bx;dy=by;}}
+  const d=Math.hypot(dx,dy)||1;return [v[0]+dx/d*30,v[1]+dy/d*30+8];}
+function draw(svg,s,marks){
+  svg.innerHTML="";const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+  const n=s.n,m=s.open?n-1:n,P=s.pts;let num=0;
+  for(let i=0;i<m;i++){const a=P[i],b=P[(i+1)%n];
+    if(i===s.curve){svg.appendChild(el("path",{class:"side curve"+(marks?" marked":""),d:`M${a[0]} ${a[1]} Q${s.ctrl[0]} ${s.ctrl[1]} ${b[0]} ${b[1]}`}));continue;}
+    const x=marks&&s.cross&&s.cross.includes(i),ln=el("line",{class:"side"+(x?" crossed":""),x1:a[0],y1:a[1],x2:b[0],y2:b[1]});
+    if(x)ln.setAttribute("style","stroke:var(--mark);stroke-width:7");svg.appendChild(ln);
+    if(marks&&!s.cross){num++;const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;svg.appendChild(el("circle",{class:"numbg",cx:mx,cy:my,r:14}));
+      const t=el("text",{class:"num",x:mx,y:my+6,"text-anchor":"middle"});t.textContent=num;svg.appendChild(t);}}
+  if(marks&&s.open)for(const E of [P[n-1],P[0]])svg.appendChild(el("circle",{class:"gap",cx:E[0],cy:E[1],r:14}));
+  if(marks&&s.cross){const [i,j]=s.cross,x=inter(P[i],P[(i+1)%n],P[j],P[(j+1)%n]);svg.appendChild(el("circle",{class:"gap",cx:Math.round(x[0]),cy:Math.round(x[1]),r:16}));}
+  P.forEach((p,k)=>{svg.appendChild(el("circle",{class:"dot",cx:p[0],cy:p[1],r:6}));const [lx,ly]=labelAt(s,k);
+    const t=el("text",{class:"lbl",x:Math.round(lx),y:Math.round(ly),"text-anchor":"middle"});t.textContent=s.letters[k];svg.appendChild(t);});}
+
+/* ---------- the reply: what the shape is, in words (approved wording) ---------- */
+function reply(s,right){
+  const L=s.letters,N=L.slice(0,s.n),m=s.open?s.n-1:s.n,straight=[];for(let i=0;i<m;i++)if(i!==s.curve)straight.push(sideName(s,i));
+  const k=straight.length,nb=`${k} straight sides, numbered 1 to ${k} on the shape. They are ${list(straight)}.`;
+  const lead=right?(s.yes?`Yes, ${N} is a quadrilateral. `:`No, ${N} is not a quadrilateral. `)
+                  :(s.yes?`Your answer was no, but ${N} is a quadrilateral. `:`Your answer was yes, but ${N} is not a quadrilateral. `);
+  if(s.open){const a=L[s.n-1],b=L[0];return lead+`${N} is not closed. Its ends, ${a} and ${b}, are ringed on the shape, and there is no side from ${a} back to ${b}. It has only ${nb} A quadrilateral is closed and has 4 straight sides, so ${N} is not a quadrilateral.`;}
+  if(s.curve>=0)return lead+`${N} is closed, and it has 4 sides, but side ${sideName(s,s.curve)} is curved. Only 3 of its sides are straight. They are numbered 1 to 3 on the shape, and they are ${list(straight)}. A quadrilateral has 4 straight sides, so ${N} is not a quadrilateral.`;
+  if(s.cross){const [i,j]=s.cross;return lead+`${N} is closed, and it has 4 straight sides, but side ${sideName(s,i)} crosses side ${sideName(s,j)}. Those two sides are coloured on the shape, and they cross at the ringed point. The sides of a quadrilateral meet only at its corners, so ${N} is not a quadrilateral.`;}
+  if(!s.yes)return lead+`${N} is closed, but it has ${nb} A quadrilateral has 4 straight sides, so ${N} is not a quadrilateral.`;
+  let t=lead+`${N} is closed, and it has ${nb} Its sides meet only at its corners, so ${N} is a quadrilateral.`;
+  if(s.inward>=0)t+=(right?" ":" A quadrilateral does not have to look like a square. ")+`The corner at ${L[s.inward]} points into the shape, and ${N} is still a quadrilateral.`;
+  else if(s.tilted&&!right)t+=" A quadrilateral does not have to look like a square. It can be tilted, and its sides can have different lengths.";
+  return t;}
+/* the part of the reply that is special to each kind of shape (the test checks it) */
+const KEY={concave:"points into the shape",kite:"different lengths",irregular:"different lengths",open:"ringed",triangle:"3 straight sides",curved:"is curved",pentagon:"5 straight sides",crossed:"crosses side"};
+
+/* ---------- one item: the shape, the question, Yes and No ---------- */
+const clickChoice=yes=>[...document.querySelectorAll("#words .ch")].find(b=>b.textContent.startsWith(yes?"Yes":"No")).click();
+function decide(ctx,svg,s,opts){
+  opts=opts||{};
+  function answer(sayYes){if(!ctx.open)return;draw(svg,s,true);const right=sayYes===s.yes;
+    ctx.done({right,answer:sayYes?"yes":"no",eq:"is it a quadrilateral",tag:(s.kind||"example")+", said "+(sayYes?"yes":"no"),reply:reply(s,right)});}
+  ctx.ask(opts.question||QUESTION);
+  ctx.choices([{t:YES,fn:()=>answer(true)},{t:NO,fn:()=>answer(false)}]);
+  const wrong=()=>clickChoice(!s.yes),key=s.kind&&KEY[s.kind];
+  /* a Yes or No question has one wrong answer; it is listed twice so the test checks both the lead and the part special to this shape */
+  ctx.auto({right(){clickChoice(s.yes);},wrongs:[{expect:"Your answer was "+(s.yes?"no":"yes")+", but",fn:wrong},{expect:key||(s.yes?"is a quadrilateral":"is not a quadrilateral"),fn:wrong}]});}
+
+/* ---------- worked examples ---------- */
+function W1(ctx){const s=shapeFrom([[0,-150],[90,-40],[0,150],[-90,-40]],{rot:30,yes:true,tilted:true,letters:"ABCD"});
+  const svg=ctx.svg("0 0 420 380","A tilted shape with 4 straight sides, lettered A, B, C and D.");draw(svg,s,true);
+  ctx.say(RULE);
+  ctx.say("The shape ABCD is closed. It has 4 straight sides, numbered 1 to 4 on the shape. Its sides meet only at its corners, A, B, C and D. So ABCD is a quadrilateral, even though it is tilted and its sides have different lengths.");
+  decide(ctx,svg,s,{question:"Look at ABCD again. Is ABCD a quadrilateral?"});}
+function W2(ctx){const ex=shapeFrom([[-110,-100],[110,-100],[110,100],[-110,100]],{curve:3,off:100,letters:"ABCD",rot:0});
+  const svg1=ctx.svg("0 0 420 380","A shape with 4 sides, lettered A, B, C and D. Side D A is curved.");svg1.style.maxWidth="250px";draw(svg1,ex,true);
+  ctx.say("The shape ABCD is closed, and it has 4 sides. But side DA is curved. Only 3 of its sides are straight, numbered 1 to 3 on the shape. A quadrilateral has 4 straight sides, so ABCD is not a quadrilateral.");
+  const s=shapeOf(ctx,"curved","PQRST");
+  const svg2=document.createElementNS(NS,"svg");svg2.setAttribute("viewBox","0 0 420 380");svg2.setAttribute("role","img");svg2.setAttribute("aria-label","A new shape, lettered P, Q, R and S.");ctx.picBelow(svg2);draw(svg2,s,false);
+  decide(ctx,svg2,s,{question:"Look at the new shape PQRS in the second picture. Is PQRS a quadrilateral?"});}
+function SUP(ctx){const s=shapeOf(ctx,"irregular");
+  ctx.say(RULE,"say done");
+  ctx.say("To decide, check 3 things about the shape. Is it closed? Does it have 4 straight sides? Do its sides meet only at its corners?","say done");
+  const svg=ctx.svg("0 0 420 380","A shape with lettered corners.");draw(svg,s,false);decide(ctx,svg,s);}
+
+/* ---------- her own items ---------- */
+function own(kind,contrast){return ctx=>{if(contrast)ctx.contrast=contrast;const s=shapeOf(ctx,kind);
+  const svg=ctx.svg("0 0 420 380","A shape with lettered corners.");draw(svg,s,false);decide(ctx,svg,s);};}
+const G={concave:own("concave","a corner points in"),kite:own("kite","tilted with unequal sides"),irregular:own("irregular"),
+ open:own("open"),triangle:own("triangle"),curved:own("curved","one side curved"),pentagon:own("pentagon"),crossed:own("crossed","sides cross")};
+
+/* 6 yes and 6 no, no more than two of the same answer in a row */
+QE.start({set:"ki-ge-21",ki:"KI-GE-21",title:"Decide whether each shape is a quadrilateral",version:"quadrilaterals-2 1.0 (11 Nov 2026)",
+  teacher:"Quadrilateral: a simple closed plane figure bounded by 4 line segments (sides meet only at end points; no two sides cross); 4 sides, 4 vertices, 4 angles. Not a quadrilateral when the figure is open, has a number of straight sides other than 4, has a curved side, or has sides that cross.",
+  worked:[W1,W2],sup:SUP,gen:G,
+  plan:["kite","curved","open","concave","crossed","irregular","triangle","pentagon","concave","kite","curved","irregular"],
+  contrasts:["a corner points in","tilted with unequal sides","one side curved","sides cross"],
+  contrastKind:{"a corner points in":"concave","tilted with unequal sides":"kite","one side curved":"curved","sides cross":"crossed"},gates:{}});
+</script>
+</body>
+</html>

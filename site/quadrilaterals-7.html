@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find the angles of a quadrilateral when they are written with x</title>
+<!-- Student 2, quadrilaterals experience 7 of 7. 11 Nov 2026.
+     SK-GE-09: find the angles of a quadrilateral from angles written as expressions in x.
+     Statement: the four angles are written as c·x + e (for example x, 2x, 3x, 4x, or x + 10°, x − 20°, 2x, x).
+     She forms the equation with the angle sum, solves it for x, and finds the angle the question names.
+     Teacher name: angle sum of a quadrilateral applied to a linear equation in one variable.
+       (c1·x + e1) + (c2·x + e2) + (c3·x + e3) + (c4·x + e4) = 360°, so (c1+c2+c3+c4)·x = 360° − (e1+e2+e3+e4),
+       x = (360° − Σe) ÷ Σc, and each angle = ci·x + ei. Needs KI-GE-23 (the angle sum is 360°) and linear equations (M806).
+     Whole numbers only: x and every angle are whole degrees, every angle is between 20° and 200° (never 180°), at most one
+     is above 180°, and then the shape is concave. The shape is drawn with exactly these angles, so the picture is true to scale.
+     Picture job: in "angle" items she taps the corner the question names, and its expression is written beside the picture
+     before the answer box appears. Her other items read the same picture (nothing is judged until she answers).
+     Kinds: equation (choose 1 of 3), findx (find x), angle (find one named angle, not x), constants (find x when degrees
+     are added to or taken from x), check (yes or no on a worked answer; half have a slip).
+     Shortcuts this set defeats: "the number I find is the angle" (angle: x is not the angle), "any angle total will do"
+     (equation with 180°), "leave out the plus and minus degrees" (constants), "divide 360° by 4" (findx, constants),
+     "a worked answer is right because it looks tidy" (check with a slip).
+     Contrast cases: "x is not the angle" (angle), "constant terms" (constants), "a worked answer with a slip" (check, slip only).
+     Engine and records: assets/quad-engine.js. -->
+<link rel="stylesheet" href="assets/quad.css">
+</head>
+<body>
+<div class="app">
+  <div class="top"><h1 id="h1">Find the angles of a quadrilateral when they are written with x</h1><div class="tools"><button class="btn" id="readBtn" type="button">Read it</button><button class="btn" id="pauseBtn" type="button">Pause</button></div></div>
+  <div id="teacher" class="hide"></div>
+  <div class="card"><div id="pic"></div><div class="text"><div id="words"></div><div id="acts"></div></div></div>
+</div>
+<div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
+<script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/quad-engine.js"></script>
+<script>
+"use strict";
+const L="ABCD";
+const RULE="The 4 angles of a quadrilateral add up to 360°.";
+
+/* ---------- expressions and items ---------- */
+const ex=(c,e)=>(c===1?"x":c+"x")+(e>0?" + "+e+"°":e<0?" − "+(-e)+"°":"");
+const exB=(c,e)=>e?"("+ex(c,e)+")":ex(c,e);
+const sumTerms=(it,n)=>it.c.slice(0,n||4).map((c,i)=>exB(c,it.e[i])).join(" + ");
+const sumLine=it=>sumTerms(it)+" = 360°";
+const simpl=it=>it.k+"x"+(it.E>0?" + "+it.E+"°":it.E<0?" − "+(-it.E)+"°":"")+" = 360°";
+const angList=a=>a.slice(0,-1).map(v=>v+"°").join(", ")+" and "+a[a.length-1]+"°";
+function mk(c,e){const k=c.reduce((s,v)=>s+v,0),E=e.reduce((s,v)=>s+v,0),x=(360-E)/k;return {c,e,k,E,x,ang:c.map((v,i)=>v*x+e[i])};}
+/* the working for an angle, e.g. "3x = 3 × 36° = 108°" */
+function valStr(it,i){const c=it.c[i],e=it.e[i];if(c===1&&!e)return "x = "+it.x+"°";
+  const sub=(c===1?it.x+"°":c+" × "+it.x+"°")+(e>0?" + "+e+"°":e<0?" − "+(-e)+"°":"");return ex(c,e)+" = "+sub+" = "+it.ang[i]+"°";}
+function steps(it){return it.E===0?simpl(it)+", so x = 360° ÷ "+it.k+" = "+it.x+"°."
+  :simpl(it)+", so "+it.k+"x = 360° "+(it.E>0?"−":"+")+" "+Math.abs(it.E)+"° = "+(360-it.E)+"°, and x = "+(360-it.E)+"° ÷ "+it.k+" = "+it.x+"°.";}
+const shuf=(ctx,a)=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=ctx.int(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+const COEFS=[[1,2,3,4],[1,1,2,2],[2,3,3,4],[1,2,2,3],[1,2,4,5],[1,3,4,4],[2,2,3,5],[1,1,3,3],[2,3,4,6],[1,2,3,3],[2,3,5,5],[1,1,2,5],[1,2,2,5],
+  [1,1,1,2],[1,1,1,3],[1,1,2,3],[1,1,2,4],[1,2,2,2],[2,2,3,3],[1,1,1,4]];
+const CONST=[-30,-20,-10,10,20,30];
+
+/* ---------- the shape, drawn with exactly these angles ---------- */
+function layout(ctx,ang){
+  for(let t=0;t<400;t++){
+    const th=ctx.rng()*Math.PI*2,d=[th];for(let i=1;i<4;i++)d.push(d[i-1]+(180-ang[i])*Math.PI/180);
+    const u=d.map(a=>[Math.cos(a),Math.sin(a)]),s0=1,s1=.3+ctx.rng()*1.9;
+    const rx=-(s0*u[0][0]+s1*u[1][0]),ry=-(s0*u[0][1]+s1*u[1][1]),det=u[2][0]*u[3][1]-u[3][0]*u[2][1];
+    if(Math.abs(det)<.15)continue;
+    const s2=(rx*u[3][1]-u[3][0]*ry)/det,s3=(u[2][0]*ry-rx*u[2][1])/det;
+    if(s2<.35||s3<.35||s2>3||s3>3)continue;
+    const s=[s0,s1,s2,s3],P=[[0,0]];for(let i=0;i<3;i++)P.push([P[i][0]+s[i]*u[i][0],P[i][1]+s[i]*u[i][1]]);
+    const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+    const sc=Math.min(200/(x1-x0),200/(y1-y0));
+    return P.map(p=>[Math.round(210+(p[0]-(x0+x1)/2)*sc),Math.round(190+(p[1]-(y0+y1)/2)*sc)]);}
+  return null;}
+/* a fresh item: o = {E:"none"|"some", concave:true|false|undefined, strict, named} */
+function fresh(ctx,o){
+  for(let t=0;t<900;t++){
+    const c=shuf(ctx,ctx.pick(COEFS)),e=[0,0,0,0];
+    if(o.E==="some"){const idx=shuf(ctx,[0,1,2,3]).slice(0,ctx.int(2,3));idx.forEach(i=>e[i]=ctx.pick(CONST));}
+    const k=c.reduce((s,v)=>s+v,0),E=e.reduce((s,v)=>s+v,0);
+    if(o.E==="some"&&E===0)continue;if((360-E)%k!==0)continue;if(o.strict&&(360%k!==0||E%k!==0))continue;
+    const x=(360-E)/k;if(x<10)continue;const ang=c.map((v,i)=>v*x+e[i]);
+    if(ang.some(a=>a<20||a>200||a===180))continue;
+    const big=ang.filter(a=>a>180).length;if(big>1||(o.concave===true&&big!==1)||(o.concave===false&&big!==0))continue;
+    let target=-1;if(o.named){const ok=[0,1,2,3].filter(i=>c[i]>=2&&e[i]===0&&(!big||ang[i]>180));if(!ok.length)continue;target=ctx.pick(ok);}
+    const P=layout(ctx,ang);if(!P)continue;
+    return Object.assign(mk(c,e),{P,target,concave:big===1});}
+  if(o.concave)return fresh(ctx,Object.assign({},o,{concave:false}));
+  const it=mk(...(o.E==="some"?[[1,2,3,4],[10,-20,0,0]]:[[1,2,3,4],[0,0,0,0]]));it.P=layout(ctx,it.ang);it.target=o.named?3:-1;return it;}
+
+/* ---------- the picture: the shape with its angles written at the corners ---------- */
+const orient=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);
+function picture(ctx,it,onTap){
+  window.__item=it;const P=it.P,n=4;
+  const svg=ctx.svg("0 0 420 380","A quadrilateral ABCD. The angle at each corner is written beside it.");
+  const area=P.reduce((t,p,m)=>{const q=P[(m+1)%n];return t+p[0]*q[1]-q[0]*p[1];},0);
+  for(let i=0;i<n;i++){const a=P[i],b=P[(i+1)%n];svg.appendChild(ctx.el("line",{class:"side",x1:a[0],y1:a[1],x2:b[0],y2:b[1]}));}
+  const els=[];
+  P.forEach((p,i)=>{const q=P[(i+1)%n],r=P[(i+3)%n];
+    const u=[q[0]-p[0],q[1]-p[1]],w=[r[0]-p[0],r[1]-p[1]],nu=Math.hypot(...u),nw=Math.hypot(...w),R=24;
+    const s=[p[0]+u[0]/nu*R,p[1]+u[1]/nu*R],e=[p[0]+w[0]/nw*R,p[1]+w[1]/nw*R];let sweep=(u[0]*w[1]-u[1]*w[0])>0?1:0,large=0;
+    const reflex=Math.sign(orient(r,p,q))!==Math.sign(area);
+    if(reflex){large=1;sweep=1-sweep;}
+    svg.appendChild(ctx.el("path",{class:"arc",d:`M${s[0]} ${s[1]} A${R} ${R} 0 ${large} ${sweep} ${e[0]} ${e[1]}`}));
+    /* the label sits outside the corner, along the line that halves the angle */
+    let dx=u[0]/nu+w[0]/nw,dy=u[1]/nu+w[1]/nw;if(Math.hypot(dx,dy)<.08){dx=-u[1];dy=u[0];}
+    const dd=Math.hypot(dx,dy),sg=reflex?1:-1;dx=sg*dx/dd;dy=sg*dy/dd;
+    const txt="∠"+L[i]+" = "+ex(it.c[i],it.e[i]),wd=txt.length*9.3+10;
+    const off=16+Math.abs(dx)*wd/2+Math.abs(dy)*10,cx=Math.min(414-wd/2,Math.max(wd/2+6,p[0]+dx*off)),cy=Math.min(368,Math.max(22,p[1]+dy*off+6));
+    const t=ctx.el("text",{class:"ang","text-anchor":"middle",x:cx,y:cy});t.textContent=txt;svg.appendChild(t);});
+  P.forEach((p,i)=>{
+    if(!onTap){svg.appendChild(ctx.el("circle",{class:"dot",cx:p[0],cy:p[1],r:6}));return;}
+    const g=ctx.el("g",{class:"pt",tabindex:0,role:"button","aria-label":"Corner "+L[i],"data-i":i});
+    g.appendChild(ctx.el("circle",{class:"hit",cx:p[0],cy:p[1],r:30}));g.appendChild(ctx.el("circle",{class:"pdot",cx:p[0],cy:p[1],r:10}));
+    g.addEventListener("click",()=>onTap(i));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();onTap(i);}});
+    svg.appendChild(g);els.push(g);});
+  return {select(i){els.forEach((g,k)=>g.classList.toggle("sel",k===i));}};}
+
+/* ---------- answering: a whole number of degrees ---------- */
+const typeIn=v=>{document.querySelector("#words input.box").value=String(v);document.querySelector("#acts .decide").click();};
+function uniq(list,right){const seen=new Set([right]);return list.filter(w=>Number.isInteger(w.v)&&w.v>0&&w.v<=9999&&!seen.has(w.v)&&seen.add(w.v));}
+/* spec: {q, ans, label, eq, right (reply text), wrongs:[{v,tag,text}], other (reply for any other number), auto:false} */
+function askNumber(ctx,spec){
+  if(spec.q)ctx.ask(spec.q);
+  const wr=uniq(spec.wrongs,spec.ans);
+  ctx.numberBox("Your answer in degrees",(v)=>{
+    if(v===null)return ctx.note("Write a number of degrees, like 75.");
+    if(v===spec.ans)return ctx.done({right:true,answer:spec.label+" = "+v+"°",eq:spec.eq,tag:"right",reply:spec.right});
+    const w=wr.find(z=>z.v===v);
+    ctx.done({right:false,answer:spec.label+" = "+v+"°",eq:spec.eq,tag:w?w.tag:"other",reply:"You wrote "+v+"°. "+(w?w.text:spec.other)});});
+  if(spec.auto!==false)ctx.auto({right(){typeIn(spec.ans);},wrongs:wr.map(w=>({expect:"You wrote "+w.v+"°.",fn(){typeIn(w.v);}}))});
+  return wr;}
+const maxAt=it=>it.ang.indexOf(Math.max(...it.ang));
+const triangleNote="180° is the total for the 3 angles of a triangle. The 4 angles of a quadrilateral add up to 360°.";
+function wrongsFindX(it){const out=[
+  {v:90,tag:"360 divided by 4",text:"360° ÷ 4 = 90° would be x only if all 4 angles were equal. The angles are written differently, so "+simpl(it)+"."}];
+  if(it.E===0||(180-it.E)%it.k===0)out.push({v:(180-it.E)/it.k,tag:"angle sum 180",text:"That comes from an angle total of 180°. "+triangleNote});
+  const m=maxAt(it);out.push({v:it.ang[m],tag:"an angle, not x",text:"That is ∠"+L[m]+", which is "+ex(it.c[m],it.e[m])+". The question asks for x."});
+  return out;}
+function wrongsConst(it){const out=[
+  {v:360/it.k,tag:"constant terms left out",text:"That leaves out the degrees added to x or taken away from x. The equation is "+simpl(it)+", so "+it.k+"x = "+(360-it.E)+"°."},
+  {v:(360+it.E)/it.k,tag:"constant terms with the wrong sign",text:"That "+(it.E>0?"adds the "+it.E+"° to":"takes the "+(-it.E)+"° from")+" 360°. "+simpl(it)+", so "+it.k+"x = 360° "+(it.E>0?"−":"+")+" "+Math.abs(it.E)+"° = "+(360-it.E)+"°."},
+  {v:90,tag:"360 divided by 4",text:"360° ÷ 4 = 90° would be x only if all 4 angles were equal. The equation is "+simpl(it)+"."}];
+  const m=maxAt(it);out.push({v:it.ang[m],tag:"an angle, not x",text:"That is ∠"+L[m]+", which is "+ex(it.c[m],it.e[m])+". The question asks for x."});return out;}
+const rightX=it=>"x = "+it.x+"° is right. "+steps(it)+" The 4 angles are "+angList(it.ang)+", and they add up to 360°.";
+
+/* ---------- worked examples ---------- */
+function W1(ctx){const it=mk([1,2,3,4],[0,0,0,0]);it.P=layout(ctx,it.ang);picture(ctx,it);
+  ctx.say(RULE);
+  ctx.say("The 4 angles here are x, 2x, 3x and 4x. Adding all 4 angles gives the equation x + 2x + 3x + 4x = 360°. Together, x + 2x + 3x + 4x is 10x, so 10x = 360°.");
+  askNumber(ctx,{q:"How many degrees is x?",ans:36,label:"x",eq:"x + 2x + 3x + 4x = 360°; x = 36°",right:rightX(it),
+    wrongs:[{v:90,tag:"360 divided by 4",text:"360° ÷ 4 = 90° would be x only if all 4 angles were equal. Here 10x = 360°, so x is 360° ÷ 10."},
+            {v:360,tag:"the angle sum",text:"That is what all 4 angles add up to. 10x = 360°, so x is 360° ÷ 10."}]});}
+function W2(ctx){const it=mk([1,1,2,1],[10,-20,0,0]);it.P=layout(ctx,it.ang);picture(ctx,it);
+  ctx.say("Here the angles are x + 10°, x − 20°, 2x and x. Adding all 4 angles gives (x + 10°) + (x − 20°) + 2x + x = 360°.");
+  ctx.say("The x terms add up to 5x, and +10° and −20° make −10°, so 5x − 10° = 360°. Then 5x = 370°, and x = 74°.");
+  askNumber(ctx,{q:"How many degrees is the largest angle, 2x?",ans:148,label:"largest angle",eq:"5x − 10° = 360°; x = 74°; 2x = 148°",
+    right:"2x = 2 × 74° = 148° is right. The 4 angles are 84°, 54°, 148° and 74°, and they add up to 360°.",
+    wrongs:[{v:74,tag:"x, not the angle",text:"That is x. The largest angle is 2x = 2 × 74° = 148°."},
+            {v:84,tag:"another angle",text:"That is x + 10°, the angle at A. The largest angle is 2x = 2 × 74° = 148°."}]});}
+function SUP(ctx){const it=fresh(ctx,{E:"none",concave:false});picture(ctx,it);
+  ctx.say(RULE,"say done");
+  ctx.say("The 4 angles are "+it.c.map((c,i)=>ex(c,0)).join(", ").replace(/, ([^,]*)$/," and $1")+". Adding all 4 angles gives "+sumLine(it)+". Together, that is "+simpl(it)+".","say done");
+  askNumber(ctx,{q:"How many degrees is x?",ans:it.x,label:"x",eq:sumLine(it)+"; x = "+it.x+"°",right:rightX(it),wrongs:wrongsFindX(it),other:"The equation is "+simpl(it)+", so x is 360° ÷ "+it.k+"."});}
+
+/* ---------- her own items ---------- */
+const INTRO="The 4 angles of this quadrilateral are written at its corners.";
+const G={
+ equation(ctx){const it=fresh(ctx,{E:ctx.rng()<.5?"some":"none",concave:ctx.rng()<.15?true:false});picture(ctx,it);
+   ctx.say(INTRO);ctx.ask("Which equation can be used to find x?");
+   const m3=it.c.length-1,right=sumLine(it),w180=sumTerms(it)+" = 180°",wmiss=sumTerms(it,3)+" = 360°";
+   const opts=shuf(ctx,[
+     {t:right,r:true,tag:"right",reply:"This equation is right. It adds all 4 angles, ∠A, ∠B, ∠C and ∠D, and sets the total equal to 360°."},
+     {t:w180,tag:"angle sum 180",reply:"You chose the equation with 180°. "+triangleNote},
+     {t:wmiss,tag:"a term left out",reply:"You chose an equation with only 3 angles. It leaves out ∠D, which is "+ex(it.c[m3],it.e[m3])+". A quadrilateral has 4 angles, and all 4 are added."}]);
+   const fns=opts.map(o=>()=>{if(!ctx.open)return;ctx.done({right:!!o.r,answer:o.t,eq:right,tag:o.tag,reply:o.reply});});
+   ctx.choices(opts.map((o,i)=>({t:o.t,fn:fns[i]})));
+   ctx.auto({right(){fns[opts.findIndex(o=>o.r)]();},wrongs:opts.filter(o=>!o.r).map(o=>({expect:o.reply.slice(0,22),fn(){fns[opts.indexOf(o)]();}}))});},
+ findx(ctx){const it=fresh(ctx,{E:"none",concave:ctx.rng()<.2?true:false});picture(ctx,it);
+   ctx.say(INTRO);
+   askNumber(ctx,{q:"How many degrees is x?",ans:it.x,label:"x",eq:sumLine(it)+"; x = "+it.x+"°",right:rightX(it),wrongs:wrongsFindX(it),other:"The equation is "+simpl(it)+", so x is 360° ÷ "+it.k+"."});},
+ angle(ctx){ctx.contrast="x is not the angle";const it=fresh(ctx,{E:"none",named:true,concave:ctx.rng()<.25?true:false});
+   const t=it.target,N="∠"+L[t],ans=it.ang[t];let line=null,B=null,boxMade=false;
+   const spec={ans,label:N,eq:sumLine(it)+"; "+N+" = "+ex(it.c[t],0),auto:false,
+     right:N+" = "+valStr(it,t)+" is right. "+simpl(it)+" gives x = "+it.x+"°, and the 4 angles add up to 360°.",
+     other:"Find x from "+simpl(it)+" first. Then "+N+" = "+ex(it.c[t],0)+".",
+     wrongs:[{v:it.x,tag:"x, not the angle",text:"That is x. "+N+" is "+ex(it.c[t],0)+", which is "+valStr(it,t).split(" = ").slice(1).join(" = ")+"."}]};
+   if((180)%it.k===0)spec.wrongs.push({v:it.c[t]*180/it.k,tag:"angle sum 180",text:"That comes from an angle total of 180°. "+triangleNote});
+   const o=(t+1+ctx.int(0,2))%4;spec.wrongs.push({v:it.ang[o],tag:"another corner",text:"That is ∠"+L[o]+", which is "+ex(it.c[o],0)+". The question asks for "+N+"."});
+   const wr=uniq(spec.wrongs,ans);
+   B=picture(ctx,it,i=>{if(!ctx.open)return;B.select(i);const s="You tapped ∠"+L[i]+". ∠"+L[i]+" = "+ex(it.c[i],it.e[i])+".";
+     if(!line)line=ctx.say(s);else line.textContent=s;
+     if(!boxMade){boxMade=true;ctx.numberBox("Your answer in degrees",(v)=>{
+       if(v===null)return ctx.note("Write a number of degrees, like 75.");
+       if(v===ans)return ctx.done({right:true,answer:N+" = "+v+"°",eq:spec.eq,tag:"right",reply:spec.right});
+       const w=wr.find(z=>z.v===v);ctx.done({right:false,answer:N+" = "+v+"°",eq:spec.eq,tag:w?w.tag:"other",reply:"You wrote "+v+"°. "+(w?w.text:spec.other)});});}});
+   ctx.say(INTRO);ctx.say("Tap "+N+" in the picture first.");ctx.ask("How many degrees is "+N+"?");
+   const tapIt=()=>{if(!boxMade)document.querySelector(`#pic .pt[data-i="${t}"]`).dispatchEvent(new MouseEvent("click",{bubbles:true}));};
+   ctx.auto({right(){tapIt();typeIn(ans);},wrongs:wr.map(w=>({expect:"You wrote "+w.v+"°.",fn(){tapIt();typeIn(w.v);}}))});},
+ constants(ctx){ctx.contrast="constant terms";const it=fresh(ctx,{E:"some",strict:true,concave:ctx.rng()<.2?true:false});picture(ctx,it);
+   ctx.say(INTRO);
+   askNumber(ctx,{q:"How many degrees is x?",ans:it.x,label:"x",eq:sumLine(it)+"; x = "+it.x+"°",right:rightX(it),wrongs:wrongsConst(it),other:"The equation is "+simpl(it)+"."});},
+ check(ctx){const it=fresh(ctx,{E:ctx.rng()<.5?"some":"none",concave:ctx.rng()<.15?true:false});picture(ctx,it);
+   const slip=ctx.rng()<.5;if(slip)ctx.contrast="a worked answer with a slip";
+   const sh=it.ang.slice();let bad=-1;if(slip){bad=ctx.int(0,3);sh[bad]+=ctx.pick([-20,-10,10,20]);}
+   const total=sh.reduce((s,v)=>s+v,0),sumTxt=sh.map(v=>v+"°").join(" + ")+" = "+total+"°";
+   ctx.say(INTRO);ctx.say("Here is a worked answer. It says x = "+it.x+"°.");
+   ctx.say(sh.map((v,i)=>"∠"+L[i]+" = "+v+"°").join(", ")+".");
+   ctx.ask("Do the 4 angles in this worked answer add up to 360°?");
+   const fix=slip?" ∠"+L[bad]+" should be "+ex(it.c[bad],it.e[bad])+" = "+valStr(it,bad).split(" = ").slice(1).join(" = ")+".":"";
+   const yes={t:"Yes, they add up to 360°",ok:!slip,tag:slip?"missed the slip":"agreed",
+     reply:slip?"Your answer was yes, but "+sumTxt+". The 4 angles must add up to 360°."+fix:"Yes. "+sumTxt+", so the 4 angles add up to 360°."};
+   const no={t:"No, they do not add up to 360°",ok:slip,tag:slip?"found the slip":"saw a slip that is not there",
+     reply:slip?"No. "+sumTxt+", and the 4 angles must add up to 360°."+fix:"Your answer was no, but "+sumTxt+". The 4 angles do add up to 360°."};
+   const go=c=>()=>{if(!ctx.open)return;ctx.done({right:c.ok,answer:c.t,eq:sumTxt,tag:c.tag,reply:c.reply});};
+   ctx.choices([{t:yes.t,fn:go(yes)},{t:no.t,fn:go(no)}]);
+   const good=slip?no:yes,badc=slip?yes:no;
+   ctx.auto({right(){go(good)();},wrongs:[{expect:badc.reply.slice(0,18),fn(){go(badc)();}}]});}
+};
+
+QE.start({set:"sk-ge-09",ki:"SK-GE-09",title:"Find the angles of a quadrilateral when they are written with x",version:"quadrilaterals-7 1.0 (11 Nov 2026)",
+  teacher:"Angle sum of a quadrilateral applied to a linear equation: Σ(ci·x + ei) = 360°, so x = (360° − Σei) ÷ Σci, and each angle = ci·x + ei.",
+  worked:[W1,W2],sup:SUP,gen:G,
+  plan:["equation","findx","angle","findx","check","constants","equation","angle","constants","check","findx"],
+  contrasts:["x is not the angle","constant terms","a worked answer with a slip"],
+  contrastKind:{"x is not the angle":"angle","constant terms":"constants","a worked answer with a slip":"check"},gates:{}});
+</script>
+</body>
+</html>

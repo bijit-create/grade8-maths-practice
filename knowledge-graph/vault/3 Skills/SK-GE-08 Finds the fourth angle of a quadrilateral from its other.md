@@ -7,6 +7,8 @@ domain: "[[Geometry]]"
 role: outcome task
 review: pending
 authored_by: ConveGenius
+requires_before_teaching:
+  - "[[KI-GE-21 A quadrilateral is a closed figure in a plane bounded by]]"
 requires_before_attainment:
   - "[[KI-GE-23 The four angles of a quadrilateral add up to 360 deg]]"
 extends:
@@ -44,6 +46,7 @@ Authored by ConveGenius. Belongs to [[LO-M811 Solves problems related to angles 
 
 | Type | To | Basis | Strength | Reason |
 |---|---|---|---|---|
+| requires | Knowledge item [[KI-GE-21 A quadrilateral is a closed figure in a plane bounded by]] | mathematical necessity | required before teaching | — |
 | requires | Knowledge item [[KI-GE-23 The four angles of a quadrilateral add up to 360 deg]] | mathematical necessity | required before attainment | — |
 | extends | Skill [[SK-GE-09 Finds the angles of a quadrilateral from angles given as]] | authored | — | From finding the fourth angle of a quadrilateral from three angles in degrees to finding all four angles when they are given as expressions in x. |
 | extends | Skill [[SK-GE-10 Finds the angles of a quadrilateral from angles given in a]] | authored | — | From finding the fourth angle of a quadrilateral from three angles in degrees to finding all four angles when they are given in a ratio. |

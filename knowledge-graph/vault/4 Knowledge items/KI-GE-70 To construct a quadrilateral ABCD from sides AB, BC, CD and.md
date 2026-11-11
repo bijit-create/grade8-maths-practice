@@ -13,7 +13,7 @@ entry_check: not yet written
 authored_by: ConveGenius
 requires_before_attainment:
   - "[[KI-GE-64 To construct a triangle from its three sides, draw one side]]"
-  - "[[KI-GE-66 A diagonal of a quadrilateral divides it into two triangles]]"
+  - "[[KI-GE-66 Every quadrilateral has at least one diagonal that lies]]"
 tags: [knowledge-item, procedure]
 ---
 # KI-GE-70
@@ -31,7 +31,7 @@ Required by skills in grade(s): 8.
 | Type | To | Basis | Strength | Reason |
 |---|---|---|---|---|
 | requires | Knowledge item [[KI-GE-64 To construct a triangle from its three sides, draw one side]] | mathematical necessity | required before attainment | — |
-| requires | Knowledge item [[KI-GE-66 A diagonal of a quadrilateral divides it into two triangles]] | mathematical necessity | required before attainment | — |
+| requires | Knowledge item [[KI-GE-66 Every quadrilateral has at least one diagonal that lies]] | mathematical necessity | required before attainment | — |
 
 ## Linked from
 

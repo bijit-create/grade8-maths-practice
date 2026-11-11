@@ -15,6 +15,7 @@ requires_before_teaching:
   - "[[KI-GE-21 A quadrilateral is a closed figure in a plane bounded by]]"
 requires_before_attainment:
   - "[[KI-GE-22 The three angles of a triangle add up to 180 deg]]"
+  - "[[KI-GE-66 Every quadrilateral has at least one diagonal that lies]]"
 tags: [knowledge-item, principle]
 ---
 # KI-GE-23
@@ -33,6 +34,7 @@ Required by skills in grade(s): 8.
 |---|---|---|---|---|
 | requires | Knowledge item [[KI-GE-21 A quadrilateral is a closed figure in a plane bounded by]] | mathematical necessity | required before teaching | — |
 | requires | Knowledge item [[KI-GE-22 The three angles of a triangle add up to 180 deg]] | instructional route | required before attainment | — |
+| requires | Knowledge item [[KI-GE-66 Every quadrilateral has at least one diagonal that lies]] | instructional route | required before attainment | — |
 
 ## Linked from
 

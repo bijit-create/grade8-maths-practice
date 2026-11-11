@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preview of the Signals tab (simulated records)</title>
+<!-- Teacher preview. Student 2 never sees it. It draws the same rows that apps-script/Signals.gs writes to the Signals tab
+     of her Sheet, from simulated rows (signals-sample-rows.js), which are not her answers. Add ?empty=1 to see the tab
+     as it is before she has answered anything. -->
+<style>
+  body{font:14px/1.45 Arial,sans-serif;color:#1c1c1c;background:#fff;margin:0;padding:16px}
+  .sim{background:#fff3c4;border:2px solid #b58900;padding:10px 12px;margin:0 0 12px;font-weight:600;max-width:1360px;box-sizing:border-box}
+  table{border-collapse:collapse;table-layout:fixed;width:1360px}
+  td{border:1px solid #e1e1e1;padding:3px 6px;vertical-align:top;white-space:pre-line;overflow-wrap:anywhere}
+  tr.title td,tr.h2 td{font-size:17px;font-weight:700}
+  tr.h3 td,tr.strong td,tr.th td{font-weight:700}
+  tr.th td{background:#f2f2f2}
+  tr.blank td{height:14px}
+  tr.over td{border-left-color:transparent;border-right-color:transparent;white-space:nowrap;overflow:visible}
+</style>
+</head>
+<body>
+<p class="sim" id="sim"></p>
+<table id="tab"><colgroup><col style="width:100px"><col style="width:330px"><col style="width:330px"><col style="width:170px"><col style="width:280px"><col style="width:150px"></colgroup></table>
+<script src="../apps-script/Signals.gs"></script>
+<script src="signals-sample-rows.js"></script>
+<script>
+(function(){
+  const empty=/[?&]empty=1/.test(location.search);
+  document.getElementById("sim").textContent=empty
+    ?"This is the Signals tab as it is before Student 2 has answered anything."
+    :"These records are simulated. A scripted learner played the practice page on 10 Nov 2026 and gave planned wrong answers. The clock of the page was set to 12 Nov and then to 13 Nov. Student 2 has not used the page, and none of these answers is hers.";
+  const T=signalsTable(signalsFromRows(empty?[]:SIMULATED_ROWS));
+  const tab=document.getElementById("tab");
+  T.forEach(r=>{const tr=document.createElement("tr");
+    const over=["title","text","h2","h3","strong"].includes(r.style);   /* these rows overflow to the right in the Sheet */
+    tr.className=r.style+(over?" over":"");
+    r.cells.forEach(c=>{const td=document.createElement("td");td.textContent=c;tr.appendChild(td);});
+    tab.appendChild(tr);});
+})();
+</script>
+</body>
+</html>

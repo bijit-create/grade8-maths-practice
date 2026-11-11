@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find an angle of a quadrilateral from the angle beside it</title>
+<!-- Student 2, quadrilaterals experience 6 of 7. 11 Nov 2026.
+     SK-GE-11 (Skill): find an angle of a quadrilateral from the angle that makes a straight line with it at the same vertex.
+     Statement: angles on a straight line add up to 180 degrees, so for a quadrilateral ABCD with side AB extended past B to a
+     point E, angle ABC (the interior angle at B) + angle CBE (the outside angle) = 180 degrees.
+     Teacher name: linear pair of angles (supplementary adjacent angles); exterior angle of a quadrilateral.
+       Rule in symbols: ∠ABC = 180° − ∠CBE. With the angle sum, ∠D = 360° − (∠A + ∠B + ∠C).
+     Picture: a quadrilateral with one side carried on as a dashed straight line to a point E, the outside angle written,
+     the angle inside the quadrilateral unknown. The angles of every shape are exact: the shape is built from its angles.
+     Picture job: she taps which of two marked angles at that vertex is the angle inside the quadrilateral. It is kept on the
+     first 5 own items and on the worked and supported items, then dropped (the ? stays on the picture). ?tap=0 / ?tap=1 force it.
+     Kinds: outBig (outside angle more than 90°, inside less), outSmall (outside less than 90°, inside more),
+       otherVertex (the extended vertex is A or D), twoStep (one known angle is given as an outside angle; find the 4th angle),
+       which (choice of 3: which angle is an angle of the quadrilateral).
+     Shortcuts this set defeats: "the number I see is the answer" (all kinds), "the inside angle is always less than 90°"
+       (outSmall), "180° minus the number is always the answer" (twoStep needs the sum 360° as well),
+       "the outside angle is one of the four angles" (twoStep, which), "the extended vertex is always B or C" (otherVertex).
+     Contrasts: outside angle less than 90° (outSmall), two steps (twoStep), outside angle at a different vertex (otherVertex).
+     Engine and records: assets/quad-engine.js. -->
+<link rel="stylesheet" href="assets/quad.css">
+</head>
+<body>
+<div class="app">
+  <div class="top"><h1 id="h1">Find an angle of a quadrilateral from the angle beside it</h1><div class="tools"><button class="btn" id="readBtn" type="button">Read it</button><button class="btn" id="pauseBtn" type="button">Pause</button></div></div>
+  <div id="teacher" class="hide"></div>
+  <div class="card"><div id="pic"></div><div class="text"><div id="words"></div><div id="acts"></div></div></div>
+</div>
+<div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
+<script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/quad-engine.js"></script>
+<script>
+"use strict";
+const LET="ABCD",QSP=new URLSearchParams(location.search),LEN=56;
+const rad=d=>d*Math.PI/180,f1=x=>Math.round(x*10)/10;
+const unit=(a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],d=Math.hypot(dx,dy)||1;return [dx/d,dy/d];};
+const bis=(u,w)=>{const x=u[0]+w[0],y=u[1]+w[1],d=Math.hypot(x,y)||1;return [x/d,y/d];};
+const at=(V,u,r)=>[V[0]+u[0]*r,V[1]+u[1]*r];
+const lcg=seed=>{let s=seed;return ()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};};
+/* an angle's number sits further out when the angle is narrow, so it clears the sides */
+const labR=(u,w)=>{const h=Math.acos(Math.max(-1,Math.min(1,u[0]*w[0]+u[1]*w[1])))/2;return Math.min(82,Math.max(52,34/Math.sin(h)));};
+const inB=(p,x0,x1,y0,y1)=>p[0]>=x0&&p[0]<=x1&&p[1]>=y0&&p[1]<=y1;
+
+/* ---------- a quadrilateral built from its four angles (exact), turned and sized at random ---------- */
+function attempt(rnd,I){
+  const sgn=rnd()<.5?1:-1;let a=rnd()*360;const dirs=[a];
+  for(let k=1;k<4;k++){a+=sgn*(180-I[k]);dirs.push(a);}
+  const u=dirs.map(x=>[Math.cos(rad(x)),Math.sin(rad(x))]);
+  const l1=1,l2=.7+rnd()*.9,rx=-(l1*u[0][0]+l2*u[1][0]),ry=-(l1*u[0][1]+l2*u[1][1]);
+  const det=u[2][0]*u[3][1]-u[2][1]*u[3][0],l3=(rx*u[3][1]-ry*u[3][0])/det,l4=(u[2][0]*ry-u[2][1]*rx)/det;
+  if(!(l3>.5&&l4>.5&&l3<2.2&&l4<2.2))return null;
+  const L=[l1,l2,l3,l4];let P=[[0,0]];for(let k=0;k<3;k++)P.push([P[k][0]+L[k]*u[k][0],P[k][1]+L[k]*u[k][1]]);
+  const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  const s=Math.min(280/(x1-x0),230/(y1-y0));
+  P=P.map(p=>[f1(210+(p[0]-(x0+x1)/2)*s),f1(185+(p[1]-(y0+y1)/2)*s)]);
+  for(let k=0;k<4;k++)if(Math.hypot(P[k][0]-P[(k+1)%4][0],P[k][1]-P[(k+1)%4][1])<62)return null;
+  return P;}
+/* the dashed line and the two angle labels at vertex v must stay inside the picture */
+function layout(rnd,I,v){for(let n=0;n<1500;n++){const P=attempt(rnd,I);if(!P)continue;
+  const V=P[v],pv=P[(v+3)%4],nx=P[(v+1)%4],dE=unit(pv,V),dp=unit(V,pv),dn=unit(V,nx);
+  if(!inB(at(V,dE,LEN+20),14,406,22,362))continue;
+  if(!inB(at(V,bis(dp,dn),Math.max(labR(dp,dn),50)+8),24,396,28,356)||!inB(at(V,bis(dE,dn),Math.max(labR(dE,dn),68)+8),24,396,28,356))continue;
+  return P;}
+  throw new Error("no layout");}
+/* four whole-number angles, the one at v being T */
+function angleSet(ctx,v,T){for(let n=0;n<200;n++){const a=ctx.int(55,125),b=ctx.int(55,125),c=360-T-a-b;if(c<50||c>130)continue;
+  const I=[0,0,0,0],o=[0,1,2,3].filter(k=>k!==v);I[v]=T;I[o[0]]=a;I[o[1]]=b;I[o[2]]=c;return I;}
+  return null;}
+function newItem(ctx,vs,T0,T1){for(let n=0;n<100;n++){const v=ctx.pick(vs),T=ctx.int(T0,T1),I=angleSet(ctx,v,T);if(!I)continue;
+  let P;try{P=layout(ctx.rng,I,v);}catch(e){continue;}
+  return {P,I,v,out:180-T};}
+  throw new Error("no item");}
+
+/* ---------- the picture: the two angles at the extended vertex, the dashed line, the angles that are written ---------- */
+function scene(ctx,P,o){
+  const v=o.v,V=P[v],pv=P[(v+3)%4],nx=P[(v+1)%4],dp=unit(V,pv),dn=unit(V,nx),dE=unit(pv,V),E=at(V,dE,LEN);
+  const bin=bis(dp,dn),bout=bis(dE,dn),rin=Math.max(labR(dp,dn),50),rout=Math.max(labR(dE,dn),68),cen=[0,1,2,3].reduce((s,k)=>[s[0]+P[k][0]/4,s[1]+P[k][1]/4],[0,0]);
+  const svg=ctx.svg("0 0 420 380",`A quadrilateral ABCD. Side ${LET[(v+3)%4]}${LET[v]} is carried straight on past ${LET[v]} to the point E by a dashed line.`);
+  let sel=null;const shown={};
+  const marks=o.marks||[];   /* {k, text}: an angle written inside the shape at vertex k */
+  function wedge(Vp,d1,d2,R){const s=at(Vp,d1,R),e=at(Vp,d2,R),sw=(d1[0]*d2[1]-d1[1]*d2[0])>0?1:0;
+    return {arc:`M${f1(s[0])} ${f1(s[1])} A${R} ${R} 0 0 ${sw} ${f1(e[0])} ${f1(e[1])}`,fill:`M${Vp[0]} ${Vp[1]} L${f1(s[0])} ${f1(s[1])} A${R} ${R} 0 0 ${sw} ${f1(e[0])} ${f1(e[1])} Z`};}
+  function label(p,t){const e=ctx.el("text",{class:"ang",x:f1(p[0]),y:f1(p[1]+6),"text-anchor":"middle"});e.textContent=t;svg.appendChild(e);return e;}
+  function draw(focus){svg.innerHTML="";
+    const parts=[{w:"in",d1:dp,d2:dn,b:bin},{w:"out",d1:dE,d2:dn,b:bout}];
+    parts.forEach(q=>{const w=wedge(V,q.d1,q.d2,q.w==="in"?30:46),fp=ctx.el("path",{d:w.fill,fill:sel===q.w?"var(--mark)":(o.tap?"var(--accent)":"none"),"fill-opacity":sel===q.w?".45":".12",stroke:"none"});svg.appendChild(fp);});
+    for(let k=0;k<4;k++)svg.appendChild(ctx.el("line",{class:"side",x1:P[k][0],y1:P[k][1],x2:P[(k+1)%4][0],y2:P[(k+1)%4][1]}));
+    svg.appendChild(ctx.el("line",{class:"gap",x1:V[0],y1:V[1],x2:E[0],y2:E[1]}));
+    svg.appendChild(ctx.el("circle",{class:"dot",cx:f1(E[0]),cy:f1(E[1]),r:6}));
+    {const t=ctx.el("text",{class:"lbl",x:f1(E[0]+dE[0]*20),y:f1(E[1]+dE[1]*20+8),"text-anchor":"middle"});t.textContent="E";svg.appendChild(t);}
+    parts.forEach(q=>{const w=wedge(V,q.d1,q.d2,q.w==="in"?30:46),a=ctx.el("path",{class:"arc",d:w.arc});
+      if(sel===q.w){a.style.stroke="var(--diag)";a.style.strokeWidth="5";}svg.appendChild(a);});
+    marks.forEach(m=>{const Pk=P[m.k],d1=unit(Pk,P[(m.k+3)%4]),d2=unit(Pk,P[(m.k+1)%4]),w=wedge(Pk,d1,d2,24);
+      svg.appendChild(ctx.el("path",{class:"arc",d:w.arc}));label(at(Pk,bis(d1,d2),48),shown["m"+m.k]||m.text);});
+    label(at(V,bout,rout),o.out+"°");
+    if(shown.in)label(at(V,bin,rin),shown.in+"°");else if(o.q)label(at(V,bin,rin),"?");
+    [0,1,2,3].forEach(k=>{let d;if(k===v){const n=[-dE[1],dE[0]];d=(n[0]*dn[0]+n[1]*dn[1])<0?n:[-n[0],-n[1]];}else d=unit(cen,P[k]);
+      const t=ctx.el("text",{class:"lbl",x:f1(P[k][0]+d[0]*(k===v?32:30)),y:f1(P[k][1]+d[1]*(k===v?32:30)+8),"text-anchor":"middle"});t.textContent=LET[k];svg.appendChild(t);});
+    if(o.tap)parts.forEach(q=>{const c=at(V,q.b,q.w==="in"?rin:rout),g=ctx.el("g",{class:"pt",tabindex:0,role:"button","aria-label":"One of the two angles at "+LET[v],"data-w":q.w});
+      g.appendChild(ctx.el("circle",{class:"hit",cx:f1(c[0]),cy:f1(c[1]),r:32}));
+      g.addEventListener("click",()=>pick(q.w));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(q.w,true);}});svg.appendChild(g);});
+    if(focus){const g=svg.querySelector(`[data-w="${sel}"]`);if(g)g.focus();}}
+  function pick(w,key){if(!ctx.open)return;sel=w;ctx.clearNote();draw(key);}
+  draw();
+  return {select:w=>pick(w),get sel(){return sel},reveal(x){Object.assign(shown,x);draw();}};}
+
+/* the picture job is kept on the worked and supported items and on her first 5 own items, then dropped */
+function tapOn(ctx){if(QSP.get("tap")==="0")return false;if(QSP.get("tap")==="1")return true;
+  if(ctx.role==="worked"||ctx.role==="supported")return true;if(ctx.role==="review")return false;
+  const st=window.__qe&&window.__qe.S&&window.__qe.S.st;return !st||st.pi<5;}
+const press=()=>document.querySelector("#acts .decide").click();
+function uniqWrongs(list,right){const seen=new Set([right]),out=[];list.forEach(w=>{if(w.n>0&&w.n<10000&&!seen.has(w.n)){seen.add(w.n);out.push(w);}});return out;}
+
+/* ---------- one angle from the angle beside it ---------- */
+function judgeSingle(item,sel,n,tap){const {v,out}=item,V=LET[v],nx=LET[(v+1)%4],X=`∠${nx}${V}E`,inn=180-out;
+  const lead=tap&&sel==="out"?`You tapped ${X}, the angle outside the quadrilateral. `:"";
+  const ans=(tap?(sel==="in"?"tapped the inside angle; ":sel==="out"?"tapped the outside angle; ":"no tap; "):"")+"wrote "+n;
+  if(n===inn&&!lead)return {right:true,answer:ans,tag:"right",eq:`${inn} = 180 − ${out}`,
+    reply:`Yes. ∠${V} and ${X} are on one straight line, so they add up to 180°. ∠${V} = 180° − ${out}° = ${inn}°.`};
+  let body,tag;
+  if(n===inn){body=`You wrote ${n}°. ${n}° is the size of ∠${V}, the angle inside the quadrilateral. The angle you tapped is ${X}, and it is ${out}°.`;tag="right number, tapped the outside angle";}
+  else if(n===out){body=`You wrote ${n}°. ${n}° is the size of ${X}, the angle outside the quadrilateral, and it is already written on the picture. ∠${V} is on the same straight line, so ∠${V} + ${X} = 180°.`;tag="wrote the outside angle";}
+  else if(n===360-out){body=`You wrote ${n}°. That is 360° − ${out}°. Angles on a straight line add up to 180°, not 360°, so ∠${V} + ${X} = 180°.`;tag="360 minus the outside angle";}
+  else{body=`You wrote ${n}°. Then ∠${V} + ${X} would be ${n}° + ${out}° = ${n+out}°. Angles on a straight line add up to 180°, so ∠${V} + ${X} should be 180°.`;tag="other number";}
+  return {right:false,answer:ans,tag,eq:`${inn} = 180 − ${out}`,reply:lead+body};}
+function single(ctx,item,cfg){cfg=cfg||{};const tap=cfg.tap,{v,out}=item,V=LET[v],pv=LET[(v+3)%4],nx=LET[(v+1)%4],X=`∠${nx}${V}E`,inn=180-out;
+  const B=scene(ctx,item.P,{v,out,tap,q:true});
+  if(cfg.lead)cfg.lead.forEach(t=>ctx.say(t,cfg.leadCls));
+  ctx.say(`The dashed line carries side ${pv}${V} straight on past ${V}, to the point E. ${X} is ${out}°.`);
+  if(cfg.lines)cfg.lines.forEach(t=>ctx.say(t,cfg.linesCls||"say done"));
+  if(tap)ctx.say(`Tap the angle at ${V} that is inside the quadrilateral ABCD.`);
+  ctx.ask(`How many degrees is ∠${V}?`);
+  const inp=ctx.numberBox("Your answer in degrees",(n,raw)=>{
+    if(tap&&B.sel===null)return ctx.note(`Tap the angle at ${V} that is inside the quadrilateral first. Then write its number of degrees.`);
+    if(n===null)return ctx.note(raw===""?"Write a number of degrees, like 75.":"Write a whole number of degrees, like 75.");
+    const j=judgeSingle(item,B.sel,n,tap);if(j.right)B.reveal({in:inn});ctx.done(j);});
+  const set=(w,n)=>()=>{if(tap)B.select(w);inp.value=String(n);press();};
+  const W=[{n:out,expect:`You wrote ${out}°`},{n:360-out,expect:`You wrote ${360-out}°`},{n:inn+10,expect:`You wrote ${inn+10}°`},{n:inn-10,expect:`You wrote ${inn-10}°`}];
+  const wr=uniqWrongs(W,inn).slice(0,3).map(w=>({expect:w.expect,fn:set("in",w.n)}));
+  if(tap)wr.push({expect:`You tapped ${X}`,fn:set("out",inn)});
+  ctx.auto({right:set("in",inn),wrongs:wr});}
+
+/* ---------- two steps: one of the three known angles is an outside angle ---------- */
+function judgeTwo(item,hid,sel,n,tap){const {v,I,out}=item,V=LET[v],H=LET[hid],nx=LET[(v+1)%4],X=`∠${nx}${V}E`,x=180-out,ans=I[hid];
+  const known=[0,1,2,3].filter(k=>k!==hid),vals=k=>k===v?x:I[k];
+  const sumK=known.reduce((s,k)=>s+vals(k),0),expr=known.map(k=>vals(k)+"°").join(" + ");
+  const lead=tap&&sel==="out"?`You tapped ${X}, the angle outside the quadrilateral. `:"";
+  const rec=(tap?(sel==="in"?"tapped the inside angle; ":sel==="out"?"tapped the outside angle; ":"no tap; "):"")+"wrote "+n;
+  if(n===ans&&!lead)return {right:true,answer:rec,tag:"right",eq:`∠${H} = 360 − (${sumK})`,
+    reply:`Yes. ∠${V} and ${X} are on one straight line, so ∠${V} = 180° − ${out}° = ${x}°. Then ∠${H} = 360° − (${expr}) = ${ans}°.`};
+  let body,tag;const wrongOut=360-(sumK-x+out);
+  if(n===ans){body=`You wrote ${n}°. ${n}° is the size of ∠${H}. The angle you tapped is ${X}, and it is ${out}°. The angle inside the quadrilateral at ${V} is ∠${V}.`;tag="right number, tapped the outside angle";}
+  else if(n===wrongOut){body=`You wrote ${n}°. That is 360° − (${known.map(k=>(k===v?out:I[k])+"°").join(" + ")}). ${out}° is the size of ${X}, the angle outside the quadrilateral, so it is not one of the 4 angles that add up to 360°.`;tag="used the outside angle in the sum";}
+  else if(n===x){body=`You wrote ${n}°. That is the size of ∠${V}, which comes from the straight line with ${X}. The question asks for ∠${H}, the 4th angle of the quadrilateral.`;tag="stopped after the first step";}
+  else if(n===sumK){body=`You wrote ${n}°. That is the 3 angles ${expr} added together. ∠${H} is what is left when the 3 angles are taken from 360°.`;tag="the sum of the three angles";}
+  else{const all=[0,1,2,3].map(k=>k===hid?n:vals(k)),t=all.reduce((s,y)=>s+y,0);
+    body=`You wrote ${n}°. Then ∠A + ∠B + ∠C + ∠D would be ${all.map(y=>y+"°").join(" + ")} = ${t}°. The 4 angles of a quadrilateral add up to 360°.`;tag="other number";}
+  return {right:false,answer:rec,tag,eq:`∠${H} = 360 − (${sumK})`,reply:lead+body};}
+function two(ctx,item,hid,cfg){cfg=cfg||{};const tap=cfg.tap,{v,I,out}=item,V=LET[v],H=LET[hid],pv=LET[(v+3)%4],nx=LET[(v+1)%4],X=`∠${nx}${V}E`,x=180-out,ans=I[hid];
+  const kn=[0,1,2,3].filter(k=>k!==v&&k!==hid),marks=kn.map(k=>({k,text:I[k]+"°"})).concat([{k:hid,text:"?"}]);
+  const B=scene(ctx,item.P,{v,out,tap,marks,q:false});
+  ctx.say(`The dashed line carries side ${pv}${V} straight on past ${V}, to the point E. ${X} is ${out}°.`);
+  ctx.say(`${kn.map(k=>`∠${LET[k]} is ${I[k]}°`).join(" and ")}.`);
+  if(cfg.lines)cfg.lines.forEach(t=>ctx.say(t,"say done"));
+  if(tap)ctx.say(`Tap the angle at ${V} that is inside the quadrilateral ABCD.`);
+  ctx.ask(`How many degrees is ∠${H}?`);
+  const inp=ctx.numberBox("Your answer in degrees",(n,raw)=>{
+    if(tap&&B.sel===null)return ctx.note(`Tap the angle at ${V} that is inside the quadrilateral first. Then write ∠${H} in degrees.`);
+    if(n===null)return ctx.note(raw===""?"Write a number of degrees, like 75.":"Write a whole number of degrees, like 75.");
+    const j=judgeTwo(item,hid,B.sel,n,tap);if(j.right)B.reveal({["m"+hid]:ans+"°"});ctx.done(j);});
+  const set=(w,n)=>()=>{if(tap)B.select(w);inp.value=String(n);press();};
+  const known=[0,1,2,3].filter(k=>k!==hid),sumK=known.reduce((s,k)=>s+(k===v?x:I[k]),0);
+  const W=[{n:360-(sumK-x+out),expect:"not one of the 4 angles"},{n:x,expect:"the 4th angle of the quadrilateral"},{n:sumK,expect:"added together"},{n:ans+10,expect:`You wrote ${ans+10}°`}];
+  const wr=uniqWrongs(W,ans).map(w=>({expect:w.expect,fn:set("in",w.n)}));
+  if(tap)wr.push({expect:`You tapped ${X}`,fn:set("out",ans)});
+  ctx.auto({right:set("in",ans),wrongs:wr});}
+
+/* ---------- which angle is it ---------- */
+function which(ctx,item){const {v,out}=item,V=LET[v],pv=LET[(v+3)%4],nx=LET[(v+1)%4],X=`∠${nx}${V}E`,IN=`∠${pv}${V}${nx}`,ST=`∠${pv}${V}E`;
+  scene(ctx,item.P,{v,out,tap:false,q:false});
+  ctx.say(`The dashed line carries side ${pv}${V} straight on past ${V}, to the point E. ${X} is ${out}°.`);
+  ctx.ask(`Which angle is an angle of the quadrilateral ABCD at ${V}?`);
+  const opts=[{t:IN,right:true},{t:X,right:false},{t:ST,right:false}];
+  for(let i=2;i>0;i--){const j=ctx.int(0,i);[opts[i],opts[j]]=[opts[j],opts[i]];}
+  const reply={[IN]:`Yes. ${IN} is made by the sides ${pv}${V} and ${V}${nx} of the quadrilateral ABCD, so it is the angle ∠${V}. ${X} is outside the quadrilateral, between side ${V}${nx} and the dashed line.`,
+    [X]:`Your answer was ${X}. ${X} is the angle outside the quadrilateral, between side ${V}${nx} and the dashed line. An angle of ABCD is made by two of its sides.`,
+    [ST]:`Your answer was ${ST}. ${pv}, ${V} and E are on one straight line, so ${ST} is the whole straight line, 180°. It is not made by two sides of ABCD.`};
+  const tag={[IN]:"right",[X]:"chose the outside angle",[ST]:"chose the straight angle"};
+  const w=ctx.choices(opts.map(o=>({t:o.t,fn(){ctx.done({right:o.right,answer:o.t,tag:tag[o.t],eq:"angle at "+V+" inside the quadrilateral",reply:reply[o.t]});}})));
+  const click=t=>()=>[...w.querySelectorAll("button")].find(b=>b.textContent===t).click();
+  ctx.auto({right:click(IN),wrongs:[{expect:`Your answer was ${X}`,fn:click(X)},{expect:`Your answer was ${ST}`,fn:click(ST)}]});}
+
+/* ---------- worked examples ---------- */
+function W1(ctx){
+  /* B = 70°, so the outside angle CBE = 110°. The shape is fixed. */
+  const P=[[73.5,140],[300,100],[265,297],[110,310]],item={P,I:[88,70,105,97],v:1,out:110};
+  single(ctx,item,{tap:false,lead:["A quadrilateral has 4 angles, ∠A, ∠B, ∠C and ∠D."],
+    linesCls:"say",lines:["A, B and E are on one straight line. Angles on a straight line add up to 180°, so ∠B + ∠CBE = 180°.","∠CBE is 110°, so ∠B = 180° − 110°."]});}
+function W2(ctx){const I=[75,80,110,95],rnd=lcg(7),P=layout(rnd,I,1),item={P,I,v:1,out:100};
+  const B=scene(ctx,P,{v:1,out:100,tap:false,marks:[{k:0,text:"75°"},{k:2,text:"110°"},{k:3,text:"?"}],q:false});B.reveal({in:80});
+  ctx.say("The dashed line carries side AB straight on past B, to the point E. ∠CBE is 100°.");
+  ctx.say("First, ∠B and ∠CBE are on one straight line, so ∠B = 180° − 100° = 80°.");
+  ctx.say("Then the 4 angles of ABCD add up to 360°, so ∠D = 360° − (75° + 80° + 110°).");
+  ctx.ask("How many degrees is ∠D?");
+  const inp=ctx.numberBox("Your answer in degrees",(n,raw)=>{if(n===null)return ctx.note(raw===""?"Write a number of degrees, like 75.":"Write a whole number of degrees, like 75.");
+    const j=judgeTwo(item,3,null,n,false);if(j.right)B.reveal({m3:"95°"});ctx.done(j);});
+  const set=n=>()=>{inp.value=String(n);press();};
+  ctx.auto({right:set(95),wrongs:[{expect:"not one of the 4 angles",fn:set(360-(75+100+110))},{expect:"the 4th angle",fn:set(80)}]});}
+function SUP(ctx){const item=newItem(ctx,[1,2],40,85);
+  single(ctx,item,{tap:true,lines:["Angles on a straight line add up to 180°.",`∠${LET[item.v]} + ∠${LET[(item.v+1)%4]}${LET[item.v]}E = 180°`]});}
+
+/* ---------- her own items ---------- */
+const G={
+ outBig(ctx){single(ctx,newItem(ctx,[1,2],40,85),{tap:tapOn(ctx)});},
+ outSmall(ctx){ctx.contrast="outside angle less than 90°";single(ctx,newItem(ctx,[1,2],95,140),{tap:tapOn(ctx)});},
+ otherVertex(ctx){ctx.contrast="outside angle at a different vertex";single(ctx,newItem(ctx,[0,3],45,135),{tap:tapOn(ctx)});},
+ twoStep(ctx){ctx.contrast="two steps";const item=newItem(ctx,[0,1,2,3],50,130),hid=ctx.pick([0,1,2,3].filter(k=>k!==item.v));two(ctx,item,hid,{tap:tapOn(ctx)});},
+ which(ctx){which(ctx,newItem(ctx,[0,1,2,3],50,130));}
+};
+
+QE.start({set:"sk-ge-11",ki:"SK-GE-11",title:"Find an angle of a quadrilateral from the angle beside it",version:"quadrilaterals-6 1.0 (11 Nov 2026)",
+  teacher:"Linear pair (adjacent supplementary angles): ∠ABC + ∠CBE = 180° when A, B, E are collinear, so ∠ABC = 180° − ∠CBE. Two-step: ∠D = 360° − (∠A + ∠B + ∠C), with ∠B = 180° − its outside angle.",
+  worked:[W1,W2],sup:SUP,gen:G,
+  plan:["outBig","outSmall","which","otherVertex","twoStep","outBig","twoStep","outSmall","otherVertex","which","twoStep","outBig"],
+  contrasts:["outside angle less than 90°","two steps","outside angle at a different vertex"],
+  contrastKind:{"outside angle less than 90°":"outSmall","two steps":"twoStep","outside angle at a different vertex":"otherVertex"},
+  gates:{twoStep:["outBig"]}});
+</script>
+</body>
+</html>
