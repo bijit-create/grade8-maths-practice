@@ -1,46 +1,88 @@
-# Handover: Student 2 (11 Nov 2026)
+# Handover: Student 2 (15 Nov 2026)
 
-Keep this file short (CLAUDE.md step 6). Replace a section when it is settled; do not stack new sections above old ones.
-
-## What she meets now
-
-Facts from git, 11 Nov 2026 (commit e400dd2); check the code before relying on them.
-- Home page (`site/index.html`), live since 11 Nov 2026 night (commit b14d43e, deployment dpl_DXWyH7BfKoktbeuee9iJezJx45gs, Bijit's "Yes, deploy"): Equations first (`equations-1.html` KI-AG-01/03, "Start here"; `equations-2.html` KI-AG-04/06), then quadrilaterals 1–7 ("Start the quadrilaterals here, after the equations pages"). No teacher words; the knowledge graph is unlinked but still at /knowledge-graph. Every page has a "Back to all pages" button. Removed from the site: `balance-equations.html` (rejected) and `equations-practice.html` (24 Oct, sent nothing to her Sheet); both give 404. Known: the equations-1 test fails one review check about 1 run in 3 on the old page too (random review item). Second reader's notes, not acted on: page 1 opens with 3 sides drawn; page 7 writes the equation for her though no page teaches solving one; equations keypad shows + − × x for number answers; Read it and Pause are not explained.
-- Her Sheet ("Student 2 – Maths progress record"; Apps Script project "Student 2 practice record"), checked 11 Nov 2026, evening. The live web app is still the 9 Nov receiver (commit 2eaba1b); her pages post to it unchanged. Saved in the editor but NOT deployed: `Signals.gs` and the `Code.gs` with the three-line `updateSignals` hook, both exactly as commit 3516442 (only version that exists; the copies in four worktrees differ only in line endings). Backup of the earlier Code.gs: commit 2eaba1b (checked line by line against the live text). Stopped at Google's "Authorisation required" when running `updateSignals` once; Bijit to click Review permissions, then Run `updateSignals`, then Deploy > Manage deployments > edit > New version > Deploy. Until then the Signals tab does not exist. Signals reads only sets `ki-ag-01`/`ki-ag-03` (equations-1: same task kinds, every tag it sends has a reading); equations-2 and the quadrilateral pages are ignored, not misread. Tests: 6 of 6 passed. Activity already holds test rows from 9–10 Nov (sets bags, counters, share from the rejected balance page), which Signals ignores.
-- Status.gs (Student 1's stage and "helped" logic): not needed for her (decided 11 Nov evening by the right-size check). Her pages already send each set's stage and own-right count to Now, and every answer's own/support to Activity. Status.gs needs tabs she has not got (Topics, Skills, Knowledge items), reads his row fields (correct, graph tags, his roles), and applies his 9-of-10 rule, which `CLAUDE.md` does not adopt. Its "helped" marks come from a teacher page that does not exist for her, and no adult sits with her. Revisit only if a named question cannot be answered from Activity and Now.
-- Live site: grade8-maths-practice.vercel.app. Pushes do not deploy; prod deploys need Bijit's yes.
-- Since the 11 Nov merge (8db1f2f), main also has the seven quadrilateral pages and their home-page links, as in production (6a30629). The bags-and-counters KI-AG-01/03 page was dropped (11 Nov). Which topic she starts on is open (C1 below).
+Keep this file short (CLAUDE.md step 6). Replace a section when it is settled; do not stack new sections above old ones. The 11 Nov text of this file is in git (7899894). Written 15 Nov 2026 from her Sheet, the code on main and Bijit's answers of that day.
 
 ## Her record
 
-None yet. `profile.md` (local) is mostly blank.
+Source: her Sheet "Student 2 – Maths progress record", tab Activity, read 15 Nov 2026 and saved as `data/activity-2026-11-15.csv` (local). Counted by `python tests/count-first-answers.py <that csv>`; a second reader counted the same rows by hand and got the same numbers. Rows on device d-54ufsm are hers. Bijit, 15 Nov: "She has done everything very independently." The Sheet itself has no field for who was there.
 
-## 11 Nov 2026: Student 1's 10–11 Nov work brought in (rules, research, code). Committed on main 11 Nov (900d860).
+A **first answer** is an item on her own that did not come straight after a wrong-answer reply. **After a reply** is the fresh item straight after one. The pages log both as her own; this count keeps them apart. Each cell is right / asked.
 
-- `CLAUDE.md`: six steps; which document governs; `supplied` and "helped" in the record; what a knowledge item is and the moment test; show, predict, fade with practice after modelling; decisions rest on researched knowledge (lever points); the route for a new screen.
-- `charter.md` (new): Student 1's goals, for her, without his evidence.
-- `research-from-student-1/` (local): his 11 Nov research with a status note on each file and the ChatGPT method in `README.md`.
-- `templates-from-student-1/2026-11-11/` (local): his journey engine, ladder, tests and Sheet scripts, keys switched to student2. `PORTING-NOTE.md` says what moving the balance page onto it would take.
-- 11 Nov 2026 (night): both local folders are in the main checkout (moved at 19:56; worktree `peaceful-villani-833f1f` no longer holds them) and stay gitignored. In `CLAUDE.md`, Student 1's diagnosis was taken out of the public text; it now says only "written for Student 1". The worktree's own branch (cd4737b, not pushed) holds an earlier copy of these rule files; main is the one to use.
-- 11 Nov 2026 (night): `claude/funny-gates-6c0b8e` (tip 4286dd9) merged into main (8db1f2f) and pushed. The only conflict was in `.gitignore`, and both lines were kept (`tests/shots/`, `research-from-student-1/`). `git diff 6a30629 main -- site/` is empty, so `site/` on main is what production serves. No redeploy was needed, and none was made.
+| Date | Page (set) | First answers | After a reply | Worked steps |
+|---|---|---|---|---|
+| 10 Nov | Balance: bags, counters, share | 3 / 4 | 1 / 3 | none logged |
+| 11 Nov | Balance: share, check | 2 / 3 | 1 / 2 | none logged |
+| 11 Nov | Make a quadrilateral (q1-make) | 8 / 10 | 2 / 2 | 2 / 2 |
+| 11 Nov | Decide whether it is a quadrilateral (ki-ge-21) | 11 / 12 | 1 / 1 | 2 / 2 |
+| 11 Nov | Diagonals (ki-me-40) | 10 / 12 | 2 / 2 | 2 / 2 |
+| 12 Nov | What the 4 angles add up to (ki-ge-23) | 11 / 11 | none | 2 / 2 |
+| 12 Nov | Find the missing angle (sk-ge-08) | 6 / 6, page not finished | none | 2 / 2 |
+| 13 Nov | An angle from the angle beside it (sk-ge-11) | 12 / 12 | none | 2 / 2 |
+| 13 Nov | Angles written with x (sk-ge-09) | 15 / 16 | 1 / 1 | 2 / 2 |
+| 15 Nov | Letters and expressions (ki-ag-01) | 9 / 11, saved stop | 2 / 4 | 4 / 6 |
+| 15 Nov | Terms (ki-ag-04) | 7 / 12 | 5 / 6 | 4 / 5 |
+| 15 Nov | Coefficients (ki-ag-06) | 9 / 10 | 1 / 1 | 3 / 5 |
 
-## 11 Nov 2026 (evening): ChatGPT's Student 2 handoff checked and repairs applied. Deployed.
+All first answers: 119 right of 135. The second half of Letters and expressions (ki-ag-03) was not reached.
 
-On Bijit's "please push and deploy", everything below went into branch `claude/funny-gates-6c0b8e` as commit 6a30629 (pushed). Production deployment dpl_DtzUbNj2NWwEeWsabrJVSqZGbjJH is READY on grade8-maths-practice.vercel.app; the live page 4, engine and graph page were checked. Since 11 Nov (night) these edits are on main through the merge (8db1f2f). `science-books/` (NCERT Grade 8 Science textbook) is gitignored and stays local (Bijit, 11 Nov).
+First answers that were not right (Sheet row, what was asked, her answer):
+- 47, 52: make a quadrilateral: a shape with 5 sides; a shape with three points on a line.
+- 67: an open shape: "yes, a quadrilateral".
+- 87, 93: a diagonal of a dart: MK; how many diagonals a quadrilateral has: 1.
+- 172: a worked sum, 185° + 45° + 55° + 95° = 380°: "Yes, they add up to 360°".
+- 193: "6 less than a number y": 6 − y. 195: "Can a + 9 be 9?": No.
+- 232, 242: "Do 12 − 2y and −2y + 12 have the same value for every y?": No. "Do 9 − 2a and 2a − 9 …?": Yes.
+- 236: "How many terms does 4 × a + 4 have?": 3.
+- 239, 252, 263: the second term of 14 − 2y: 2y; of 8y − 6: 6; the constant term of 5x − 7: 7.
+- 11, 39: balance, 4x + 10 = 6x + 4 (her entry was not stored); "is 5 a solution of 2x + 11 = 3x + 6": "not the same".
 
-Sources: bridge request e29fba0a (ChatGPT's handoff, 09:19) and cd28102b (Claude's audit of it, 15:47; P2, P3 accepted, P1, P4–P7 corrected; each correction checked before use). Backups in the session scratchpad `backup-2026-11-11/`.
-- Graph (`knowledge-graph/`: `fragments/GE.json`, `merged-raw.json`, `graph-data.json`, `vault/`, `graph-page.html`; and `site/knowledge-graph.html` in main and in worktree funny-gates): Bijit's three decisions applied. KI-GE-21 now excludes crossed sides, touching opposite sides and three vertices in a line. KI-GE-23 requires KI-GE-66 (instructional route). SK-GE-08 requires KI-GE-21. KI-GE-66 corrected; the old statement was false for a concave shape: "Every quadrilateral has at least one diagonal that lies inside it apart from its end points, and that diagonal divides the quadrilateral into two triangles." The vault note for KI-GE-66 was renamed to match, with its links. The patched `merged-raw.json` matches a fresh `merge.py` run. `finalize.py` was not rerun, because it rewrites the whole file. The published graph artifact was not republished.
-- Page 4 (worktree funny-gates, `site/quadrilaterals-4.html`): the teacher comment and `?teacher=1` string now name KI-GE-66 and KI-GE-22 correctly. Nothing she sees changed. Test: 615 passed, 0 failed.
-- `HANDOVER-7-pages.md`: "Nothing deployed" corrected, and the page 4 note made exact. `HANDOVER-sk-ge-08.md` (worktree kis-skills-progress): the approved prototype's two faults recorded. The prototype itself was not edited.
-- Already settled: the daily cap of 8, with up to 10 after a modelling run, is in `CLAUDE.md`.
+What the record cannot show: anything after a gap or in a mixed set (no set has answers on two days, except the balance sets bags, counters and share); whether she read a reply; what she typed on most balance items. She found x in 16 of 17 angle equations though no page teaches solving one. On 15 Nov she typed "5+2" seven times into one box, which the page could not read.
 
-Bijit took all three defaults ("Yes, take them", 11 Nov). Done locally, not deployed: C1 is recorded in `profile.md`. C2 and C3 are noted in page 4's header comment. The supported item's `support` column now says the 180° rule was written for her. This uses an optional `supSupport` field in `quad-engine.js`; the other six pages keep "worked lines on screen". To revise on her evidence:
-- C1. Which topic she starts on: equations, quadrilaterals, or both in a set order. [Keep equations as the recorded focus until he changes it.]- C2. Every total on page 4 is 360°. [Keep page 4 as supported practice and read its totals as limited evidence. Propose a triangle-against-quadrilateral contrast through the new-screen route if independent attainment is needed.]
-- C3. The triangle angle sum (KI-GE-22) is written beside her on page 4. [Keep it supplied and record it as supplied. Add a short teach-and-check if her answers show trouble using 180°.]
+## What she meets now
 
-## Open, for Bijit
+- Live site: grade8-maths-practice.vercel.app (deployed 11 Nov, b14d43e). Home page: equations-1 (KI-AG-01, 03, "Start here"), equations-2 (KI-AG-04, 06), then quadrilaterals 1 to 7. Pushes do not deploy; a deploy needs Bijit's yes. `site/` on main is what is live.
+- Her Sheet: the Signals tab now exists and holds her 15 Nov rows for ki-ag-01 only. It reads no other page.
+- The Now tab has no row for sk-ge-08 or ki-ag-06, and its "held" marks include answers given after a reply. Read her record from the count above, not from Now.
 
-- Decided (Bijit, 11 Nov evening, "own page code"): her next screens are built on her own pages' code (`site/assets/quad-engine.js` and the equations pages), not Student 1's engine. So `student2-ki-v1` keeps her pages' shape `{ki,res[],passed,stage}`; his engine's `{res,passed}` shape is not used for her.
-- 11 Nov evening, Bijit: "yes please do all" to the open list. Three sessions were started from the session that did the ChatGPT review: (1) git housekeeping on main, (2) her Sheet (Signals.gs; whether Status.gs is needed), (3) research (NCERT check of the quadrilateral and equations items, what the balance models).
-- Her Sheet: authorise the script, run `updateSignals`, deploy a new version (see "What she meets now").
-- 11 Nov 2026, research done (notes only, nothing applied): `plan/research-2026-11-11.md` (local). It holds the item-by-item NCERT check of the quadrilateral and equations items, and a cited account of what the balance does and does not represent. Main finding: NCERT's 2026-27 Class 8 book is *Ganita Prakash*. It teaches linear equations in Grade 7 (Part 2 ch. 7, with a weighing scale for positive terms only) and does not use "variable" or "coefficient". Open: which book her school uses (asked once); proposals P1–P6 (pages) and G1–G8 (graph) wait for Bijit.
+## Where the pages differ from CLAUDE.md (known; changing one is a build)
+
+- The fresh item after a wrong-answer reply is logged as her own and counts towards "holds" (`quad-engine.js`, both equations pages, `Signals.gs:205`). Worked-example steps are logged with own = 1.
+- No row holds `supplied` or who was there. The page version is only on the "session start" row.
+- After a wrong answer: one reply, one fresh item of the same kind, then a stop after two misses. No check of a part, no teaching. A page reload in the middle of a two-part item drops that item from the page's totals.
+- Nine separate pages and two copies of the flow (inline in each equations page; `quad-engine.js`). `?screen=` on an equations page still writes rows to her Sheet.
+- Nothing checks a page against the graph. quadrilaterals-7 (SK-GE-09) needs KI-AG-47, KI-AG-11 and KI-AG-20, which no page teaches. q1-make and ki-ge-21 both record KI-GE-21.
+- Tests: the seven quadrilateral tests pass (run 15 Nov); they need Playwright from the HTML-TOOL folder. The equations tests are in `study-materials/equations-pages/`, and the equations-1 test fails about 1 run in 3.
+
+## Decided
+
+- Bijit, 15 Nov: her Class 8 book is *Ganita Prakash*. There linear equations are Grade 7 work (Part 2, ch. 7, "Finding the Unknown"); the book says "letter-number" and does not teach "variable", "coefficient" or "constant term" (`plan/research-2026-11-11.md`, local). So equations-1 and equations-2 teach words her book does not use.
+- Bijit, 15 Nov: harder work on a skill comes only after she has practised it and it has developed (`CLAUDE.md`, "Knowledge items before skills").
+- Bijit, 11 Nov: her screens are built on her own pages' code, not Student 1's engine. Status.gs is not needed. C2 and C3 (page 4: every total is 360°; the 180° rule is written beside her) keep their defaults.
+- Student 1's 15 Nov structure (STATE.md, CANVAS.md, check.py, one sitting page) is not copied here. His own file says she follows "when unit 1 has run three sittings", and none has run.
+
+## The next sitting, and why
+
+Proposed, not built: one return sitting on the quadrilateral work of 11 to 13 Nov. About 12 first answers, no teaching before them, mixed in an order she cannot predict:
+- the kinds that were not right at the first answer (rows 47, 52, 67, 87, 93, 172), with new shapes and numbers;
+- the whole tasks SK-GE-08, SK-GE-11 and SK-GE-09, with no picture where the page had one;
+- two or three equations in the form *Ganita Prakash* uses (for example 20 + 2c = 60), to see whether she already solves them.
+
+Why: every "held" mark she has rests on one day. This is the first check after a gap and the first mixed set, and it can be asked again unchanged on a later day. What it decides: if the first answers are right, the quadrilateral work steps up (SK-GE-10, angles in a ratio; the exercises of *Ganita Prakash* 8, ch. 4), and the equations work starts from what she showed, not from the vocabulary pages. If not, the kind that was not right is taught before anything harder.
+
+Route: a local prototype on `quad-engine.js`, played, a second reader on the screens, then Bijit's yes to the screens (CLAUDE.md, "Route for a new screen").
+
+## Waiting for Bijit (two places)
+
+1. His yes to the return sitting's screens, when they are shown.
+2. Whether equations-1 and equations-2 stay on her home page as "Start here", now that her book does not use their words. Default until he says: they stay live, and no new work is built on them.
+
+## Later (none changes the next sitting)
+
+- Research proposals P1 to P6 (pages) and G1 to G8 (graph), `plan/research-2026-11-11.md` lines 255 to 283. G1 (the sign belongs to the term) bears on rows 239, 252 and 263. G5 names KI-GE-25, which was merged into KI-ME-40.
+- Eight graph questions in `knowledge-graph/progress-note.md` lines 17 to 25; item 9 (chapters removed in 2023) should be read again against *Ganita Prakash*.
+- A unit plan for equations taken from the graph (KI-AG-18, 19, 20, 24, 47; skills SK-AG-25 to 32) and checked against *Ganita Prakash* Grade 7 and 8. The graph has no skill for solving with the letter on one side.
+- Logging first answer / after a reply, `supplied` and the page version on every row: do it in the return-sitting page first, then in the nine pages.
+- Bijit's 13 Nov rule for Student 1 (after a failure, fall back down the requires chain to success, teach, then check) is in a memory note only; whether it is hers too has not been asked.
+- Uncommitted work outside main: worktree `student-1-ki-experience-88b445` (the joined quadrilateral journey and the fuller `study-materials/quadrilaterals/HANDOVER.md`), `kis-skills-progress-3ba1de` (the approved KI-GE-23 screen), `grade-8-science-books-ed7a85` (science chapter studies), and `Downloads/HTML-TOOL/.claude/worktrees/quizzical-khayyam-ca7f11/student2/` (the spec and build script for the equations pages). Do not remove these worktrees.
+- `README.md` lines 15, 18, 23 and 25 and `profile.md` line 22 still name pages that were removed on 11 Nov.
+- Whether the 21 rows of 10 Nov are hers or tests on her device: taken as hers on Bijit's "everything"; not asked row by row.

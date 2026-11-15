@@ -1,6 +1,6 @@
 # Student 2: design for independent learning
 
-Student 2 is one Grade 8 CBSE learner (NCERT textbook; outcomes M801 to M820 in `knowledge-graph/`). Read `profile.md` before designing anything. It is still mostly blank: there is no record of her work yet. No adult will sit with her (Bijit, 9 Nov 2026). Her answers are to go to a Google Sheet, as Student 1's do.
+Student 2 is one Grade 8 CBSE learner. Her Class 8 book is NCERT's *Ganita Prakash* (Bijit, 15 Nov 2026); the graph in `knowledge-graph/` was built from the 2017 outcomes M801 to M820 and the older book, so check an item against *Ganita Prakash* before teaching it. Read `HANDOVER.md` ("Her record") and `profile.md` before designing anything. Her answers go to a Google Sheet, and she has answered there on 10 to 15 Nov 2026. No adult sits with her (Bijit, 9 Nov 2026); he said on 15 Nov 2026 that she did all of that work independently.
 
 These rules are copied from Student 1's `CLAUDE.md` (7 to 11 Nov 2026), where Bijit set them after many rounds of correction. They are written for Student 2 here. Student 1's evidence (his answers, dates, counts) is not hers. Where a rule rested on his record, it is kept as a starting design choice and marked "provisional", to be revised from her own record.
 
@@ -74,6 +74,7 @@ A manipulative is something she moves. Student 1's thermometer (`templates-from-
 - Her record decides which items are a warm-up. There is no opening test. Holding the parts does not join them, so the whole skill is always practised.
 - Two items in a row not right on her own end that practice for the day with her place saved. The next session shows the worked example again, then new items.
 - An item that holds in one journey counts in the next. Store it once for her (`student2-ki-v1`).
+- Harder work on a skill comes only after she has practised that skill and it has developed. When her first answers are right, the next work may be harder; right answers allow the step up, they do not replace the practice. Bijit, 15 Nov 2026: "if she does better, you can increase the rigor, but not gradually until she has practiced the skill and has developed it."
 
 ## What a knowledge item is (from Student 1, 10 to 11 Nov)
 
