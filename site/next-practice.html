@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Choose your next practice</title><link rel="stylesheet" href="assets/quad.css"><link rel="stylesheet" href="assets/learning-support.css"></head><body><main class="app"><h1>Choose your next practice</h1><p>Your work on this device helps choose these pages. You can pause and return whenever you need.</p><section id="choices" class="learning-support"></section><section id="waiting"></section><a class="btn" href="index.html">See all pages</a><details id="review" hidden><summary>Teaching decisions and evidence</summary><pre id="evidence" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre><button id="export" class="btn">Save the evidence</button></details></main><script src="assets/teaching-catalogue.js"></script><script src="assets/preparation.js"></script><script src="assets/learning-policy.js"></script><script>
+const policy=LearningPolicy.create({storage:localStorage,targets:TeachingCatalogue.targets});const plan=policy.choose();
+const box=document.getElementById('choices');
+const alternatives=document.createElement('details'),summary=document.createElement('summary');summary.textContent='Choose something else';alternatives.appendChild(summary);
+let returnDone=false;try{returnDone=JSON.parse(localStorage.getItem('student2-return-sitting-v1')||'{}').done;}catch(_){}
+const firstReturn=!returnDone&&!policy.snapshot().events.some(e=>e.type==='answer');
+if(firstReturn){const p=document.createElement('p');p.textContent='Start with a few questions on your earlier work. They will help choose what comes next.';box.appendChild(p);const a=document.createElement('a');a.className='btn primary';a.href='return-sitting.html';a.textContent='Return to shapes, angles and equations';box.appendChild(a);}
+for(const [i,x] of plan.eligible.entries()){const d=TeachingCatalogue.get(x.target),s=policy.status(x.target);const a=document.createElement('a');a.className='btn';let page=d.page;
+const missing=x.action==='review'?s.missingDelayedDecisions:s.missingDecisions;
+if(d.id==='KI-GE-21'&&!missing.includes('construct')&&(missing.includes('classify')||missing.includes('boundary')))page='quadrilaterals-2.html';
+a.href=page+'?target='+encodeURIComponent(d.id)+'&action='+x.action;a.textContent=d.name;
+if(i===0&&!firstReturn){const p=document.createElement('p');p.textContent=({repair:'Look at an example, then try a new question.',review:'Try a fresh question on your earlier work before seeing an example.',practise:'Practise this idea with some new questions.',teach:'Learn this idea with an example and some questions.'})[x.action];box.appendChild(p);a.classList.add('primary');box.appendChild(a);}else alternatives.appendChild(a);}
+if(alternatives.children.length>1)box.appendChild(alternatives);
+if(!plan.eligible.length)box.textContent='Your work is kept. Come back for another practice, or choose a page to revisit.';
+if(plan.waiting.length){const p=document.createElement('p');p.textContent='Some earlier work is ready for a return on another day. Other pages above are available now.';document.getElementById('waiting').appendChild(p);}
+if(plan.storageIssue){const p=document.createElement('p');p.textContent='This browser could not save your work. Keep this page open if you want to continue.';box.appendChild(p);}
+if(new URLSearchParams(location.search).get('teacher')==='1'){document.getElementById('review').hidden=false;document.getElementById('evidence').textContent=JSON.stringify({plan,status:TeachingCatalogue.targets.map(d=>policy.status(d.id))},null,2);}
+document.getElementById('export').onclick=()=>{const a=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify(policy.snapshot(),null,2)],{type:'application/json'}));a.href=url;a.download='student2-learning-evidence.json';a.click();URL.revokeObjectURL(url);};
+</script></body></html>

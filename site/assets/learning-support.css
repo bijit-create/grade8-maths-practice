@@ -1,0 +1,3 @@
+[hidden]{display:none!important}
+.learning-support{grid-column:1/-1;padding:18px;border:2px solid var(--accent,#1f6fb2);border-radius:12px;display:flex;flex-direction:column;gap:12px;background:var(--card,#fff);color:var(--ink,#1a2430);min-width:0}
+.learning-support p{margin:0;line-height:1.5}.learning-support button,.learning-support input,.learning-support a{font:inherit;min-height:48px;padding:10px;border-radius:8px}.learning-support .choices{display:flex;flex-wrap:wrap;gap:10px}.learning-support input{max-width:100%}.learning-support .worked{white-space:pre-line}.learning-support a{text-decoration:none}.learning-support:focus-within{scroll-margin:16px}

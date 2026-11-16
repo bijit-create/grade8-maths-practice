@@ -38,6 +38,7 @@
 (function(){var q=new URLSearchParams(location.search);if(q.get("screen")!=="sitting"){q.set("screen","sitting");
   try{history.replaceState(null,"",location.pathname+"?"+q.toString()+location.hash);}catch(e){}}})();
 </script>
+<link rel="stylesheet" href="assets/learning-support.css">
 </head>
 <body>
 <div class="app">
@@ -48,6 +49,7 @@
 </div>
 <div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
 <script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/teaching-catalogue.js"></script><script src="assets/preparation.js"></script><script src="assets/learning-policy.js"></script><script src="assets/teaching-support.js"></script><script src="assets/learning-bridge.js"></script>
 <script src="assets/quad-engine.js"></script>
 <script>
 "use strict";
@@ -400,10 +402,14 @@ function showRows(){if(QS2.get("teacher")!=="1")return;const r=$("rows");r.class
 function send(row){window.__sitting.rows.push(row);showRows();
   if(LOG){try{SheetLog.activity(Object.assign({},row,{detail:JSON.stringify(row.detail)}));}catch(e){}}}
 function logRow(it,r){const supplied=it.supplied.slice();if(cur.read)supplied.push("read aloud");if(cur.tried)supplied.push("lines she drew to try before answering");
-  send({event:"answer",set:"return-sitting",role:"first answer",eq:it.ask||it.id,answer:r.answer,right:r.right?1:0,own:1,support:supplied.length?supplied.join("; "):"none",checks:it.graph+" | "+it.id,
-    detail:{item:it.id,seat:pos+1,first_answer:true,supplied,version:VERSION,tag:r.tag||"",reply:r.reply||""}});}
+  const row={event:"answer",set:"return-sitting",role:"first answer",eq:it.ask||it.id,answer:r.answer,right:r.right?1:0,own:1,support:supplied.length?supplied.join("; "):"none",checks:it.graph+" | "+it.id,
+    detail:{item:it.id,seat:pos+1,first_attempt:true,decision:({"decide-yes":"classify","make-5":"construct","make-line":"construct","decide-open":"boundary","dart":"draw","howmany":"count","check-slip":"check","fourth-angle":"calculate","angle-beside":"calculate","angles-x":"substitute","eq-1":"solve","eq-2":"solve","eq-3":"solve"})[it.id],supplied,version:VERSION,tag:r.tag||"",reply:r.reply||""}};
+  const target=(it.graph.match(/(?:KI|SK)-[A-Z]+-\d+/)||[])[0],d=TeachingCatalogue.get(target);
+  if(d){LearningBridge.init(d.sets[0],VERSION);const adapted=Object.assign({},row,{set:d.sets[0]});LearningBridge.observe(adapted);row.detail=adapted.detail;row.own=adapted.own;}
+  send(row);}
 function endScreen(first){$("pic").innerHTML="";$("words").innerHTML="";$("acts").innerHTML="";
   for(const t of ["That is the end of these questions. Your answers are kept.","There are no more questions on this page."]){const p=document.createElement("p");p.className="say";p.textContent=t;$("words").appendChild(p);}
+  const link=document.createElement("a");link.href="next-practice.html";link.className="btn";link.textContent="Choose the next page";$("acts").appendChild(link);
   if(first){send({event:"sitting end",set:"return-sitting",detail:{version:VERSION,answered:ORDER.length}});if(LOG)setTimeout(()=>{try{SheetLog.flush()}catch(e){}},50);}}
 function showItem(){if(pos>=ORDER.length){ST.done=true;store.set(ST);return endScreen(true);}QE.start(PAGE);}
 function intro(ctx){

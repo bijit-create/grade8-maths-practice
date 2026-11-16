@@ -1,6 +1,14 @@
-# Handover: Student 2 (15 Nov 2026)
+# Handover: Student 2 (16 Nov 2026)
 
-Keep this file short (CLAUDE.md step 6). Replace a section when it is settled; do not stack new sections above old ones. The 11 Nov text of this file is in git (7899894). Written 15 Nov 2026 from her Sheet, the code on main and Bijit's answers of that day.
+Keep this file short. The 11 Nov text is in git (7899894); the 15 Nov learner recount and decisions below are preserved. The 16 Nov changes update local teaching rules and code under Bijit's current instruction. Local authoring permission does not authorise production deployment or live Sheet writes.
+
+## Current local update, 16 Nov
+
+- `CANVAS.md` is her compact working model: domain principles, source/read-depth limits, learner evidence, conditional decisions and revision conditions. `OPERATING-PLAN.md` supplies one evidence-to-next-teaching loop across days. These are Student 2's own compact documents, not a copy of Student 1's full architecture.
+- Current policy: prepare the KIs relevant to the selected skill; teach unfamiliar relevant knowledge; integrate it in skill practice; continue eligible unrelated work. Use a discriminating probe for an ambiguous response, targeted teaching, a fresh check and fresh whole-task use, then a delayed return. There is no global slow default, no automatic promotion on one answer and no inference that unknown means failed.
+- The shared target catalogue, policy and teaching-support helpers are a **local prototype**, connected through her existing page interfaces. Implementation and verification are being checked in this update; the final delivery/check record supplies the exact behaviours and results. No learner has supplied evidence for these helpers yet. No deployment or live record write is part of this update.
+- A historical graph timing label does not override relevant-prerequisite preparation. Target-specific catalogue mappings may clarify the route; the complete old graph has not been revalidated or semantically rewritten.
+- The two vocabulary pages remain available locally and live under the earlier decision. Their wording is not the basis for claiming her curriculum requires those names. Next work is chosen from mathematical capability and her book, not a home-page “Start here” label.
 
 ## Her record
 
@@ -38,13 +46,15 @@ First answers that were not right (Sheet row, what was asked, her answer):
 
 What the record cannot show: anything after a gap or in a mixed set (no set has answers on two days, except the balance sets bags, counters and share); whether she read a reply; what she typed on most balance items. She found x in 16 of 17 angle equations though no page teaches solving one. On 15 Nov she typed "5+2" seven times into one box, which the page could not read.
 
-## What she meets now
+## Live baseline last checked 15 Nov
 
 - Live site: grade8-maths-practice.vercel.app (deployed 11 Nov, b14d43e). Home page: equations-1 (KI-AG-01, 03, "Start here"), equations-2 (KI-AG-04, 06), then quadrilaterals 1 to 7. Pushes do not deploy; a deploy needs Bijit's yes. `site/` on main is what is live.
 - Her Sheet: the Signals tab now exists and holds her 15 Nov rows for ki-ag-01 only. It reads no other page.
 - The Now tab has no row for sk-ge-08 or ki-ag-06, and its "held" marks include answers given after a reply. Read her record from the count above, not from Now.
 
-## Where the pages differ from CLAUDE.md (known; changing one is a build)
+## Known baseline differences, recorded 15 Nov
+
+These describe the pre-update/live baseline. A local repair does not repair production; verify the current local code and delivery record before declaring a point fixed locally.
 
 - The fresh item after a wrong-answer reply is logged as her own and counts towards "holds" (`quad-engine.js`, both equations pages, `Signals.gs:205`). Worked-example steps are logged with own = 1.
 - No row holds `supplied` or who was there. The page version is only on the "session start" row.
@@ -58,31 +68,30 @@ What the record cannot show: anything after a gap or in a mixed set (no set has 
 - Bijit, 15 Nov: her Class 8 book is *Ganita Prakash*. There linear equations are Grade 7 work (Part 2, ch. 7, "Finding the Unknown"); the book says "letter-number" and does not teach "variable", "coefficient" or "constant term" (`plan/research-2026-11-11.md`, local). So equations-1 and equations-2 teach words her book does not use.
 - Bijit, 15 Nov: harder work on a skill comes only after she has practised it and it has developed (`CLAUDE.md`, "Knowledge items before skills").
 - Bijit, 11 Nov: her screens are built on her own pages' code, not Student 1's engine. Status.gs is not needed. C2 and C3 (page 4: every total is 360°; the 180° rule is written beside her) keep their defaults.
-- Student 1's 15 Nov structure (STATE.md, CANVAS.md, check.py, one sitting page) is not copied here. His own file says she follows "when unit 1 has run three sittings", and none has run.
+- On 15 Nov Student 1's full structure (STATE.md, CANVAS.md, check.py, one sitting page) was not copied, awaiting three of his unit-1 sittings. The 16 Nov authorisation now adds her own compact canvas and operating contract with shared local helpers; it does not import his learner evidence or full architecture.
 
-## The next sitting, and why
+## Next teaching and the return sitting
 
-Proposed, not built: one return sitting on the quadrilateral work of 11 to 13 Nov. About 12 first answers, no teaching before them, mixed in an order she cannot predict:
+Proposed on 15 Nov, then built locally during the night as `site/return-sitting.html`: a return to quadrilateral work of 11 to 13 Nov, mixing fresh questions before a refresher. No record says she has taken it. Its scope includes:
 - the kinds that were not right at the first answer (rows 47, 52, 67, 87, 93, 172), with new shapes and numbers;
 - the whole tasks SK-GE-08, SK-GE-11 and SK-GE-09, with no picture where the page had one;
 - two or three equations in the form *Ganita Prakash* uses (for example 20 + 2c = 60), to see whether she already solves them.
 
-Why: every "held" mark she has rests on one day. This is the first check after a gap and the first mixed set, and it can be asked again unchanged on a later day. What it decides: if the first answers are right, the quadrilateral work steps up (SK-GE-10, angles in a ratio; the exercises of *Ganita Prakash* 8, ch. 4), and the equations work starts from what she showed, not from the vocabulary pages. If not, the kind that was not right is taught before anything harder.
+Why: her “held” marks predominantly rest on same-day blocked practice. A delayed mixed return supplies missing evidence; use fresh items on later returns rather than interpreting remembered answers as generalisation. One right item suggests a provisional next step, not an established skill. Before harder quadrilateral work (such as angles in a ratio), check the relevant knowledge and practise the integrated skill. Equations work starts from demonstrated mathematical capability and the relevant preparation, not a vocabulary score.
 
-Route: a local prototype on `quad-engine.js`, played, a second reader on the screens, then Bijit's yes to the screens (CLAUDE.md, "Route for a new screen").
+The earlier prototype review found evidence contamination from preceding worked replies, answer leakage, a degenerate-shape judge and interface faults. Local repairs and their checks must be reported explicitly; its old 261 software checks did not establish learning or readiness. The 16 Nov update also adds local authored support and shared decisions rather than treating the return page as a complete teaching system. Unfamiliar relevant parts receive teaching and practice, and difficulty does not block eligible unrelated work.
 
-## Waiting for Bijit (two places)
+## Authorisation and remaining boundary
 
-1. His yes to the return sitting's screens, when they are shown.
-2. Whether equations-1 and equations-2 stay on her home page as "Start here", now that her book does not use their words. Default until he says: they stay live, and no new work is built on them.
+Bijit has authorised the rules and local teaching-code update. The earlier “wait for screens before authoring” checkpoint is superseded for this work; show and verify actual screens as part of delivery. Production deployment/live Sheet changes remain separate. Keep the vocabulary pages available under the existing default; local next-practice guidance may direct her from relevant mathematical evidence instead.
 
 ## Later (none changes the next sitting)
 
 - Research proposals P1 to P6 (pages) and G1 to G8 (graph), `plan/research-2026-11-11.md` lines 255 to 283. G1 (the sign belongs to the term) bears on rows 239, 252 and 263. G5 names KI-GE-25, which was merged into KI-ME-40.
 - Eight graph questions in `knowledge-graph/progress-note.md` lines 17 to 25; item 9 (chapters removed in 2023) should be read again against *Ganita Prakash*.
 - A unit plan for equations taken from the graph (KI-AG-18, 19, 20, 24, 47; skills SK-AG-25 to 32) and checked against *Ganita Prakash* Grade 7 and 8. The graph has no skill for solving with the letter on one side.
-- Logging first answer / after a reply, `supplied` and the page version on every row: do it in the return-sitting page first, then in the nine pages.
-- Bijit's 13 Nov rule for Student 1 (after a failure, fall back down the requires chain to success, teach, then check) is in a memory note only; whether it is hers too has not been asked.
+- Historical Sheet rows lack full support/first-answer conditions; preserve them and interpret their limitations. Shared local evidence is not proof that the live Sheet receiver or historical rows have been migrated.
+- The current operating contract now explicitly requires discriminating checks, relevant preparation, targeted teaching and a fresh return to the whole. Student 1's personal evidence and unverified diagnoses remain excluded.
 - Uncommitted work outside main: worktree `student-1-ki-experience-88b445` (the joined quadrilateral journey and the fuller `study-materials/quadrilaterals/HANDOVER.md`), `kis-skills-progress-3ba1de` (the approved KI-GE-23 screen), `grade-8-science-books-ed7a85` (science chapter studies), and `Downloads/HTML-TOOL/.claude/worktrees/quizzical-khayyam-ca7f11/student2/` (the spec and build script for the equations pages). Do not remove these worktrees.
-- `README.md` lines 15, 18, 23 and 25 and `profile.md` line 22 still name pages that were removed on 11 Nov.
+- `profile.md` and older source notes may retain historical removed-page links; `README.md` now distinguishes current pages from historical sources.
 - Whether the 21 rows of 10 Nov are hers or tests on her device: taken as hers on Bijit's "everything"; not asked row by row.

@@ -2,6 +2,11 @@
    Rows wait in a queue in this browser until they are sent, so nothing is lost offline or on reload.
    Modelled on Student 1's sheetlog.js (9 Nov 2026). kind "activity" -> Activity tab; kind "state" -> Now tab. */
 const SheetLog=(()=>{
+ // Preview rows never join or flush the real learner queue.
+ const q=new URLSearchParams(location.search);
+ if(location.protocol==="file:"||["localhost","127.0.0.1"].includes(location.hostname)||q.get("try")==="1"||(q.has("screen")&&q.get("screen")!=="sitting")){
+   const rows=[];window.__previewSheet=rows;return {setSession(){},activity(r){rows.push(r)},state(r){rows.push(r)},pending(){return 0},flush(){}};
+ }
  const CFG=window.SHEET_CONFIG||{}, QKEY="student2-sheet-queue", DKEY="student2-device";
  const lesson=document.title;
  const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};

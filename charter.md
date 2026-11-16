@@ -1,6 +1,6 @@
 # Charter: what this work is responsible for (Student 2)
 
-Adopted 11 Nov 2026 from Student 1's charter (7 Nov, updated 10 Nov), goals only. His evidence is left out; there is no record of hers yet. `CLAUDE.md` turns these goals into design rules and wins where the two differ on how to design or read evidence.
+Adopted 11 Nov 2026 from Student 1's charter (7 Nov, updated 10 Nov), goals only; updated 16 Nov. His evidence is left out. Her 10–15 Nov work is recorded in `HANDOVER.md`. `CLAUDE.md` turns these goals into rules; `CANVAS.md` gives the current domain-grounded model and `OPERATING-PLAN.md` the common operating contract.
 
 ## The problem
 
@@ -28,6 +28,8 @@ Reciting a rule does not establish applying it; carrying out a familiar procedur
 
 Each unit specifies: the complete performance wanted (for example "solve an equation with the unknown on both sides and check it"); the knowledge it builds on; the new relationships or actions to establish; the teaching experiences and what she is expected to notice, connect, retrieve or do in each; how support and task complexity change, and on what evidence; how retention and independent use will be shown; what happens when the expected progress does not occur.
 
+Prepare the KIs relevant to that performance, then teach and practise their coordination in the whole skill. Missing unrelated knowledge does not stop eligible work elsewhere. The knowledge form and the learning process are different decisions: a concept, fact, principle or procedure may each need explanation, discrimination, retrieval and application in different proportions. The core teaching must support the intended process. Neither an answer reveal nor a progress label fulfils that responsibility.
+
 ## Six processes the system must manage
 
 1. **Shared understanding of the task.** Wording, notation, picture and answer controls communicate one task. Unfamiliar conventions (the balance, the box for the unknown) are taught.
@@ -42,6 +44,8 @@ The failure sequence to design against: an ambiguous task → an unexpected answ
 ## Measurement
 
 Every answer is kept with its conditions: the item, the support given (`supplied`), the response, the reply or retry, and later fresh or delayed performance. A task that allowed two readings is a fault in the task and is fixed. A fast answer, or one that matches a number on the screen, is not discarded. Elapsed time is not evidence of attention or struggle. One day's success is performance; learning shows across sessions and formats.
+
+“Held” is a scoped evidence claim, not a permanent global property. State the task range, support, kinds and delay. Unknown or unreadable is neither mastered nor failed. Increase rigour when practice and evidence warrant it; do not impose a universal slow route or promote automatically from one response. A wrong answer triggers a useful discriminating check and teaching, followed by fresh practice and whole-task use, with a later return.
 
 ## The standard
 

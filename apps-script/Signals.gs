@@ -202,7 +202,7 @@ function signalsFromRows(rows) {
   const ans = rows.filter(r => r.event === 'answer' && SIGNAL_SETS.includes(r.set)).map((r, i) => {
     let d = {}; try { d = JSON.parse(String(r.detail || '{}').replace(/^'/, '')); } catch (e) {}
     return { i: i, day: dayOf(r.ts), kind: d.kind || '', tag: d.tag || '', right: Number(r.right) === 1,
-      own: Number(r.own) === 1 && r.support === 'none', support: r.support, role: r.role, eq: r.eq, answer: r.answer,
+      own: d.learning ? d.learning.valid && d.learning.evidence === 'independent-fresh' : Number(r.own) === 1 && r.support === 'none', support: r.support, role: r.role, eq: r.eq, answer: r.answer,
       done: d.itemDone === true, itemRight: d.itemRight === true };
   });
   /* What happened on her next task of the same kind, after the reply to this answer. */

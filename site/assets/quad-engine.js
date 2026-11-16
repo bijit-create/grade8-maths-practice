@@ -39,8 +39,8 @@
 const QE=(()=>{
 const QS=new URLSearchParams(location.search);
 const TEACHER=QS.get("teacher")==="1";
-const HAS_SHEET=typeof SheetLog!=="undefined";
-const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const HAS_SHEET=typeof SheetLog!=="undefined"&&QS.get("try")!=="1";
+const store={get(k){if(new URLSearchParams(location.search).has("screen")||new URLSearchParams(location.search).get("try")==="1")return null;try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){if(new URLSearchParams(location.search).has("screen")||new URLSearchParams(location.search).get("try")==="1")return;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const todayKey=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
 let seed=Number(QS.get("seed"))||((Date.now()%100000)+1);
 function rng(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646;}
@@ -55,9 +55,10 @@ let screenText=[],itemOpen=false;
 window.__records=[];
 
 /* ---------- records ---------- */
-function saveAll(){if(SAMPLE)return;store.set(stateKey,S);store.set(kiKey,K);}
+function saveAll(){if(SAMPLE||QS.get("try")==="1")return;store.set(stateKey,S);store.set(kiKey,K);}
 function record(event,f){
   const row=Object.assign({t:new Date().toISOString(),event,set:PAGE.set,role:"",eq:"",answer:"",right:"",own:"",support:"",checks:"",detail:""},f||{});
+  if(window.LearningBridge&&!SAMPLE)LearningBridge.observe(row);
   if(S&&!SAMPLE){S.events.push(row);if(S.events.length>2000)S.events.splice(0,S.events.length-2000);store.set(stateKey,S);}
   if(HAS_SHEET&&!SAMPLE){try{SheetLog.activity({event:row.event,set:row.set,role:row.role,eq:row.eq,answer:row.answer,right:row.right,own:row.own,support:row.support,checks:row.checks,detail:typeof row.detail==="string"?row.detail:JSON.stringify(row.detail)});}catch(e){}}
   window.__records.push(row);renderTeacher();}
@@ -92,29 +93,34 @@ function makeCtx(role,kind){
     auto(a){window.__qe.part=a;},
     done(r){if(doneCalled)return;doneCalled=true;itemOpen=false;ctx.clearNote();
       $("words").querySelectorAll("input,.ch").forEach(x=>x.disabled=true);$("acts").innerHTML="";$("pic").querySelectorAll("button").forEach(x=>x.remove());
-      if(r.reply)replyBox(r.reply,r.right?"ok":"no");ctx.onDone&&ctx.onDone(r);}
+      if(r.reply&&(r.right||!window.LearningBridge||SAMPLE||ctx.role==="worked"||ctx.role==="supported"))replyBox(r.reply,r.right?"ok":"no");ctx.onDone&&ctx.onDone(r);}
   };
   return ctx;}
-function runTask(task,role,kind,onDone){clearStage();const ctx=makeCtx(role,kind);itemOpen=true;ctx.onDone=r=>onDone(r,ctx);task(ctx);return ctx;}
+function runTask(task,role,kind,onDone){clearStage();const ctx=makeCtx(role,kind);itemOpen=true;ctx.onDone=r=>onDone(r,ctx);task(ctx);if(window.LearningBridge&&!SAMPLE)LearningBridge.begin(PAGE.set,role,kind,PAGE.version,()=>runTask(task,role,kind,onDone));return ctx;}
 
 /* ---------- flow ---------- */
 function freshStop(){return {phase:"worked",w:0,firstTry:[],pi:0,queue:null,missRun:0,res:[],resumed:false};}
 function start(page){PAGE=page;stateKey="student2-"+page.set+"-v1";document.title=page.title;
   window.__qe.PAGE=page;
   if(QS.get("screen")){SAMPLE=true;S={events:[],stops:{}};K={};return sample(QS.get("screen"));}
+  if(window.LearningBridge)LearningBridge.init(PAGE.set,PAGE.version);
   S=store.get(stateKey);if(!S||S.v!==1)S={v:1,st:null,events:[],stoppedOn:null,lastDay:null,review:false};
   K=store.get(kiKey)||{};
   if(HAS_SHEET)try{SheetLog.setSession("s2q-"+Date.now().toString(36));}catch(e){}
   const today=todayKey(),newDay=S.lastDay!==today;S.lastDay=today;
   record("session start",{detail:{version:page.version}});
-  if(S.stoppedOn===today)return endScreen("stopped");
+  if(S.stoppedOn===today&&!new URLSearchParams(location.search).get("action"))return endScreen("stopped");
   if(S.stoppedOn){S.stoppedOn=null;if(S.st){S.st.phase="worked";S.st.w=0;S.st.resumed=true;S.st.missRun=0;}}
   if(!S.st)S.st=freshStop();
   if(newDay&&kiOf().passed&&S.events.some(e=>e.event==="answer"))S.review=true;
+  if(QS.get("action")==="review")S.review=true;
+  if(QS.get("action")==="repair"){S.stoppedOn=null;S.st.phase="worked";S.st.w=0;S.st.resumed=true;S.st.missRun=0;kiOf().passed=false;}
+  if(QS.get("action")==="practise"){S.st.phase="own";S.st.queue=null;S.st.pi=0;kiOf().passed=false;}
   saveAll();go();}
 function go(){saveAll();renderTeacher();
   if(S.review)return reviewItem();
   if(kiOf().passed)return endScreen("all");
+  if(window.LearningBridge&&!LearningBridge.guard(PAGE.set))return;
   const st=S.st;
   if(st.phase==="worked")return workedExample(st);
   if(st.phase==="supported")return supportedItem(st);
@@ -139,29 +145,36 @@ function ownItem(st){
   if(gate){const ok=st.res.filter(r=>r.own&&r.right).map(r=>r.kind);const miss=gate.find(g=>!ok.includes(g));if(miss){q.splice(st.pi,0,miss);kind=miss;}}
   showOwn(kind,"own",(r)=>{
     st.res.push(r);kiOf().res.push(r);
+    if(!r.right&&window.LearningBridge&&!SAMPLE){
+      st.pi++;q.splice(st.pi,0,kind);saveAll();
+      return nextButton(()=>LearningBridge.repair(PAGE.set,kind,r.tag||"",out=>{
+        if(out.outcome==="stop"||out.outcome==="needs-more-teaching")return stopForToday();
+        st.missRun=0;saveAll();go();}));
+    }
     if(r.right){st.missRun=0;st.pi++;}
     else{st.missRun++;st.pi++;q.splice(st.pi,0,kind);
       if(st.missRun>=2){saveAll();return nextButton(()=>stopForToday());}}
     saveAll();nextButton(()=>go());});}
 function showOwn(kind,role,after){
   runTask(PAGE.gen[kind],role,kind,(r,ctx)=>{
-    const res={kind,contrast:ctx.contrast||"",right:!!r.right,own:true,role,t:new Date().toISOString()};
+    const res={kind,tag:r.tag||"",contrast:ctx.contrast||"",right:!!r.right,own:true,role,t:new Date().toISOString()};
     record("answer",{role,eq:r.eq||"",answer:r.answer||"",right:r.right?1:0,own:1,support:"none",checks:PAGE.ki+" "+kind+(res.contrast?" | contrast: "+res.contrast:""),
-      detail:{kind,tag:r.tag||"",reply:plain(r.reply||""),itemDone:true,itemRight:!!r.right}});
+      detail:{kind,tag:r.tag||"",reply:plain(r.reply||""),feedbackDeferred:!!window.LearningBridge&&!r.right,itemDone:true,itemRight:!!r.right}});
     after(res);});}
 function holds(st){const k=kiOf();k.passed=true;k.stage="held on own items (mixed set and gap still to come)";k.heldOn=new Date().toISOString();
   record("item holds",{role:"own",checks:PAGE.ki,detail:{rule:"last right on her own, every contrast case right on her own, at least three kinds right on her own",kinds:heldNow(st).kinds}});
-  sendState("held");saveAll();go();}
-function stopForToday(){S.stoppedOn=todayKey();kiOf().stage="saved stop: two items in a row not right";
-  record("saved stop",{checks:PAGE.ki,detail:{reason:"two items in a row not right on her own"}});sendState("stopped for today");saveAll();flushSoon();endScreen("stopped");}
-function reviewItem(){const kinds=PAGE.plan.filter(k=>!(PAGE.gates||{})[k]);
-  showOwn(pick(kinds),"review",(r)=>{S.review=false;kiOf().res.push(r);
+  sendState("practice complete; shared evidence decides next work");saveAll();go();}
+function stopForToday(){S.stoppedOn=todayKey();kiOf().stage="saved teaching continuation";
+  record("saved stop",{checks:PAGE.ki,detail:{reason:"the supported check needs more teaching"}});sendState("stopped for today");saveAll();flushSoon();endScreen("stopped");}
+function reviewItem(){const kinds=PAGE.plan;
+  showOwn(window.LearningBridge?LearningBridge.reviewKind(PAGE.set,kinds):pick(kinds),"review",(r)=>{S.review=false;kiOf().res.push(r);
     if(!r.right){const k=kiOf();k.passed=false;k.stage="back to practice after a review miss";S.st=freshStop();S.st.phase="own";sendState("back to practice");
       record("teaching decision",{checks:PAGE.ki,detail:{action:"back to practice",reason:"review item not right"}});}
-    saveAll();nextButton(()=>go());});}
+    saveAll();if(!r.right&&window.LearningBridge)return nextButton(()=>LearningBridge.repair(PAGE.set,r.kind,r.tag||"",out=>{if(out.outcome==="needs-more-teaching")stopForToday();else go();}));nextButton(()=>go());});}
 function endScreen(why){clearStage();
-  if(why==="stopped"){para("We stop here for today. Your place is kept.");para("Next time, you start again with an example and then new questions.");}
+  if(why==="stopped"){para("Your place is kept. You can choose another page or come back to this example.");para("Next time, you start again with an example and then new questions.");}
   else{para("That is the end of this part. Your work is kept.");para("Next time, there will be new questions.");}
+  const link=document.createElement("a");link.className="btn";link.href="next-practice.html";link.textContent="Choose the next page";(document.getElementById("acts")||document.getElementById("stage")).appendChild(link);
   record("session end",{detail:{reason:why}});flushSoon();}
 
 /* ---------- Read it, Pause, teacher strip ---------- */
