@@ -20,6 +20,7 @@
      different corner with a different set of letters.
      Engine and records: assets/quad-engine.js. -->
 <link rel="stylesheet" href="assets/quad.css">
+<link rel="stylesheet" href="assets/learning-support.css">
 </head>
 <body>
 <div class="app">
@@ -29,6 +30,7 @@
 </div>
 <div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
 <script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/teaching-catalogue.js"></script><script src="assets/preparation.js"></script><script src="assets/learning-policy.js"></script><script src="assets/teaching-support.js"></script><script src="assets/learning-bridge.js"></script>
 <script src="assets/quad-engine.js"></script>
 <script>
 "use strict";
@@ -142,7 +144,7 @@ const clickChoice=yes=>[...document.querySelectorAll("#words .ch")].find(b=>b.te
 function decide(ctx,svg,s,opts){
   opts=opts||{};
   function answer(sayYes){if(!ctx.open)return;draw(svg,s,true);const right=sayYes===s.yes;
-    ctx.done({right,answer:sayYes?"yes":"no",eq:"is it a quadrilateral",tag:(s.kind||"example")+", said "+(sayYes?"yes":"no"),reply:reply(s,right)});}
+    ctx.done({right,answer:sayYes?"yes":"no",eq:"is it a quadrilateral",tag:(s.kind||"example")+", said "+(sayYes?"yes":"no"),reply:reply(s,right),describe:sayYes?`You said ${s.letters.slice(0,s.n)} is a quadrilateral.`:`You said ${s.letters.slice(0,s.n)} is not a quadrilateral.`});}
   ctx.ask(opts.question||QUESTION);
   ctx.choices([{t:YES,fn:()=>answer(true)},{t:NO,fn:()=>answer(false)}]);
   const wrong=()=>clickChoice(!s.yes),key=s.kind&&KEY[s.kind];

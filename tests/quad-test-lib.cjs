@@ -26,7 +26,7 @@ ok(html.includes(SHEET_LINES),"the page loads sheet-config.js and sheetlog.js");
 ok(html.indexOf(SHEET_LINES)<html.indexOf('<script src="assets/quad-engine.js"></script>'),"the Sheet lines come before the page scripts");
 const TMP=fs.mkdtempSync(path.join(os.tmpdir(),"quadtest-"));fs.mkdirSync(path.join(TMP,"assets"));
 const copy=html.replace(SHEET_LINES,"");fs.writeFileSync(path.join(TMP,cfg.page),copy);
-for(const f of ["quad-engine.js","quad.css"])fs.copyFileSync(path.join(SITE,"assets",f),path.join(TMP,"assets",f));
+for(const f of fs.readdirSync(path.join(SITE,"assets")).filter(f=>!/^(sheetlog|sheet-config)\.js$/.test(f)))fs.copyFileSync(path.join(SITE,"assets",f),path.join(TMP,"assets",f));
 ok(!/sheetlog|sheet-config/.test(copy),"the tested copy has no Sheet scripts");
 ok(!fs.existsSync(path.join(TMP,"assets","sheetlog.js")),"sheetlog.js is not next to the tested copy");
 const code=html.replace(/<!--[\s\S]*?-->/g,"");
@@ -64,15 +64,17 @@ let tried=0;
   ok(await p.locator("#words .reply.ok").count()===1,s+" seed "+seed+": the right answer gets a green reply");await collect(p);}
  await p.context().close();}
 console.log("   "+tried+" planned wrong answers tried");
-if(cfg.extra){const p=await newPage({clear:true});await cfg.extra({p,URL0,ok,norm,lastReply,lastAnswer,hasNext,collect});await p.context().close();}
+if(cfg.extra){const p=await newPage({clear:true});await cfg.extra({p,URL0,ok,norm,lastReply,lastAnswer,hasNext,collect,newPage});await p.context().close();}
 
 async function step(p){if(await hasNext(p)){await collect(p);await p.locator("#acts .next").click();return true;}
   const has=await p.evaluate(()=>!!window.__qe.part);if(!has)return false;await p.evaluate(()=>window.__qe.part.right());return true;}
 const phase=p=>p.evaluate(()=>window.__qe.S&&window.__qe.S.st?window.__qe.S.st.phase:null);
 const stateKey="student2-"+META.set+"-v1";
 
+const seedPrereqs=async p=>{await p.evaluate(set=>{if(!window.LearningBridge)return;const d=LearningBridge.def(set);if(!d)return;const P=LearningBridge.policy;
+  for(const r of (d.requires||[])){const t=TeachingCatalogue.get(r.target);if(!t)continue;for(let c=0;c<2;c++)for(const decision of t.decisions)P.recordAnswer({target:t.id,kind:t.kind,item:"fixture-"+decision+c,decision,response:"fixture",right:true,role:"own",supplied:[],version:"test fixture"});}},META.set);};
 console.log("3. full journey");
-{const p=await newPage({});await p.goto(URL0+"?a");await p.evaluate(()=>localStorage.clear());await p.goto(URL0);
+{const p=await newPage({});await p.goto(URL0+"?a");await p.evaluate(()=>localStorage.clear());await seedPrereqs(p);await p.goto(URL0);
  await p.screenshot({path:path.join(SHOTS,"journey-start.png"),fullPage:true});
  ok(await p.locator("#teacher").isHidden(),"teacher strip hidden on her screen");
  let n=0,sawSup=false;while(n++<200){if(await phase(p)==="supported")sawSup=true;if(!(await step(p)))break;}
@@ -85,8 +87,8 @@ console.log("3. full journey");
  ok(sheet.every(r=>typeof r.detail==="string"),"detail is sent as text");
  const ans=sheet.filter(r=>r.event==="answer");ok(ans.length>=META.plan.length,"one Sheet row per answer ("+ans.length+")");
  ok(ans.some(r=>r.role==="supported"&&r.own===0),"the supported item is recorded own = 0");
- ok(sheet.filter(r=>r.event==="item holds").length===1,"one 'item holds' row");
- const st=await p.evaluate(()=>window.__state);ok(st.length===1&&st[0].status==="held"&&st[0].set===META.set,"a state row says held");
+ ok(sheet.filter(r=>r.event==="practice complete").length===1,"one 'practice complete' row");
+ const st=await p.evaluate(()=>window.__state);ok(st.length===1&&String(st[0].status).startsWith("practice complete")&&st[0].set===META.set,"a state row says practice complete");
  const checks=ans.filter(r=>r.role==="own"&&r.right===1).map(r=>r.checks).join("|");
  for(const c of META.contrasts)ok(checks.includes("contrast: "+c),"contrast case right on her own: "+c);
  const kinds=new Set(ans.filter(r=>r.role==="own").map(r=>JSON.parse(r.detail).kind));ok(META.kinds.every(k=>kinds.has(k)),"every kind was shown ("+META.kinds.filter(k=>!kinds.has(k))+")");
@@ -98,23 +100,16 @@ console.log("3. full journey");
  ok(await phase(p)==="own","back to practice starts with her own items");
  await p.context().close();}
 
-console.log("4. two misses in a row");
-{const p=await newPage({});await p.goto(URL0+"?b");await p.evaluate(()=>localStorage.clear());await p.goto(URL0);
+console.log("4. a wrong answer opens a short check (16 Nov route; replaces the two-miss stop)");
+{const p=await newPage({});await p.goto(URL0+"?b");await p.evaluate(()=>localStorage.clear());await seedPrereqs(p);await p.goto(URL0);
  let g=0;while(await phase(p)!=="own"&&g++<30)await step(p);
- const kind=()=>p.evaluate(()=>{const s=window.__qe.S.st;return s.queue?s.queue[s.pi]:window.__qe.PAGE.plan[0];});
- const k1=await kind();
- await p.evaluate(()=>window.__qe.part.wrongs[0].fn());await p.locator("#acts .next").click();
- ok(await kind()===k1,"after one miss the next item is a fresh one of the same kind ("+k1+")");
- await p.evaluate(()=>window.__qe.part.wrongs[0].fn());await p.locator("#acts .next").click();
- const t=norm(await p.locator("#words").textContent());ok(t.includes("We stop here for today. Your place is kept."),"two misses: saved stop screen");
- ok(await p.locator("#acts button, #words .ch, #words input").count()===0,"the stop screen has no answer controls");
- await collect(p);await p.screenshot({path:path.join(SHOTS,"saved-stop.png"),fullPage:true});
- ok((await p.evaluate(()=>window.__sheet)).some(r=>r.event==="saved stop"),"the saved stop is recorded");
- await p.reload();ok(norm(await p.locator("#words").textContent()).includes("We stop here for today"),"reload on the same day stays stopped");
- await p.evaluate(k=>{const s=JSON.parse(localStorage.getItem(k));s.stoppedOn="2000-01-01";s.lastDay="2000-01-01";localStorage.setItem(k,JSON.stringify(s));},stateKey);
- await p.reload();ok(await phase(p)==="worked","next day starts with the worked example again");
- let sup=false;g=0;while(await phase(p)!=="own"&&g++<30){if(await phase(p)==="supported")sup=true;await step(p);}
- ok(!sup,"after a saved stop, the worked examples lead straight to her own items");ok(await kind()===k1,"her place is kept: the same kind comes next");
+ await p.evaluate(()=>window.__qe.part.wrongs[0].fn());
+ {const r=await p.locator("#words .reply.no").allTextContents();ok(r.length===1&&r[0].startsWith("That answer is not right."),"a wrong answer is told it is not right before the check ("+(r[0]||"").slice(0,90)+")");
+  ok(!/Here is the answer|add up to 360|must add up/.test(r[0]||""),"the rule and the working are held back until after the check");}
+ await p.locator("#acts .next").click();
+ ok(await p.locator("#learning-support").count()===1,"after a wrong answer, a short check opens");
+ await collect(p);await p.screenshot({path:path.join(SHOTS,"check-after-wrong.png"),fullPage:true});
+ await p.reload();ok(await p.locator("#learning-support").count()===1,"reload on the same day reopens the check");
  await p.context().close();}
 
 console.log("5. pause");

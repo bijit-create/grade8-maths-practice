@@ -2,7 +2,7 @@
 const path=require("path");
 const SH=path.join(__dirname,"shots","q6");require("fs").mkdirSync(SH,{recursive:true});
 require("./quad-test-lib.cjs").run({page:"quadrilaterals-6.html",phoneShots:["w1","w2","outBig","twoStep"],
- extra:async({p,URL0,ok,lastReply,lastAnswer,norm})=>{
+ extra:async({p,URL0,ok,lastReply,lastAnswer,norm,newPage})=>{
   const outsideOf=()=>p.evaluate(()=>{const t=[...document.querySelectorAll("#pic text.ang")].map(e=>e.textContent).filter(s=>/^\d+°$/.test(s));return t.length?parseInt(t[0]):null;});
   const vertexOf=()=>p.evaluate(()=>document.querySelector("#words .q").textContent.match(/∠(\w)/)[1]);
   const check=()=>p.getByRole("button",{name:"Check my answer"}).click();
@@ -62,14 +62,14 @@ require("./quad-test-lib.cjs").run({page:"quadrilaterals-6.html",phoneShots:["w1
   await p.goto(URL0+"?seed=9&screen=outBig");ok(await p.locator("#pic text.ang",{hasText:"?"}).count()===1,"the inside angle is marked ? on a tap item too");
   ok(await p.locator('#pic path[fill="var(--accent)"]').count()===2,"both angles are shaded faintly before she taps");
   /* the picture job fades in the plan: early own items have it, later ones do not */
-  await p.goto(URL0+"?seed=3");await p.evaluate(()=>localStorage.clear());await p.goto(URL0+"?seed=3");
+  {const p=await newPage({});await p.goto(URL0+"?seed=3");await p.evaluate(()=>localStorage.clear());await p.evaluate(()=>{const d=LearningBridge.def(__qe.PAGE.set),P=LearningBridge.policy;for(const r of (d.requires||[])){const t=TeachingCatalogue.get(r.target);if(!t)continue;for(let c=0;c<2;c++)for(const decision of t.decisions)P.recordAnswer({target:t.id,kind:t.kind,item:"fixture-"+decision+c,decision,response:"fixture",right:true,role:"own",supplied:[],version:"test fixture"});}});await p.goto(URL0+"?seed=3");
   let sawTap=false,sawNoTap=false,g2=0;
   while(g2++<60){const ph=await p.evaluate(()=>window.__qe.S&&window.__qe.S.st?window.__qe.S.st.phase:null);
     if(ph==="own"){const n=await p.locator("#pic .pt").count();const kind=await p.evaluate(()=>{const s=window.__qe.S.st;return s.queue[s.pi]});
       if(kind!=="which"){if(n===2)sawTap=true;if(n===0)sawNoTap=true;}}
     if(await p.locator("#acts .next").count())await p.locator("#acts .next").click();
     else if(await p.evaluate(()=>!!window.__qe.part))await p.evaluate(()=>window.__qe.part.right());else break;}
-  ok(sawTap&&sawNoTap,"the tap job is on the early own items and off the later ones");
+  ok(sawTap&&sawNoTap,"the tap job is on the early own items and off the later ones");await p.context().close();}
   /* two steps */
   await p.goto(URL0+"?seed=4&screen=twoStep");
   const known=await p.evaluate(()=>[...document.querySelectorAll("#pic text.ang")].map(e=>e.textContent));

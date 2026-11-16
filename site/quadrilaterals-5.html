@@ -21,6 +21,7 @@
      Her action: she reads the three angles and writes the fourth; nothing in the picture is moved.
      Engine and records: assets/quad-engine.js. -->
 <link rel="stylesheet" href="assets/quad.css">
+<link rel="stylesheet" href="assets/learning-support.css">
 </head>
 <body>
 <div class="app">
@@ -30,6 +31,7 @@
 </div>
 <div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
 <script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/teaching-catalogue.js"></script><script src="assets/preparation.js"></script><script src="assets/learning-policy.js"></script><script src="assets/teaching-support.js"></script><script src="assets/learning-bridge.js"></script>
 <script src="assets/quad-engine.js"></script>
 <script>
 "use strict";
@@ -100,7 +102,11 @@ function item(ctx,it,o){o=o||{};const N=it.names,h=it.h,hn="∠"+N[h],right=it.a
     else if(o.looks&&x===90){tag="90 by look";expect="It looks like a right angle, but";text=`You wrote 90°. It looks like a right angle, but a picture cannot show whether an angle is exactly 90°. Then ${termsFor(90)} = ${ks+90}°, not 360°.`;}
     else if(pairs.includes(x)){tag="triangle rule";expect="angles of a triangle";text+=` The 3 angles of a triangle add up to 180°. The 4 angles of a quadrilateral add up to 360°.`;}
     else if(Math.abs(x-right)===10){tag="slip of 10";}
-    return {tag,expect,text};}
+    /* what her answer describes, without the 360° total or the working that the check after it asks for */
+    let describe=`You wrote ${x}°. If ${hn} is ${x}°, the 4 angles of ${N} add up to ${termsFor(x)} = ${S}°.`;
+    if(x===ks)describe=`You wrote ${x}°. That is ${kn.map(n=>"∠"+n).join(" + ")}, the 3 angles shown added together.`;
+    else if(o.looks&&x===90)describe=`You wrote 90°. ${hn} looks like a right angle, but a picture cannot show whether an angle is exactly 90°. If ${hn} is 90°, the 4 angles of ${N} add up to ${termsFor(90)} = ${ks+90}°.`;
+    return {tag,expect,text,describe};}
   const p=document.createElement("p");   /* not used */
   const inp=ctx.numberBox("Your answer in degrees",(x)=>{
     if(x===null)return ctx.note("Write a number of degrees, like 75.");
@@ -112,7 +118,7 @@ function item(ctx,it,o){o=o||{};const N=it.names,h=it.h,hn="∠"+N[h],right=it.a
       ctx.done({right:true,answer:x+"°",eq,tag:"right",reply:t});if(it.P)draw(ctx,it.P,it.ang,h,true);return;}
     const c=classify(x);let t=c.text;
     if(ctx.role==="own"){if(missed)t+=` Here is the answer. ${working}.`;missed=true;}
-    ctx.done({right:false,answer:x+"°",eq,tag:c.tag,reply:t});});
+    ctx.done({right:false,answer:x+"°",eq,tag:c.tag,reply:t,describe:c.describe});});
   const press=()=>document.querySelector("#acts .decide").click();
   const cands=[ks];if(o.looks)cands.push(90);if(pairs.length)cands.push(pairs[0]);cands.push(right+10);if(right>10)cands.push(right-10);
   const wrongs=[...new Set(cands)].filter(v=>v!==right).map(v=>({expect:classify(v).expect,fn(){inp.value=v;press();}}));
@@ -121,7 +127,7 @@ function item(ctx,it,o){o=o||{};const N=it.names,h=it.h,hn="∠"+N[h],right=it.a
   return inp;}
 function pictureItem(ctx,P,ang,h,o,lines){o=o||{};const it={P,ang,h,names:"ABCD"};
   draw(ctx,P,ang,h,false);
-  ctx.say(RULE);ctx.say("The picture shows 3 angles of ABCD. The angle with a ? is the one to find.");
+  if(ctx.role==="worked"||ctx.role==="supported")ctx.say(RULE);ctx.say("The picture shows 3 angles of ABCD. The angle with a ? is the one to find.");
   const known=ang.filter((_,i)=>i!==h);
   if(lines==="sum"){ctx.say(`The 3 angles shown add up to ${known.map(deg).join(" + ")} = ${known[0]+known[1]+known[2]}°.`);
     ctx.say(`The angle with a ? is what is left of 360°, so ∠${"ABCD"[h]} = 360° − ${known[0]+known[1]+known[2]}°.`);}
@@ -131,7 +137,7 @@ function pictureItem(ctx,P,ang,h,o,lines){o=o||{};const it={P,ang,h,names:"ABCD"
 function textItem(ctx){const N=ctx.pick(SETS),h=ctx.int(0,3);let ang;
   for(;;){const a=[ctx.int(52,128),ctx.int(52,128),ctx.int(52,128)].map(x=>x+(x===90?ctx.pick([-7,7]):0));const d=360-a[0]-a[1]-a[2];if(d>=35&&d<=150&&d!==90){ang=a;ang.splice(h,0,d);break;}}
   const shown=N.split("").map((n,i)=>i===h?null:`∠${n} = ${ang[i]}°`).filter(Boolean);
-  ctx.contrast="no picture";ctx.say(RULE);
+  ctx.contrast="no picture";if(ctx.role==="worked"||ctx.role==="supported")ctx.say(RULE);
   ctx.ask(`In quadrilateral ${N}, ${shown[0]}, ${shown[1]} and ${shown[2]}. How many degrees is ∠${N[h]}?`);
   item(ctx,{ang,h,names:N},{});}
 const anglesOf=P=>whole(geom(P));

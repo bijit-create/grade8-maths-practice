@@ -25,6 +25,7 @@
      "the same diagonal named the other way" (other, planned wrong: the first diagonal again, named the other way round).
      Engine and records: assets/quad-engine.js. -->
 <link rel="stylesheet" href="assets/quad.css">
+<link rel="stylesheet" href="assets/learning-support.css">
 </head>
 <body>
 <div class="app">
@@ -34,6 +35,7 @@
 </div>
 <div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
 <script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/teaching-catalogue.js"></script><script src="assets/preparation.js"></script><script src="assets/learning-policy.js"></script><script src="assets/teaching-support.js"></script><script src="assets/learning-bridge.js"></script>
 <script src="assets/quad-engine.js"></script>
 <script>
 "use strict";
@@ -96,18 +98,18 @@ function lineTask(ctx,S,o){/* o: kept (lines already drawn), target (the only ri
   const B=build(ctx,S,{kept:o.kept});ctx.ask(o.ask);
   ctx.button("My line is finished",()=>{const ln=B.line;
     if(!ln)return ctx.note("You have not drawn a line yet. Tap one vertex, then tap another vertex.");
-    const [a,b]=ln,ab=S.nm(a,b),la=S.lt[a],lb=S.lt[b];let right=false,tag="",text="";
-    if(S.adj(a,b)){tag="a side";text=`You drew ${ab}. ${la} and ${lb} are next to each other, so ${ab} is a side of ${S.name}, not a diagonal.`;}
+    const [a,b]=ln,ab=S.nm(a,b),la=S.lt[a],lb=S.lt[b];let right=false,tag="",text="",describe="";
+    if(S.adj(a,b)){tag="a side";describe=`You drew ${ab}. ${ab} is a side of ${S.name}.`;text=`You drew ${ab}. ${la} and ${lb} are next to each other, so ${ab} is a side of ${S.name}, not a diagonal.`;}
     else{const dup=B.kept.find(k=>same(k,ln));
-      if(dup){const kn=S.nm(dup[0],dup[1]),rest=S.diags.find(p=>!same(p,dup));tag="the diagonal again";
+      if(dup){const kn=S.nm(dup[0],dup[1]),rest=S.diags.find(p=>!same(p,dup));tag="the diagonal again";describe=`You drew ${ab}. That line is already drawn on the shape.`;
         text=`You drew ${ab}. `+(kn===ab?`${ab} is the diagonal already drawn.`:`${ab} is the same line segment as ${kn}, the diagonal already drawn.`)+` ${S.name} has one more diagonal, ${S.nm(rest[0],rest[1])}.`;}
-      else if(o.target&&!same(o.target,ln)){tag="diagonal inside the shape";
+      else if(o.target&&!same(o.target,ln)){tag="diagonal inside the shape";describe=`You drew ${ab}. ${ab} lies inside the shape.`;
         text=`You drew ${ab}. ${la} and ${lb} are not next to each other, so ${ab} is a diagonal of ${S.name}, and it lies inside the shape. The diagonal that lies outside the shape is ${S.nm(o.target[0],o.target[1])}. A diagonal does not have to lie inside the shape.`;}
       else{right=true;tag=S.out&&same(S.out,ln)?"diagonal outside the shape":"a diagonal";
         text=`${la} and ${lb} are not next to each other, so ${ab} is a diagonal of ${S.name}.`+(S.out&&same(S.out,ln)?` ${ab} lies outside the shape, and it is still a diagonal.`:"")
           +(o.kept&&o.kept.length?` ${S.name} has 2 diagonals, ${S.nm(o.kept[0][0],o.kept[0][1])} and ${ab}.`:"");}}
     if(!right)B.reveal(S.diags);
-    ctx.done({right,answer:ab,eq:"a diagonal joins 2 vertices that are not next to each other",tag,reply:text});});
+    ctx.done({right,answer:ab,eq:"a diagonal joins 2 vertices that are not next to each other",tag,reply:text,describe});});
   const draws=p=>function(){B.again();B.tap(p[0]);B.tap(p[1]);pressFinish();};
   ctx.auto({right:draws(o.good),wrongs:o.wrongs.map(w=>({expect:w.expect,fn:draws(w.pair)}))});
   return B;}

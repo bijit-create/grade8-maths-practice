@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Answer questions on shapes, angles and equations</title>
+<!-- Student 2, return sitting. 16 Nov 2026. Screens approved by Bijit on 15 Nov 2026 ("Yes to the screens") as a local prototype.
+     Source: HANDOVER.md "The next sitting, and why" (15 Nov 2026); her Activity rows 47, 52, 67, 87, 93, 172
+     (data/activity-2026-11-15.csv); the task kinds of quadrilaterals-1, -2, -3, -5, -6, -7 (11 Nov 2026);
+     statements and ids from knowledge-graph/graph-data.json; the equation form from plan/research-2026-11-11.md
+     (GP 8 Part 2 ch. 6: 20 + 2c = 60; GP 7 Part 2 ch. 7: 4 + 2y = 16 and 11y + (-5) = 61).
+
+     What it is: 13 first answers, no worked example and no rule before them, in an order she cannot predict
+     (shuffled once per sitting; the first item is one kind she was right on, a shape that is a quadrilateral).
+     Every item has one plain reply. The reply says what her answer was and, where it can be told, what it describes;
+     then it states the answer in the same words whether she was right or not. No fresh item of the same
+     kind follows a wrong answer: Next goes to the next item in the list.
+
+     How it uses the engine: assets/quad-engine.js is loaded unchanged. Its sample mode (?screen=...) runs one task
+     and stores and sends nothing itself, so the page sets ?screen=sitting before the engine loads and calls QE.start
+     once per item. This page sends its own rows with SheetLog.activity (Activity tab; the set is "return-sitting",
+     which Signals.gs and the Now tab do not read).
+     Each answer row: event "answer", role "first answer" (true for every item: none follows a reply on its own kind),
+     her answer, right, support = what the screen supplied ("none" when nothing), checks = graph id and item id,
+     detail = {item, seat, first_answer, supplied (a list), version, tag, reply}. "sitting start", "sitting resumed"
+     and "sitting end" rows carry the version too.
+     Her place: localStorage "student2-return-sitting-v1" keeps the order and the next seat. A reload goes to the next
+     unanswered item; an item she has answered is never asked again. When all 13 are answered the page shows the end
+     screen from then on (a later sitting is a new version of this page).
+     ?try=1 plays the page without sending or storing anything (for Bijit and for tests); ?seed=n fixes the order;
+     ?teacher=1 shows the rows under the card. -->
+<link rel="stylesheet" href="assets/quad.css">
+<style>
+#rows{font:13px/1.35 ui-monospace,Consolas,monospace;white-space:pre-wrap;background:#FFF7E0;color:#3A2E00;border:1px dashed #B08A00;border-radius:8px;padding:8px 10px;max-height:320px;overflow:auto}
+</style>
+<script>
+/* the engine reads ?screen= once, when it loads; the sitting runs in its sample mode, which stores nothing */
+(function(){var q=new URLSearchParams(location.search);if(q.get("screen")!=="sitting"){q.set("screen","sitting");
+  try{history.replaceState(null,"",location.pathname+"?"+q.toString()+location.hash);}catch(e){}}})();
+</script>
+<link rel="stylesheet" href="assets/learning-support.css">
+</head>
+<body>
+<div class="app">
+  <div class="top"><h1 id="h1">Answer questions on shapes, angles and equations</h1><div class="tools"><a class="btn" id="homeLink" href="index.html">Back to all pages</a><button class="btn" id="readBtn" type="button">Read it</button><button class="btn" id="pauseBtn" type="button">Pause</button></div></div>
+  <div id="teacher" class="hide"></div>
+  <div class="card"><div id="pic"></div><div class="text"><div id="words"></div><div id="acts"></div></div></div>
+  <div id="rows" class="hide"></div>
+</div>
+<div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
+<script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/teaching-catalogue.js"></script><script src="assets/preparation.js"></script><script src="assets/learning-policy.js"></script><script src="assets/teaching-support.js"></script><script src="assets/learning-bridge.js"></script>
+<script src="assets/quad-engine.js"></script>
+<script>
+"use strict";
+const VERSION="return-sitting 1.0 (16 Nov 2026)";
+
+/* =====================================================================================================
+   THE ITEMS (data). graph: the id in knowledge-graph/graph-data.json; statement: copied from that file.
+   from: the page and kind it reuses, and her Sheet row when the kind was not right at her first answer.
+   planned_wrong: the wrong answers the reply is written for (any other answer gets the general reply).
+   answer: the words that state the answer; the same words follow a right and a wrong answer.
+   supplied: what the screen does for her on this item (empty: nothing). "read aloud" is added if she presses Read it;
+   "lines she drew to try before answering" is added on the diagonals count if she drew any.
+   ===================================================================================================== */
+const G_KI_GE_21="A quadrilateral is a closed figure in a plane bounded by four line segments, in which adjacent sides meet only at their common end point, opposite sides do not meet and no three vertices lie on one straight line; it has four sides, four distinct vertices and four interior angles.";
+const G_KI_ME_40="A diagonal of a polygon is a line segment that joins two vertices that are not next to each other.";
+const G_SK_GE_08="Finds the fourth angle of a quadrilateral from its other three angles, each given in degrees.";
+const G_SK_GE_09="Finds the angles of a quadrilateral from angles given as expressions in x.";
+const G_SK_GE_11="Finds an interior angle of a quadrilateral from the angle that makes a straight line with it at the same vertex.";
+const G_KI_AG_18="An equation states that two expressions have the same value, and a solution of an equation is a value of the variable that makes the two sides equal.";
+const G_KI_AG_20="To solve a linear equation in which the variable appears once, undo the operations applied to the variable in the reverse order of their application, doing the same to both sides.";
+
+const ITEMS=[
+ {id:"decide-yes",kind:"decide",group:"decide",graph:"KI-GE-21",statement:G_KI_GE_21,
+  from:"quadrilaterals-2 (ki-ge-21), kind concave; right at her first answer on 11 Nov. Placed first, and the only yes answer, so that 'always no' does not score.",
+  shape:{base:[[-125,115],[10,-125],[125,115],[0,35]],letters:"UVWXY",yes:true},
+  planned_wrong:["no (a corner points in, so it does not look like a square)"],supplied:[]},
+ {id:"make-5",kind:"make",group:"make",graph:"KI-GE-21",statement:G_KI_GE_21,
+  from:"quadrilaterals-1 (q1-make), kind five; row 47 (she made a shape with 5 sides)",
+  points:[[205,48],[352,152],[296,330],[112,326],[62,150]],
+  auto:{good:[0,1,2,3],wrongs:[{order:[0,1,2,3,4],close:true,expect:"5 straight sides"},{order:[0,1,2,3],close:false,expect:"not closed"},{order:[0,2,1,3],close:true,expect:"crosses side"},{order:[0,1,2],close:true,expect:"3 straight sides"}]},
+  planned_wrong:["a closed shape through all 5 points (5 sides)","a shape that is not closed","a shape whose sides cross","a closed shape on 3 points (3 sides)"],
+  answer:"A quadrilateral is closed and has 4 straight sides that meet only at its corners. Any 4 of these 5 points, joined in turn around the outside and back to the first point, make a quadrilateral.",supplied:[]},
+ {id:"make-line",kind:"make",group:"make",graph:"KI-GE-21",statement:G_KI_GE_21,
+  from:"quadrilaterals-1 (q1-make), kind line; row 52 (her shape had three points on a line)",
+  points:[[80,95],[340,95],[340,295],[80,295],[210,95]],
+  auto:{good:[0,1,2,3],wrongs:[{order:[0,4,1,2],close:true,expect:"lies on the straight line"},{order:[0,1,2,3],close:false,expect:"not closed"}]},
+  planned_wrong:["a closed shape on 4 points, 3 of them on one straight line (3 corners)","a shape that is not closed","a shape whose sides cross"],
+  answer:"A quadrilateral has 4 corners and 4 straight sides. Three of these points lie on one straight line, along the top. One quadrilateral leaves out the middle point of those three, and joins the other 4 points in turn around the outside and back to the first point.",supplied:[]},
+ {id:"decide-open",kind:"decide",group:"decide",graph:"KI-GE-21",statement:G_KI_GE_21,
+  from:"quadrilaterals-2 (ki-ge-21), kind open; row 67 (she said an open shape is a quadrilateral)",
+  shape:{base:[[-20,125],[-110,-35],[85,-110],[145,50]],letters:"EFGHI",open:true,rot:20},
+  planned_wrong:["yes (4 corners, but not closed)"],supplied:[]},
+ {id:"dart",kind:"dart",group:"diag",graph:"KI-ME-40",statement:G_KI_ME_40,
+  from:"quadrilaterals-3 (ki-me-40), kind dart; row 87 (she drew the diagonal inside the shape)",
+  V:[[60,150],[330,60],[290,330],[218,198]],fix:{set:"PQRS",s:1,d:1},
+  planned_wrong:["PR, the diagonal inside the shape","a side, for example PQ"],
+  answer:"The diagonal of PQRS that lies outside the shape joins S and Q. S and Q are not next to each other, so SQ is a diagonal of PQRS, though it lies outside the shape.",supplied:[]},
+ {id:"howmany",kind:"howmany",group:"diag",graph:"KI-ME-40",statement:G_KI_ME_40,
+  from:"quadrilaterals-3 (ki-me-40), kind howmany; row 93 (she chose 1)",
+  V:[[95,85],[335,110],[310,305],[70,280]],fix:{set:"WXYZ",s:0,d:1},
+  planned_wrong:["1 diagonal","4 diagonals (WY and YW counted as two)"],
+  answer:"WXYZ has 2 diagonals, WY and XZ. W and Y are not next to each other, and X and Z are not next to each other.",supplied:[]},
+ {id:"check-slip",kind:"check",group:"angles",graph:"SK-GE-09",statement:G_SK_GE_09,
+  from:"quadrilaterals-7 (sk-ge-09), kind check with a slip; row 172 (she said yes to a worked answer that added up to 380°). The picture is kept, as on that page.",
+  c:[2,1,2,1],e:[0,30,0,0],shown:[110,85,110,65],
+  planned_wrong:["yes (did not add the 4 angles)"],
+  answer:"110° + 85° + 110° + 65° = 370°, so the 4 angles in this worked answer do not add up to 360°. ∠D should be x = 55°.",
+  supplied:["a worked answer with x already found and the 4 angles written"]},
+ {id:"fourth-angle",kind:"number",group:"angles",graph:"SK-GE-08",statement:G_SK_GE_08,
+  from:"quadrilaterals-5 (sk-ge-08), whole task, kind noPicture; 6 of 6 right on 12 Nov. No picture, and the rule is not written on the screen.",
+  ask:"In quadrilateral KLMN, ∠K = 97°, ∠L = 64° and ∠N = 122°. How many degrees is ∠M?",unit:"°",right:77,
+  wrongs:[{v:283,tag:"sum of the three",text:"283° is ∠K + ∠L + ∠N, the 3 given angles added together."},
+          {v:19,tag:"triangle rule",text:"19° is 180° − (97° + 64°). 180° is the total for the 3 angles of a triangle."},
+          {v:87,tag:"slip of 10",text:""},{v:67,tag:"slip of 10",text:""}],
+  other:v=>`Then ∠K + ∠L + ∠M + ∠N would be 97° + 64° + ${v}° + 122° = ${283+v}°, not 360°.`,
+  answer:"The 4 angles of a quadrilateral add up to 360°, so ∠M = 360° − (97° + 64° + 122°) = 360° − 283° = 77°.",supplied:[]},
+ {id:"angle-beside",kind:"number",group:"angles",graph:"SK-GE-11",statement:G_SK_GE_11,
+  from:"quadrilaterals-6 (sk-ge-11), whole task, kinds otherVertex and outSmall; 12 of 12 right on 13 Nov. No picture: the straight line is told in words.",
+  lines:["In quadrilateral ABCD, side CD is carried straight on past D to a point E. So C, D and E are on one straight line.","∠ADE is the angle between side DA and that line, outside the quadrilateral. ∠ADE = 63°."],
+  ask:"How many degrees is ∠D, the angle of quadrilateral ABCD at D?",unit:"°",right:117,
+  wrongs:[{v:63,tag:"wrote the outside angle",text:"63° is the size of ∠ADE, the angle outside the quadrilateral."},
+          {v:297,tag:"360 minus the outside angle",text:"297° is 360° − 63°."},
+          {v:27,tag:"90 minus the outside angle",text:"27° is 90° − 63°."},
+          {v:107,tag:"slip of 10",text:""},{v:127,tag:"slip of 10",text:""}],
+  other:v=>`Then ∠D + ∠ADE would be ${v}° + 63° = ${v+63}°.`,
+  answer:"∠D and ∠ADE are on one straight line, so they add up to 180°. ∠D = 180° − 63° = 117°.",supplied:[]},
+ {id:"angles-x",kind:"number",group:"angles",graph:"SK-GE-09",statement:G_SK_GE_09,
+  from:"quadrilaterals-7 (sk-ge-09), whole task, kinds angle and constants; 15 of 16 right on 13 Nov. No picture: the angles are written in words.",
+  lines:["The 4 angles of quadrilateral ABCD are ∠A = x, ∠B = 2x + 10°, ∠C = x + 20° and ∠D = 2x."],
+  ask:"How many degrees is ∠B?",unit:"°",right:120,
+  wrongs:[{v:55,tag:"x, not the angle",text:"55° is x. ∠B is 2x + 10°."},
+          {v:130,tag:"constant terms left out",text:"130° is 2x + 10° when x = 60°. x = 60° comes from 6x = 360°, which leaves out the 10° and the 20°."},
+          {v:140,tag:"constant terms with the wrong sign",text:"140° is 2x + 10° when x = 65°. x = 65° comes from 6x = 390°, which adds the 30° to 360° instead of taking it away."},
+          {v:90,tag:"360 divided by 4",text:"90° is 360° ÷ 4. That would be each angle only if all 4 angles were equal."},
+          {v:75,tag:"another corner",text:"75° is ∠C, which is x + 20°."},{v:110,tag:"another corner",text:"110° is ∠D, which is 2x."}],
+  other:()=>"",
+  answer:"x + (2x + 10°) + (x + 20°) + 2x = 360°, so 6x + 30° = 360°, 6x = 330° and x = 55°. Then ∠B = 2x + 10° = 2 × 55° + 10° = 120°.",supplied:[]},
+ {id:"eq-1",kind:"number",group:"eq",graph:"KI-AG-20 (with KI-AG-18); the graph has no skill for solving with the letter on one side",statement:G_KI_AG_20+" | "+G_KI_AG_18,
+  from:"the form of Ganita Prakash 8 Part 2 ch. 6 (20 + 2c = 60); no page of hers has asked it",
+  ask:"In 18 + 2c = 50, the letter c stands for a number. What number is c?",unit:"",right:16,
+  wrongs:[{v:32,tag:"2c, not c",text:"32 is 2c, not c."},{v:34,tag:"added 18",text:""},{v:25,tag:"50 divided by 2",text:""},{v:7,tag:"divided first",text:""}],
+  other:v=>`Then 18 + 2 × ${v} = ${18+2*v}, not 50.`,
+  answer:"Taking 18 away from both sides gives 2c = 32, so c = 32 ÷ 2 = 16. And 18 + 2 × 16 = 18 + 32 = 50.",supplied:[]},
+ {id:"eq-2",kind:"number",group:"eq",graph:"KI-AG-20 (with KI-AG-18)",statement:G_KI_AG_20+" | "+G_KI_AG_18,
+  from:"the form of Ganita Prakash 7 Part 2 ch. 7 (4 + 2y = 16), the letter term first",
+  ask:"In 3y + 11 = 47, the letter y stands for a number. What number is y?",unit:"",right:12,
+  wrongs:[{v:36,tag:"3y, not y",text:"36 is 3y, not y."},{v:58,tag:"added 11, did not divide",text:""}],
+  other:v=>`Then 3 × ${v} + 11 = ${3*v+11}, not 47.`,
+  answer:"Taking 11 away from both sides gives 3y = 36, so y = 36 ÷ 3 = 12. And 3 × 12 + 11 = 36 + 11 = 47.",supplied:[]},
+ {id:"eq-3",kind:"number",group:"eq",graph:"KI-AG-20 (with KI-AG-18)",statement:G_KI_AG_20+" | "+G_KI_AG_18,
+  from:"the form of Ganita Prakash 7 Part 2 ch. 7 (11y + (−5) = 61), a number taken away",
+  ask:"In 5m − 9 = 41, the letter m stands for a number. What number is m?",unit:"",right:10,
+  wrongs:[{v:50,tag:"5m, not m",text:"50 is 5m, not m."},{v:32,tag:"took 9 away, did not divide",text:""}],
+  other:v=>`Then 5 × ${v} − 9 = ${5*v-9}, not 41.`,
+  answer:"Adding 9 to both sides gives 5m = 50, so m = 50 ÷ 5 = 10. And 5 × 10 − 9 = 50 − 9 = 41.",supplied:[]}
+];
+
+/* ===================== code reused from the seven pages (copied; each in its own block) ===================== */
+
+/* --- quadrilaterals-1: tap points in turn; tapping the first point closes the shape --- */
+const Q1=(()=>{const L="ABCDEFG";
+  const orient=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);
+  function crosses(a,b,c,d){const s=Math.sign;return s(orient(a,b,c))*s(orient(a,b,d))<0&&s(orient(c,d,a))*s(orient(c,d,b))<0;}
+  function onLine(p,q,r){const d=Math.hypot(r[0]-p[0],r[1]-p[1]);return Math.abs(orient(p,q,r))/d<6;}
+  function build(ctx,P){let path=[],closed=false;
+    const svg=ctx.svg("0 0 420 380","Points to join into a shape. The letters follow the order of your taps.");
+    const nm=i=>L[path.indexOf(i)];
+    const segs=()=>{const s=[];for(let i=1;i<path.length;i++)s.push([path[i-1],path[i]]);if(closed)s.push([path[path.length-1],path[0]]);return s;};
+    function crossing(){const s=segs();for(let i=0;i<s.length;i++)for(let j=i+2;j<s.length;j++){if(i===0&&j===s.length-1)continue;
+      if(crosses(P[s[i][0]],P[s[i][1]],P[s[j][0]],P[s[j][1]]))return [s[i],s[j]];}return null;}
+    function straightCorners(){const n=path.length,out=[];for(let k=0;k<n;k++){const a=P[path[(k+n-1)%n]],b=P[path[k]],c=P[path[(k+1)%n]];if(onLine(a,b,c))out.push(k);}return out;}
+    function draw(){svg.innerHTML="";const cx=P.reduce((a,p)=>a+p[0],0)/P.length,cy=P.reduce((a,p)=>a+p[1],0)/P.length,bad=closed?crossing():null;
+      for(const [a,b] of segs()){const isX=bad&&bad.some(s=>s[0]===a&&s[1]===b);
+        svg.appendChild(ctx.el("line",{class:"side"+(isX?" cross":""),x1:P[a][0],y1:P[a][1],x2:P[b][0],y2:P[b][1]}));
+        const f=isX?0.3:0.5,mx=P[a][0]+(P[b][0]-P[a][0])*f,my=P[a][1]+(P[b][1]-P[a][1])*f;let dx=mx-cx,dy=my-cy;if(isX){dx=-(P[b][1]-P[a][1]);dy=P[b][0]-P[a][0];}const d=Math.hypot(dx,dy)||1;
+        const t=ctx.el("text",{class:"slbl",x:mx+dx/d*22,y:my+dy/d*22+6,"text-anchor":"middle"});t.textContent=nm(a)+nm(b);svg.appendChild(t);}
+      P.forEach((p,i)=>{const used=path.includes(i);const g=ctx.el("g",{class:"pt"+(used?" used":""),tabindex:0,role:"button","aria-label":used?"Point "+nm(i):"A point","data-i":i});
+        g.appendChild(ctx.el("circle",{class:"hit",cx:p[0],cy:p[1],r:30}));g.appendChild(ctx.el("circle",{class:"pdot",cx:p[0],cy:p[1],r:11}));
+        if(used){const dx=p[0]-cx,dy=p[1]-cy,d=Math.hypot(dx,dy)||1;const t=ctx.el("text",{class:"lbl",x:p[0]+dx/d*30,y:p[1]+dy/d*30+8,"text-anchor":"middle"});t.textContent=nm(i);svg.appendChild(t);}
+        g.addEventListener("click",()=>tap(i));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tap(i);}});
+        svg.appendChild(g);});}
+    function tap(i){if(closed||!ctx.open)return;
+      if(path.length===0)path.push(i);else if(i===path[0]&&path.length>=3)closed=true;else if(!path.includes(i))path.push(i);
+      ctx.clearNote();draw();}
+    function again(){if(!ctx.open)return;path=[];closed=false;ctx.clearNote();draw();}
+    /* what she made, in words (the page's judge, with the rule sentences taken out: the answer sentence follows it) */
+    function judge(){const n=segs().length,first=L[0],last=L[path.length-1];
+      if(path.length<2)return {none:true,text:"You have not drawn a side yet. Tap a point to start."};
+      const answer=path.map(i=>nm(i)).join("")+(closed?" closed":" open");
+      if(!closed)return {right:false,answer,tag:"not closed",text:`Your shape is not closed. Its last side ends at ${last}, and the shape started at ${first}.`};
+      const x=crossing();if(x){const [s,t]=x;return {right:false,answer,tag:"sides cross",text:`Your shape has ${n} sides, but side ${nm(s[0])}${nm(s[1])} crosses side ${nm(t[0])}${nm(t[1])}.`};}
+      const flat=straightCorners(),corners=path.length-flat.length;
+      const lineText=flat.map(k=>{const m=path.length,a=nm(path[(k+m-1)%m]),b=nm(path[k]),c=nm(path[(k+1)%m]);return `${b} lies on the straight line from ${a} to ${c}, so ${a}${b} and ${b}${c} make one straight side, ${a}${c}.`;}).join(" ");
+      if(corners!==4)return flat.length
+        ?{right:false,answer,tag:"three points on a line",text:`${lineText} Your shape has only ${corners} corners and ${corners} straight sides.`}
+        :{right:false,answer,tag:n+" sides",text:`Your shape is closed, and it has ${n} straight sides.`};
+      const nmPath=path.map(i=>nm(i)).join("");
+      if(flat.length)return {right:true,answer,tag:"quadrilateral with a point on a side",text:`${lineText} Your shape is closed, and it has 4 straight sides and 4 corners. It is a quadrilateral.`};
+      return {right:true,answer,tag:"quadrilateral",text:`Your shape ${nmPath} is closed, and it has 4 straight sides that meet only at its corners. It is a quadrilateral.`};}
+    draw();
+    const b=document.createElement("button");b.type="button";b.className="btn";b.textContent="Start again";b.addEventListener("click",again);ctx.picBelow(b);
+    return {tap,again,judge};}
+  return {build};})();
+
+/* --- quadrilaterals-2: a shape, Yes or No --- */
+const Q2=(()=>{const NS="http://www.w3.org/2000/svg";
+  const orient=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);
+  function crosses(a,b,c,d){const s=Math.sign;return s(orient(a,b,c))*s(orient(a,b,d))<0&&s(orient(c,d,a))*s(orient(c,d,b))<0;}
+  function segCross(P,n,open){const m=open?n-1:n;for(let i=0;i<m;i++)for(let j=i+2;j<m;j++){if(!open&&i===0&&j===m-1)continue;
+    if(crosses(P[i],P[(i+1)%n],P[j],P[(j+1)%n]))return [i,j];}return null;}
+  const area=P=>P.reduce((t,p,i)=>{const q=P[(i+1)%P.length];return t+p[0]*q[1]-q[0]*p[1];},0)/2;
+  const list=a=>a.length<3?a.join(" and "):a.slice(0,-1).join(", ")+" and "+a[a.length-1];
+  function shapeFrom(base,o){const a=(o.rot||0)*Math.PI/180,ca=Math.cos(a),sa=Math.sin(a),n=base.length;
+    let P=base.map(([x,y])=>[x*ca-y*sa,x*sa+y*ca]);
+    const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+    const sc=Math.min(310/(x1-x0),270/(y1-y0),1.25),tr=p=>[Math.round(210+(p[0]-(x0+x1)/2)*sc),Math.round(190+(p[1]-(y0+y1)/2)*sc)];
+    const s={n,pts:P.map(tr),curve:-1,open:!!o.open,yes:!!o.yes,letters:o.letters};
+    s.cross=segCross(s.pts,n,s.open);s.inward=-1;
+    if(!s.open&&!s.cross){const A=area(s.pts);for(let k=0;k<n;k++){const a1=s.pts[(k+n-1)%n],b1=s.pts[k],c1=s.pts[(k+1)%n],cr=(b1[0]-a1[0])*(c1[1]-b1[1])-(b1[1]-a1[1])*(c1[0]-b1[0]);if(Math.sign(cr)!==Math.sign(A)&&Math.abs(cr)>400){s.inward=k;break;}}}
+    return s;}
+  const sideName=(s,i)=>s.letters[i]+s.letters[(i+1)%s.n];
+  function labelAt(s,k){const P=s.pts,n=s.n,v=P[k],cx=P.reduce((t,p)=>t+p[0],0)/n,cy=P.reduce((t,p)=>t+p[1],0)/n;let dx=v[0]-cx,dy=v[1]-cy;
+    if(!s.open&&!s.cross){const a=P[(k+n-1)%n],c=P[(k+1)%n],u=[v[0]-a[0],v[1]-a[1]],w=[v[0]-c[0],v[1]-c[1]],lu=Math.hypot(...u),lw=Math.hypot(...w);
+      let bx=u[0]/lu+w[0]/lw,by=u[1]/lu+w[1]/lw;if(Math.hypot(bx,by)>.2){const cr=(v[0]-a[0])*(c[1]-v[1])-(v[1]-a[1])*(c[0]-v[0]);if(Math.sign(cr)!==Math.sign(area(P))){bx=-bx;by=-by;}dx=bx;dy=by;}}
+    const d=Math.hypot(dx,dy)||1;return [v[0]+dx/d*30,v[1]+dy/d*30+8];}
+  function draw(svg,s,marks){svg.innerHTML="";const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+    const n=s.n,m=s.open?n-1:n,P=s.pts;let num=0;
+    for(let i=0;i<m;i++){const a=P[i],b=P[(i+1)%n];svg.appendChild(el("line",{class:"side",x1:a[0],y1:a[1],x2:b[0],y2:b[1]}));
+      if(marks&&!s.cross){num++;const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;svg.appendChild(el("circle",{class:"numbg",cx:mx,cy:my,r:14}));
+        const t=el("text",{class:"num",x:mx,y:my+6,"text-anchor":"middle"});t.textContent=num;svg.appendChild(t);}}
+    if(marks&&s.open)for(const E of [P[n-1],P[0]])svg.appendChild(el("circle",{class:"gap",cx:E[0],cy:E[1],r:14}));
+    P.forEach((p,k)=>{svg.appendChild(el("circle",{class:"dot",cx:p[0],cy:p[1],r:6}));const [lx,ly]=labelAt(s,k);
+      const t=el("text",{class:"lbl",x:Math.round(lx),y:Math.round(ly),"text-anchor":"middle"});t.textContent=s.letters[k];svg.appendChild(t);});}
+  /* the answer, in the page's approved words, without its opening "Yes" or "Your answer was" */
+  function answerText(s){const L=s.letters,N=L.slice(0,s.n),m=s.open?s.n-1:s.n,straight=[];for(let i=0;i<m;i++)straight.push(sideName(s,i));
+    const k=straight.length,nb=`${k} straight sides, numbered 1 to ${k} on the shape. They are ${list(straight)}.`;
+    if(s.open){const a=L[s.n-1],b=L[0];return `${N} is not closed. Its ends, ${a} and ${b}, are ringed on the shape, and there is no side from ${a} back to ${b}. It has only ${nb} A quadrilateral is closed and has 4 straight sides, so ${N} is not a quadrilateral.`;}
+    let t=`${N} is closed, and it has ${nb} Its sides meet only at its corners, so ${N} is a quadrilateral.`;
+    if(s.inward>=0)t+=` The corner at ${L[s.inward]} points into the shape, and ${N} is still a quadrilateral.`;
+    return t;}
+  return {shapeFrom,draw,answerText};})();
+
+/* --- quadrilaterals-3: tap one vertex, then another; the line and its name appear in tap order --- */
+const Q3=(()=>{const same=(a,b)=>(a[0]===b[0]&&a[1]===b[1])||(a[0]===b[1]&&a[1]===b[0]);
+  function makeShape(V,dart,fix){const set=fix.set,s=fix.s,d=fix.d,lt=[];
+    for(let j=0;j<4;j++)lt[((s+d*j)%4+4)%4]=set[j];
+    const S={V,lt,name:set,dart:!!dart,out:dart?[0,2]:null,diags:[[0,2],[1,3]]};
+    S.nm=(i,j)=>lt[i]+lt[j];S.adj=(i,j)=>{const x=(i-j+4)%4;return x===1||x===3;};
+    const c=[0,1].map(k=>V.reduce((t,p)=>t+p[k],0)/4);
+    S.lab=V.map((p,i)=>{let dx=p[0]-c[0],dy=p[1]-c[1];if(dart&&i===3){const a=V[0],b=V[2];dx=(a[0]+b[0])/2-p[0];dy=(a[1]+b[1])/2-p[1];}
+      const n=Math.hypot(dx,dy)||1;return [Math.max(16,Math.min(404,p[0]+dx/n*30)),Math.max(24,Math.min(366,p[1]+dy/n*30+8))];});
+    return S;}
+  function build(ctx,S,o){o=o||{};let kept=[],sel=null,line=null,tried=[];
+    const svg=ctx.svg("0 0 420 380","Quadrilateral "+S.name+". Tap one vertex, then another vertex, to draw a line.");
+    function seg(a,b,cls){const P=S.V[a],Q=S.V[b];svg.appendChild(ctx.el("line",{class:cls,x1:P[0],y1:P[1],x2:Q[0],y2:Q[1]}));
+      const mx=P[0]+(Q[0]-P[0])*.3,my=P[1]+(Q[1]-P[1])*.3,dx=Q[0]-P[0],dy=Q[1]-P[1],d=Math.hypot(dx,dy)||1;
+      const t=ctx.el("text",{class:"nm",x:Math.max(20,Math.min(400,mx-dy/d*20)),y:Math.max(20,Math.min(370,my+dx/d*20+6)),"text-anchor":"middle"});t.textContent=S.nm(a,b);svg.appendChild(t);}
+    function draw(){svg.innerHTML="";
+      svg.appendChild(ctx.el("polygon",{class:"side",points:S.V.map(p=>p.join(",")).join(" ")}));
+      kept.forEach(k=>seg(k[0],k[1],"kept"));tried.forEach(k=>seg(k[0],k[1],"kept"));
+      if(line)seg(line[0],line[1],"mine");
+      S.V.forEach((p,i)=>{const g=ctx.el("g",{class:"pt"+(sel===i?" sel":""),tabindex:0,role:"button","aria-label":"Vertex "+S.lt[i],"data-i":i});
+        g.appendChild(ctx.el("circle",{class:"hit",cx:p[0],cy:p[1],r:30}));g.appendChild(ctx.el("circle",{class:"pdot",cx:p[0],cy:p[1],r:11}));
+        g.addEventListener("click",()=>tap(i));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tap(i);}});
+        svg.appendChild(g);
+        const t=ctx.el("text",{class:"lbl",x:S.lab[i][0],y:S.lab[i][1],"text-anchor":"middle"});t.textContent=S.lt[i];svg.appendChild(t);});}
+    function tap(i){if(!ctx.open)return;ctx.clearNote();
+      if(o.explore){if(sel===null)sel=i;else if(sel===i)sel=null;else{if(!tried.some(m=>same(m,[sel,i])))tried.push([sel,i]);sel=null;}draw();return;}
+      if(line){line=null;sel=null;}
+      if(sel===null)sel=i;else if(sel===i)sel=null;else{line=[sel,i];sel=null;}
+      draw();}
+    function again(){if(!ctx.open)return;line=null;sel=null;tried=[];ctx.clearNote();draw();}
+    function reveal(list){list.forEach(p=>{if(!kept.some(k=>same(k,p)))kept.push(p.slice());});tried=[];if(line&&kept.some(k=>same(k,line)))line=null;draw();}
+    draw();
+    const b=document.createElement("button");b.type="button";b.className="btn";b.textContent=o.explore?"Clear my lines":"Start this line again";b.addEventListener("click",again);ctx.picBelow(b);
+    return {tap,again,reveal,get line(){return line},get tried(){return tried}};}
+  return {makeShape,build,same};})();
+
+/* --- quadrilaterals-7: a quadrilateral drawn with exactly its angles, each written as an expression in x --- */
+const Q7=(()=>{const L="ABCD";
+  const ex=(c,e)=>(c===1?"x":c+"x")+(e>0?" + "+e+"°":e<0?" − "+(-e)+"°":"");
+  function layout(ctx,ang){
+    for(let t=0;t<400;t++){
+      const th=ctx.rng()*Math.PI*2,d=[th];for(let i=1;i<4;i++)d.push(d[i-1]+(180-ang[i])*Math.PI/180);
+      const u=d.map(a=>[Math.cos(a),Math.sin(a)]),s0=1,s1=.3+ctx.rng()*1.9;
+      const rx=-(s0*u[0][0]+s1*u[1][0]),ry=-(s0*u[0][1]+s1*u[1][1]),det=u[2][0]*u[3][1]-u[3][0]*u[2][1];
+      if(Math.abs(det)<.15)continue;
+      const s2=(rx*u[3][1]-u[3][0]*ry)/det,s3=(u[2][0]*ry-rx*u[2][1])/det;
+      if(s2<.35||s3<.35||s2>3||s3>3)continue;
+      const s=[s0,s1,s2,s3],P=[[0,0]];for(let i=0;i<3;i++)P.push([P[i][0]+s[i]*u[i][0],P[i][1]+s[i]*u[i][1]]);
+      const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+      const sc=Math.min(200/(x1-x0),200/(y1-y0));
+      return P.map(p=>[Math.round(210+(p[0]-(x0+x1)/2)*sc),Math.round(190+(p[1]-(y0+y1)/2)*sc)]);}
+    return null;}
+  const orient=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);
+  function picture(ctx,it){const P=it.P,n=4;
+    const svg=ctx.svg("0 0 420 380","A quadrilateral ABCD. The angle at each corner is written beside it.");
+    const area=P.reduce((t,p,m)=>{const q=P[(m+1)%n];return t+p[0]*q[1]-q[0]*p[1];},0);
+    for(let i=0;i<n;i++){const a=P[i],b=P[(i+1)%n];svg.appendChild(ctx.el("line",{class:"side",x1:a[0],y1:a[1],x2:b[0],y2:b[1]}));}
+    P.forEach((p,i)=>{const q=P[(i+1)%n],r=P[(i+3)%n];
+      const u=[q[0]-p[0],q[1]-p[1]],w=[r[0]-p[0],r[1]-p[1]],nu=Math.hypot(...u),nw=Math.hypot(...w),R=24;
+      const s=[p[0]+u[0]/nu*R,p[1]+u[1]/nu*R],e=[p[0]+w[0]/nw*R,p[1]+w[1]/nw*R];let sweep=(u[0]*w[1]-u[1]*w[0])>0?1:0,large=0;
+      const reflex=Math.sign(orient(r,p,q))!==Math.sign(area);if(reflex){large=1;sweep=1-sweep;}
+      svg.appendChild(ctx.el("path",{class:"arc",d:`M${s[0]} ${s[1]} A${R} ${R} 0 ${large} ${sweep} ${e[0]} ${e[1]}`}));
+      let dx=u[0]/nu+w[0]/nw,dy=u[1]/nu+w[1]/nw;if(Math.hypot(dx,dy)<.08){dx=-u[1];dy=u[0];}
+      const dd=Math.hypot(dx,dy),sg=reflex?1:-1;dx=sg*dx/dd;dy=sg*dy/dd;
+      const txt="∠"+L[i]+" = "+ex(it.c[i],it.e[i]),wd=txt.length*9.3+10;
+      const off=16+Math.abs(dx)*wd/2+Math.abs(dy)*10,cx=Math.min(414-wd/2,Math.max(wd/2+6,p[0]+dx*off)),cy=Math.min(368,Math.max(22,p[1]+dy*off+6));
+      const t=ctx.el("text",{class:"ang","text-anchor":"middle",x:cx,y:cy});t.textContent=txt;svg.appendChild(t);
+      svg.appendChild(ctx.el("circle",{class:"dot",cx:p[0],cy:p[1],r:6}));});}
+  return {layout,picture};})();
+
+/* ===================== one runner per kind of item ===================== */
+const YES="Yes, it is a quadrilateral",NO="No, it is not a quadrilateral";
+const press=()=>document.querySelector("#acts .decide").click();
+const RUN={
+ make(ctx,it){const B=Q1.build(ctx,it.points);
+   ctx.ask(`Make a quadrilateral from 4 of these ${it.points.length} points. Tap the points in turn, and tap the first point again to close the shape.`);
+   ctx.button("My shape is finished",()=>{const j=B.judge();if(j.none)return ctx.note(j.text);
+     ctx.done({right:j.right,answer:j.answer,tag:j.tag,eq:"make a quadrilateral",reply:j.text+" "+it.answer});});
+   const run=(o,c)=>()=>{B.again();o.forEach(i=>B.tap(i));if(c)B.tap(o[0]);press();};
+   ctx.auto({right:run(it.auto.good,true),wrongs:it.auto.wrongs.map(w=>({expect:w.expect,fn:run(w.order,w.close)}))});},
+ decide(ctx,it){const s=Q2.shapeFrom(it.shape.base,it.shape);
+   const svg=ctx.svg("0 0 420 380","A shape with lettered corners.");Q2.draw(svg,s,false);
+   ctx.ask("Is this shape a quadrilateral?");
+   const answer=sayYes=>{if(!ctx.open)return;Q2.draw(svg,s,true);const right=sayYes===s.yes;
+     ctx.done({right,answer:sayYes?"yes":"no",eq:"is it a quadrilateral",tag:(it.shape.open?"open":"corner points in")+", said "+(sayYes?"yes":"no"),
+       reply:`Your answer was ${sayYes?"yes":"no"}${right?". That is right.":". That is not right."} `+Q2.answerText(s)});};
+   const w=ctx.choices([{t:YES,fn:()=>answer(true)},{t:NO,fn:()=>answer(false)}]);
+   const click=yes=>()=>w.children[yes?0:1].click();
+   ctx.auto({right:click(s.yes),wrongs:[{expect:"not right",fn:click(!s.yes)}]});},
+ dart(ctx,it){const S=Q3.makeShape(it.V,true,it.fix),B=Q3.build(ctx,S);
+   ctx.ask(`Draw the diagonal of ${S.name} that lies outside the shape. Tap one vertex, then tap another vertex.`);
+   ctx.button("My line is finished",()=>{const ln=B.line;
+     if(!ln)return ctx.note("You have not drawn a line yet. Tap one vertex, then tap another vertex.");
+     const [a,b]=ln,ab=S.nm(a,b),la=S.lt[a],lb=S.lt[b];let right=false,tag,lead;
+     if(S.adj(a,b)){tag="a side";lead=`You drew ${ab}. ${la} and ${lb} are next to each other, so ${ab} is a side of ${S.name}, not a diagonal.`;}
+     else if(!Q3.same(S.out,ln)){tag="diagonal inside the shape";lead=`You drew ${ab}. ${la} and ${lb} are not next to each other, so ${ab} is a diagonal of ${S.name}, but it lies inside the shape.`;}
+     else{right=true;tag="diagonal outside the shape";lead=`You drew ${ab}. That is right.`;}
+     B.reveal(S.diags);
+     ctx.done({right,answer:ab,eq:"a diagonal joins 2 vertices that are not next to each other",tag,reply:lead+" "+it.answer});});
+   const draws=p=>()=>{B.again();B.tap(p[0]);B.tap(p[1]);press();};
+   ctx.auto({right:draws([2,0]),wrongs:[{expect:"inside the shape",fn:draws([1,3])},{expect:"is a side",fn:draws([1,2])}]});},
+ howmany(ctx,it){const S=Q3.makeShape(it.V,false,it.fix),B=Q3.build(ctx,S,{explore:true});
+   ctx.say("You can tap two vertices to try a line. Then choose your answer.");
+   ctx.ask(`How many diagonals does ${S.name} have?`);
+   const lead={1:"You chose 1 diagonal. That is not right.",2:"You chose 2 diagonals. That is right.",
+     4:`You chose 4 diagonals. That is not right. ${S.nm(0,2)} and ${S.nm(2,0)} are the same line segment, and ${S.nm(1,3)} and ${S.nm(3,1)} are the same line segment.`};
+   const w=ctx.choices([1,2,4].map(n=>({t:n+(n===1?" diagonal":" diagonals"),fn(){cur.tried=B.tried.length;B.reveal(S.diags);
+     ctx.done({right:n===2,answer:String(n),eq:"a quadrilateral has 2 diagonals",tag:n+" diagonals",reply:lead[n]+" "+it.answer});}})));
+   const pick=c=>()=>w.children[c].click();
+   ctx.auto({right:pick(1),wrongs:[{expect:"You chose 1 diagonal",fn:pick(0)},{expect:"same line segment",fn:pick(2)}]});},
+ check(ctx,it){const ang=it.c.map((c,i)=>c*55+it.e[i]);const P=Q7.layout(ctx,ang);Q7.picture(ctx,{P,c:it.c,e:it.e});
+   ctx.say("The 4 angles of this quadrilateral are written at its corners.");
+   ctx.say("Here is a worked answer. It says x = 55°.");
+   ctx.say(it.shown.map((v,i)=>"∠"+"ABCD"[i]+" = "+v+"°").join(", ")+".");
+   ctx.ask("Do the 4 angles in this worked answer add up to 360°?");
+   const go=yes=>()=>{if(!ctx.open)return;const right=!yes;
+     ctx.done({right,answer:yes?"yes":"no",eq:"110 + 85 + 110 + 65 = 370",tag:yes?"missed the slip":"found the slip",
+       reply:`Your answer was ${yes?"yes":"no"}${right?". That is right.":". That is not right."} `+it.answer});};
+   const w=ctx.choices([{t:"Yes, they add up to 360°",fn:go(true)},{t:"No, they do not add up to 360°",fn:go(false)}]);
+   ctx.auto({right:()=>w.children[1].click(),wrongs:[{expect:"not right",fn:()=>w.children[0].click()}]});},
+ number(ctx,it){(it.lines||[]).forEach(t=>ctx.say(t));ctx.ask(it.ask);
+   const u=it.unit;
+   const inp=ctx.numberBox(u?"Your answer in degrees":"Your answer",(v,raw)=>{
+     if(v===null)return ctx.note(u?"Write a whole number of degrees, like 75.":"Write a whole number, like 12.");
+     if(v===it.right)return ctx.done({right:true,answer:v+u,eq:it.ask,tag:"right",reply:`Your answer, ${v}${u}, is right. `+it.answer});
+     /* a planned wrong answer gets what it describes; any other number gets the check of that number */
+     const w=it.wrongs.find(z=>z.v===v),extra=(w&&w.text)?w.text:it.other(v);
+     ctx.done({right:false,answer:v+u,eq:it.ask,tag:w?w.tag:"other",reply:`Your answer, ${v}${u}, is not right. `+(extra?extra+" ":"")+it.answer});});
+   if(!u){const deg=inp.parentElement.querySelector("span");if(deg)deg.remove();}
+   const type=v=>()=>{inp.value=String(v);press();};
+   ctx.auto({right:type(it.right),wrongs:it.wrongs.map(w=>({expect:`${w.v}${u}, is not right`,fn:type(w.v)}))});}
+};
+
+/* ===================== the sitting: order, her place, one item per QE.start, rows ===================== */
+const QS2=new URLSearchParams(location.search);
+const TRY=QS2.get("try")==="1";                         /* play without sending or storing anything */
+const LOG=!TRY&&typeof SheetLog!=="undefined";
+const SKEY="student2-return-sitting-v1";
+const store={get(){if(TRY)return null;try{return JSON.parse(localStorage.getItem(SKEY))}catch(e){return null}},set(v){if(TRY)return;try{localStorage.setItem(SKEY,JSON.stringify(v))}catch(e){}}};
+let seed=Number(QS2.get("seed"))||((Date.now()%100000)+1);
+const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};
+/* the first item is the shape that is a quadrilateral; the rest are shuffled so that no two of one group are next to each other */
+function makeOrder(){const first=ITEMS[0],rest=ITEMS.slice(1);
+  for(let t=0;t<2000;t++){const a=rest.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+    const o=[first].concat(a);if(o.every((x,i)=>i===0||x.group!==o[i-1].group))return o;}
+  return ITEMS.slice();}
+/* her place: the order and the next seat. A saved order is used only if it names exactly these 13 items. */
+let ST=store.get();
+const validOrder=o=>Array.isArray(o)&&o.length===ITEMS.length&&ITEMS.every(i=>o.includes(i.id));
+if(!ST||ST.v!==1||!validOrder(ST.order)||!(ST.pos>=0))ST={v:1,order:makeOrder().map(i=>i.id),pos:0,started:false,done:false};
+const ORDER=ST.order.map(id=>ITEMS.find(i=>i.id===id));
+window.__sitting={rows:[],order:ST.order,version:VERSION,seed:QS2.get("seed")||"random",try:TRY};
+let pos=-1,cur=null;
+const $=id=>document.getElementById(id);
+function showRows(){if(QS2.get("teacher")!=="1")return;const r=$("rows");r.classList.remove("hide");
+  r.textContent="For the teacher. Rows of this sitting"+(LOG?" (sent to the Sheet)":" (nothing is sent or stored)")+". Order: "+ST.order.join(", ")+"\n"+window.__sitting.rows.map(x=>JSON.stringify(x)).join("\n");}
+/* one row: kept on the page for the test and the teacher strip, and sent to the Activity tab */
+function send(row){window.__sitting.rows.push(row);showRows();
+  if(LOG){try{SheetLog.activity(Object.assign({},row,{detail:JSON.stringify(row.detail)}));}catch(e){}}}
+function logRow(it,r){const supplied=it.supplied.slice();if(cur.read)supplied.push("read aloud");if(cur.tried)supplied.push("lines she drew to try before answering");
+  const row={event:"answer",set:"return-sitting",role:"first answer",eq:it.ask||it.id,answer:r.answer,right:r.right?1:0,own:1,support:supplied.length?supplied.join("; "):"none",checks:it.graph+" | "+it.id,
+    detail:{item:it.id,seat:pos+1,first_attempt:true,decision:({"decide-yes":"classify","make-5":"construct","make-line":"construct","decide-open":"boundary","dart":"draw","howmany":"count","check-slip":"check","fourth-angle":"calculate","angle-beside":"calculate","angles-x":"substitute","eq-1":"solve-add","eq-2":"solve-add","eq-3":"solve-subtract"})[it.id],supplied,version:VERSION,tag:r.tag||"",reply:r.reply||""}};
+  const target=(it.graph.match(/(?:KI|SK)-[A-Z]+-\d+/)||[])[0],d=TeachingCatalogue.get(target);
+  if(d){LearningBridge.init(d.sets[0],VERSION);const adapted=Object.assign({},row,{set:d.sets[0]});LearningBridge.observe(adapted);row.detail=adapted.detail;row.own=adapted.own;}
+  send(row);}
+function endScreen(first){$("pic").innerHTML="";$("words").innerHTML="";$("acts").innerHTML="";
+  for(const t of ["That is the end of these questions. Your answers are kept.","There are no more questions on this page."]){const p=document.createElement("p");p.className="say";p.textContent=t;$("words").appendChild(p);}
+  const link=document.createElement("a");link.href="next-practice.html";link.className="btn";link.textContent="Choose the next page";$("acts").appendChild(link);
+  if(first){send({event:"sitting end",set:"return-sitting",detail:{version:VERSION,answered:ORDER.length}});if(LOG)setTimeout(()=>{try{SheetLog.flush()}catch(e){}},50);}}
+function showItem(){if(pos>=ORDER.length){ST.done=true;store.set(ST);return endScreen(true);}QE.start(PAGE);}
+function intro(ctx){
+  ctx.say("These questions are on shapes, angles and equations. Some are like questions you have answered before, with new shapes and numbers.");
+  ctx.say("Answer each question on your own. After each answer, the page shows the answer, and then you go on to the next question.");
+  ctx.button("Start",()=>{ST.started=true;store.set(ST);send({event:"sitting start",set:"return-sitting",detail:{version:VERSION,order:ST.order}});pos=0;showItem();});}
+const PAGE={set:"return-sitting",ki:"mixed",title:"Answer questions on shapes, angles and equations",version:VERSION,teacher:"Return sitting: first answers after a gap, mixed order.",
+  worked:[],plan:[],contrasts:[],contrastKind:{},gates:{},
+  gen:{sitting(ctx){
+    if(pos<0)return intro(ctx);
+    const it=ORDER[pos];cur={it,read:false,tried:0};
+    const orig=ctx.done;
+    ctx.done=r=>{orig(r);logRow(it,r);
+      ST.pos=pos+1;store.set(ST);                       /* an answered item is never asked again, even after a reload */
+      const b=document.querySelector("#acts .next");if(b){const nb=b.cloneNode(true);nb.addEventListener("click",()=>{pos++;showItem();});b.replaceWith(nb);nb.focus({preventScroll:true});}};
+    RUN[it.kind](ctx,it);}}};
+document.addEventListener("DOMContentLoaded",()=>{$("readBtn").addEventListener("click",()=>{if(cur)cur.read=true;});});
+if(LOG){try{SheetLog.setSession("s2r-"+Date.now().toString(36));}catch(e){}}
+if(new URLSearchParams(location.search).get("screen")!=="sitting"){$("words").textContent="Open this page with ?screen=sitting at the end of its address.";}
+else if(ST.done){endScreen(false);}
+else if(ST.started){pos=ST.pos;send({event:"sitting resumed",set:"return-sitting",detail:{version:VERSION,seat:pos+1}});showItem();}
+else QE.start(PAGE);
+</script>
+</body>
+</html>

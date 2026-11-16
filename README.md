@@ -1,32 +1,45 @@
 # Student 2
 
-Work for one learner, set up the same way as the Student 1 folder. Student 2 is on a different course from Student 1, so the MYP2 knowledge graph and course overview are not copied here.
+Mathematics for one Grade 8 CBSE learner working without an adult beside her. Her Class 8 book is NCERT *Ganita Prakash* (Bijit, 15 Nov 2026). Her learner evidence is distinct from Student 1's.
 
-## How lessons are designed (from 9 Nov 2026)
+## Read first
 
-`CLAUDE.md` holds the design rules, copied from Student 1's rules of 7–9 Nov (success first, journeys with probes chosen by the wrong answer, manipulatives she moves, practice that defeats shortcuts, wording checked with `instruction-language`). The first journey built to them is designed in `study-materials/equations-journey-1.md` and built as `study-materials/balance-journey.html` (it was in `site/balance-equations.html` until 11 Nov 2026, when it was removed from the site; tests: `node study-materials/balance-journey-test.cjs` with NODE_PATH set to HTML-TOOL/agentic-generator/node_modules). Every answer and event also goes to the Google Sheet "Student 2 – Maths progress record" (https://docs.google.com/spreadsheets/d/1I3JpJ4mxoshq2YFDf38P6rQ9jSsArbBz0IQzSVcpJz4): one row per answer in Activity, one row per practice set in Now. The Sheet's script is `apps-script/Code.gs` (to change it: paste, Save, Deploy > Manage deployments > edit > New version, which keeps the URL); the page sends through `site/assets/sheetlog.js` and `sheet-config.js`. A third tab, Signals, is rewritten by `apps-script/Signals.gs` each time answers arrive: it lists the planned misreadings her answers fit, the answers that fit none, and the readings not seen or not reached (preview with simulated rows: `study-materials/signals-sample.html`; test: `node study-materials/signals-test.cjs`). Rows wait on the device when offline. Opening the page with `?teacher=1` also shows a CSV download. Student 1's current reference files are in `templates-from-student-1/2026-11-09/`.
+- `CLAUDE.md`: governing teaching and evidence rules.
+- `charter.md`: intended capability and seven evaluation dimensions.
+- `CANVAS.md`: compact domain-grounded model, sources/read depth, conditional choices and revision conditions.
+- `OPERATING-PLAN.md`: one route from evidence to relevant preparation, teaching, skill integration, independent practice and delayed return.
+- `HANDOVER.md`: dated learner record, baseline faults, local implementation status and deployment boundary. The 15 Nov recount reports 119/135 first items right; it is not a mastery score.
+- `profile.md`: her context, kept local. Missing entries remain unknown.
 
-Since 11 Nov 2026 the home page starts her on two knowledge-item pages, not on the balance page (Bijit rejected that page on 9 Nov; its file was removed from `site/` on 11 Nov, with the 24 Oct page `equations-practice.html`, which sent nothing to her Sheet). `site/equations-1.html` teaches KI-AG-01 (variable) and KI-AG-03 (algebraic expression), built to the approved spec `study-materials/ki-understanding-AG01-AG03.md`. `site/equations-2.html` teaches KI-AG-04 (terms) and KI-AG-06 (coefficients). Both were built in HTML-TOOL (`student2/ki-ag-01-03.html`, `student2/ki-ag-04-06.html`; page 2 is generated there by `make-pages.cjs`, so change it there and copy it here again). The only change made here is adding the two Sheet logger lines. Both pages keep the items she holds in one shared record, `student2-ki-v1`. Their build briefs and tests are in `study-materials/equations-pages/`. To run the tests: `node study-materials/equations-pages/equations-1.test.cjs` and `node study-materials/equations-pages/equations-2.test.cjs`. Each test runs a copy of the site page with the logger lines removed, so no test row reaches her Sheet.
+## Local teaching implementation
 
-## Folders
-- `profile.md` — who Student 2 is. Fill this in first.
-- `data/` — the course overview, assessments, photos of work, CSV exports from the tablet pages.
-- `knowledge-graph/` — the skill graph for Student 2's course: Grade 8 CBSE maths, built with the congov-knowledge-graph plugin from the NCERT (2017) outcomes M801 to M820. `graph-data.json` is the source of truth; `progress-note.md` says how it was built and what is open.
-- `plan/` — the plan for the topic in focus and the session log.
-- `study-materials/` — tablet lessons and teacher guides made for Student 2.
-- `worksheets/` — paper sheets (worksheet-forge), one folder per sheet.
-- `site/` — what students see online: an index page, the two equations pages above, and copies of `knowledge-graph/graph-page.html`, `study-materials/equations-practice.html` and `study-materials/balance-journey.html`. When a source page changes, copy it into `site/` again and push.
-- `templates-from-student-1/` — Student 1's work, copied to adapt. Do not hand these to Student 2 as they are.
+The 16 Nov update adds a local prototype shared target catalogue (`site/assets/teaching-catalogue.js`), decision/evidence policy (`learning-policy.js`) and teaching support (`teaching-support.js`) through her existing equations and quadrilateral interfaces. The policy contract is in `OPERATING-PLAN.md`; see `UPDATE-2026-11-16.md` for verified coverage, installed-file status and limits. This is authored local teaching, not a complete adaptive Grade 8 curriculum or an online LLM system.
 
-## Online
+Relevant unfamiliar KIs are prepared before the skill needs them, then practised in the integrated skill. A specific gap does not block eligible unrelated work. A wrong answer leads to an appropriate discriminating check and teaching rather than a diagnosis from one response. Supplied help, prior feedback, fresh independent work and later returns remain distinguishable. Legacy progress is kept; a passed flag is not automatically reinterpreted as retained mastery.
 
-- Site for students: https://grade8-maths-practice.vercel.app (index), https://grade8-maths-practice.vercel.app/equations-practice and https://grade8-maths-practice.vercel.app/knowledge-graph.
-- Source: https://github.com/bijit-create/grade8-maths-practice (public). Vercel project `grade8-maths-practice` (account bijits-projects-ec8c6e30), root directory `site/`. The project is not yet connected to the GitHub repo, so a push does not deploy by itself: either connect it once in the Vercel dashboard (project Settings, Git, Connect, pick this repo) or ask Claude to redeploy `main` after a push.
-- Kept off GitHub by `.gitignore`: `profile.md`, `data/`, `plan/` and `templates-from-student-1/` (that folder names a school and a learner detail). They stay on this machine only.
+Use the no-write preview/test route when reviewing pages. No local test should send fictitious responses to her live Sheet. New helpers have not supplied learner outcome evidence; software checks establish behaviour only.
 
-## About the templates
-They were made for Student 1 (MYP2, integers) and still say so inside:
-- `lesson-method.md` — the general lesson method (one model per outcome, five-rung fading ladder, spaced returns). The most reusable file.
-- `integers-plan.md`, `how-memory-forms.md`, `representations-research.md` — how Student 1's plan, memory-tracking and model research were laid out.
-- `study-materials/` — the tablet lessons. Their saved-progress keys and CSV file names now say `student2`, so they do not mix with Student 1's data on a shared tablet. The questions, models and wording are still Student 1's integers content.
-- `worksheets/*/spec.json` — two worksheet-forge specs that were delivered and reviewed (dividing with negatives; add and subtract in steps). Their sources and author lines still point at Student 1.
+## Pages and sources
+
+The live baseline last checked on 15 Nov contains `site/equations-1.html`, `site/equations-2.html` and `site/quadrilaterals-1.html` through `quadrilaterals-7.html`, plus the home page and unlinked knowledge-graph page. The equation pages teach words not used in her confirmed book; their presence does not make that vocabulary a prerequisite for new mathematical work.
+
+`site/return-sitting.html` was built locally on 15–16 Nov as a delayed mixed check. No record establishes that she has taken it. It needed repairs after review; see `HANDOVER.md` and the current delivery record. The rejected `balance-equations.html` and old unlogged `equations-practice.html` were removed from the live site on 11 Nov. Historical source files in `study-materials/` are not the current teaching route.
+
+The equations pages originated in HTML-TOOL; older briefs/tests are in `study-materials/equations-pages/`. Local shared policy changes now also live here. Do not overwrite them by blindly recopying an older generated HTML file; preserve and verify current integration when regenerating a page.
+
+## Records and storage
+
+Her [Maths progress record](https://docs.google.com/spreadsheets/d/1I3JpJ4mxoshq2YFDf38P6rQ9jSsArbBz0IQzSVcpJz4) contains Activity and Now; Signals reads only the equation-1 sets. Scripts are in `apps-script/`, and pages use `site/assets/sheetlog.js` and `sheet-config.js`. Historical own/held fields have known limitations; see the handover before drawing conclusions. This local update does not imply a live Apps Script deployment or historical data migration.
+
+- `knowledge-graph/`: older NCERT-outcomes graph. Check new targets against *Ganita Prakash*. It is a candidate curriculum/dependency map, not a learner-state record; old gate annotations do not override relevant-prerequisite preparation.
+- `data/`: assessments, exports and paper-work evidence, local only.
+- `plan/`: local topic plans and research.
+- `study-materials/`, `worksheets/`: authored sources and paper materials.
+- `site/`: learner web files; local changes are not automatically live.
+- `research-from-student-1/`, `templates-from-student-1/`: reusable background/methods with status notes, not her learner evidence or an automatic source of rules/counts.
+
+`profile.md`, `data/`, `plan/`, `research-from-student-1/` and `templates-from-student-1/` stay off GitHub under the existing policy. Preserve unmerged worktrees named in `HANDOVER.md`.
+
+## Publishing
+
+The [student site](https://grade8-maths-practice.vercel.app) and [public source repository](https://github.com/bijit-create/grade8-maths-practice) are separate from local authoring. Pushes do not deploy. Production deployment, publishing, sharing changes and live Sheet writes require the applicable user instruction. This update authorises local rules, teaching code, review and repairs; it does not deploy them.

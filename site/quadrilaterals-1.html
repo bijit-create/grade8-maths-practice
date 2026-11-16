@@ -16,6 +16,7 @@
      (concave), "4 points tapped is 4 corners" (line).
      Engine and records: assets/quad-engine.js. -->
 <link rel="stylesheet" href="assets/quad.css">
+<link rel="stylesheet" href="assets/learning-support.css">
 </head>
 <body>
 <div class="app">
@@ -25,6 +26,7 @@
 </div>
 <div id="pauseOv" class="hide"><div class="box"><p>The work is paused. Your place is kept.</p><button class="btn primary" id="resumeBtn" type="button">Go on</button></div></div>
 <script src="assets/sheet-config.js"></script><script src="assets/sheetlog.js"></script>
+<script src="assets/teaching-catalogue.js"></script><script src="assets/preparation.js"></script><script src="assets/learning-policy.js"></script><script src="assets/teaching-support.js"></script><script src="assets/learning-bridge.js"></script>
 <script src="assets/quad-engine.js"></script>
 <script>
 "use strict";
@@ -105,7 +107,7 @@ function build(ctx,P,opts){
   return {tap,again,judge,draw,setArcs(v){arcs=v;draw();},get path(){return path},get closed(){return closed}};
 }
 /* the decision button; judged only here */
-function finishButton(ctx,B){ctx.button("My shape is finished",()=>{const j=B.judge();if(j.none)return ctx.note(j.text);ctx.done({right:j.right,answer:j.answer,tag:j.tag,eq:"make a quadrilateral",reply:j.text});});}
+function finishButton(ctx,B){ctx.button("My shape is finished",()=>{const j=B.judge();if(j.none)return ctx.note(j.text);ctx.done({right:j.right,answer:j.answer,tag:j.tag,eq:"make a quadrilateral",reply:j.text,describe:j.right?"":j.text.replace(/ ?(A quadrilateral|The sides of a quadrilateral)[^.]*\./g,"")});});}
 function tapAll(B,order,close){order.forEach(i=>B.tap(i));if(close)B.tap(order[0]);}
 const pressFinish=()=>document.querySelector("#acts .decide").click();
 /* how the test gives a right answer and each planned wrong one (calls the same functions as her taps) */

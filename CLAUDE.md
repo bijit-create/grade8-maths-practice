@@ -1,21 +1,23 @@
 # Student 2: design for independent learning
 
-Student 2 is one Grade 8 CBSE learner (NCERT textbook; outcomes M801 to M820 in `knowledge-graph/`). Read `profile.md` before designing anything. It is still mostly blank: there is no record of her work yet. No adult will sit with her (Bijit, 9 Nov 2026). Her answers are to go to a Google Sheet, as Student 1's do.
+Student 2 is one Grade 8 CBSE learner. Her Class 8 book is NCERT's *Ganita Prakash* (Bijit, 15 Nov 2026); the graph in `knowledge-graph/` was built from the 2017 outcomes M801 to M820 and the older book, so check an item against *Ganita Prakash* before teaching it. Read `HANDOVER.md` ("Her record") and `profile.md` before designing anything. Her answers go to a Google Sheet, and she has answered there on 10 to 15 Nov 2026. No adult sits with her (Bijit, 9 Nov 2026); he said on 15 Nov 2026 that she did all of that work independently.
 
 These rules are copied from Student 1's `CLAUDE.md` (7 to 11 Nov 2026), where Bijit set them after many rounds of correction. They are written for Student 2 here. Student 1's evidence (his answers, dates, counts) is not hers. Where a rule rested on his record, it is kept as a starting design choice and marked "provisional", to be revised from her own record.
 
 Design so that she can learn without an adult beside her. Every essential path (instructions, feedback, help, pause and resume, paper submission) must work without one. The goal is connected knowledge and increasingly capable, retained, independent performance, including written mathematics.
 
+**Current operating decision, 16 Nov 2026:** use `CANVAS.md` for the compact domain-grounded working model and `OPERATING-PLAN.md` for one evidence-to-teaching loop across sittings. The current instruction authorises updating these rules and the local teaching code. It supersedes earlier waits for permission to author or repair each local screen; deployment and live Sheet changes still require the applicable user instruction. Retain the earlier dated learner record and decisions, and report actual implementation separately.
+
 ## Six steps before anything is built or shown (from Student 1, 10 Nov 2026)
 
 Each step leaves a result Bijit can see in the reply. On Student 1 the rules below were written and still broken, because nothing showed whether a check had been run. Bijit called step 1 the most important.
 
-1. **Goal first.** Before any design, build or review, write three lines: what this is for and for whom; whether there is a better goal or a shorter route than the one asked; what success will look like, as something Bijit or she can see or do. For design and build work, wait for Bijit's answer. For a look-up or a chore, go on.
-2. **One real screen first, then wait.** Before building or deploying anything she or a teacher will see, show Bijit one real screen: the actual words, the picture, the question and the reply to a wrong answer. A "yes" to a description is not a "yes" to a screen. A request to deploy shows the changed screen with it.
-3. **Show the wording check.** Run the `instruction-language` skill on every string she or the teacher will read, and put its result in the reply. A label made up during the work ("journey 2", an item code) is never used without its plain meaning beside it.
+1. **Goal first.** State what the work is for and for whom, the smallest complete route, and observable success. Continue work already authorised; ask only when an unresolved choice materially changes the goal or exceeds the scope.
+2. **Make the result reviewable.** Show actual words, picture, question, response and wrong-answer route, then repair and verify within the authorised local work. Approval of a description does not establish usability. A production deployment is a separate action and its request includes the changed screen.
+3. **Show the wording check.** Use the `instruction-language` guidance on every string she or the teacher will read and report what actually ran. If the skill is unavailable, say so and perform the applicable manual check. A made-up label needs its plain meaning beside it; do not claim an unavailable skill ran.
 4. **A second reader.** Before a screen goes to Bijit, an agent that has seen only the screen, not the design notes, says what the screen asks and what mathematics it teaches. Its answer goes in the reply in a few lines. If it cannot say, the screen is not ready. For wide reading, use one agent per source, each returning a few lines. An agent does not replace Bijit seeing the screen.
 5. **Name the source.** Before writing, look for the current file, the earlier decision and the project's own guide. Say in the first line which source was used and its date. Where a name, date or number is not known, leave a blank and ask once; do not make one up.
-6. **Keep the chat small.** Read the count with `mcp__ccd_session_mgmt__get_usage`. When the total nears 150k tokens, update `HANDOVER.md` and start a new chat; a new chat already starts at about 114k. If the count is past 150k, finish the request in hand, say the count, and start a new chat for the next one. Automatic compaction is not a handover. Keep `HANDOVER.md` short: Student 1's grew to about 145 KB and is loaded into every chat, so a new chat there started at about 175k. Here, replace an old section when it is settled instead of adding another above it.
+6. **Keep the current state small.** Use an available usage tool when useful; do not invent counts or require an unavailable provider-specific tool. Keep `HANDOVER.md` short, replace settled current-state sections and preserve dated evidence. An automatic compaction is not a learner-state update. Finish authorised work with a reviewable result and a clear handover when necessary.
 
 ## Which document governs (from Student 1, 10 Nov 2026)
 
@@ -23,8 +25,9 @@ When two documents disagree, the one higher in this list wins:
 
 1. `CLAUDE.md` (this file): the design rules.
 2. `charter.md`: her goals and what success means.
-3. `HANDOVER.md`: what is built, what is live and what is open. Its facts are dated; check the code before relying on them.
-4. The code: `study-materials/` (sources), `site/` (what she sees), `apps-script/` (her Sheet).
+3. `CANVAS.md` and `OPERATING-PLAN.md`: current conditional domain model and shared operating contract. They do not override the goals or turn research hypotheses into facts.
+4. `HANDOVER.md`: dated learner evidence, local implementation, live status and open work. Check the code before relying on implementation claims.
+5. The code: `study-materials/` (sources), `site/` (learner pages), `apps-script/` (her Sheet). Shared policy/catalogue/support code implements the operating contract through the existing interfaces.
 
 Everything else is history, evidence or background: `knowledge-graph/`, the notes in `study-materials/`, and the local folders `templates-from-student-1/` and `research-from-student-1/` (written for Student 1; each file says what in it is general). Do not take a rule, a threshold or a test of success from them. Add a line to `CHANGELOG.md` when a governing document changes.
 
@@ -48,6 +51,8 @@ Everything else is history, evidence or background: `knowledge-graph/`, the note
 - Record only what judges the teaching: the item, the support given, the response, the reply and retry, and later fresh or delayed performance.
 - Every logged answer records `supplied`: what the screen did for her when she answered (for example the equation already written, the balance drawn, the first step done). An empty list means nothing was supplied. A right answer is evidence only for the decisions she made herself; one where the screen wrote the equation is evidence of calculating, not of forming the equation (from Student 1, 11 Nov).
 - A session in which an adult prompted her is marked "helped" as a whole, and its answers do not count as her own. Nothing is deleted (from Student 1, 11 Nov).
+- Unknown assistance, unrecorded support, unreadable responses and unseen targets remain unknown; they are neither a failure nor proof of mastery. Keep historical rows unchanged and narrow the interpretation when conditions are missing.
+- “Held” names a scoped claim, with target range, task kinds, support and delay. A legacy passed flag or one right item is not a universal claim. Keep supported repair, fresh independent work and delayed/mixed performance apart; never infer every prerequisite from a single final answer.
 
 ## Her actions and the route through difficulty
 
@@ -64,32 +69,36 @@ A manipulative is something she moves. Student 1's thermometer (`templates-from-
 - Draw her action while she makes it, and when she finishes, write its mathematics beside it. The action and the equation are never in two places.
 - Judge nothing while she moves. The check comes only when she says the step is done, with a button in the text column. A wrong step gets a reply describing what she did and goes back to the start of that step.
 - Each kind of manipulation is a mathematical operation, and each result is written as mathematics beside it.
-- Practise one kind until it holds before the next. Progress goes in stages, not by a count: right with support → right on a fresh item with less guidance → right on her own across the contrast cases that defeat the shortcut → choosing correctly in a mixed set → right after a gap. A right answer after a reply counts as help. At most 8 items of one kind a day; start each session with one item of every kind already passed (provisional). Practice that follows a modelling run is the exception (see "Show, then predict, then fade").
+- Practise a needed kind enough for the next meaningful step, then integrate and vary it. Progress includes right with support, fresh work with less guidance, independent contrasts, choosing in a mixed set and use after a gap; these are evidence conditions, not a mandatory five-screen ladder. A right answer after a reply is repair evidence. The earlier 8-per-kind cap and 10-after-modelling allowance are provisional planning defaults, never mastery or pacing laws. Choose manageable retrieval from established kinds across days rather than requiring every passed kind in every sitting.
 - Keep one plain manipulative and fade it: the picture → the picture beside the written lines → the written lines alone (the picture only on request, recorded as supplied) → paper. Guided tasks first, then open ones where she makes her own example.
 - Her screen shows only the picture, the problem, one question, the decision button and the reply. Practice names, rules, progress and design notes go where she does not see them.
 
-## Knowledge items before skills, success first
+## Relevant knowledge items before skills, then integration
 
-- A journey does not open with a whole task she may fail. Order: (1) a warm-up of the knowledge items her dated record already shows, each done as an action; (2) for each item not shown, a worked example, one item straight after it (recorded as supported), then fresh items on her own until it holds; (3) practice of the skill, from whole tasks with steps prompted to whole tasks without prompts, then contrast cases and a mixed set; (4) a return after a gap with a fresh whole task and no help; then paper.
-- Her record decides which items are a warm-up. There is no opening test. Holding the parts does not join them, so the whole skill is always practised.
-- Two items in a row not right on her own end that practice for the day with her place saved. The next session shows the worked example again, then new items.
+- Prepare the KIs relevant to the chosen skill, using her dated evidence. Known parts may receive a brief retrieval/check; unfamiliar relevant parts receive explanation/model, supported practice and fresh checks. “All KIs first” means the KIs needed for that performance, not the entire chapter or graph. A gap in an unrelated item does not block other eligible work.
+- Relevant parts are brought together in supported whole tasks and then independent skill practice. Success on isolated parts does not establish coordination or method selection. Vary, mix and return after a gap as those claims require; practise paper when paper use is intended.
+- A new lesson gives a prepared route into success. A low-stakes delayed return or discriminating starting-point probe is allowed before a refresher on taught material; the approved return sitting is one such use. Do not impose an opening failure test on every lesson or reteach every evidenced part by default.
+- Two consecutive misses were a provisional safeguard, not a universal instruction to abandon learning for the day. Inspect access and the relevant explanation, teach and check fresh; offer a saved stop when useful and continue eligible unrelated work. Do not loop unproductively or impose a global slow pace.
 - An item that holds in one journey counts in the next. Store it once for her (`student2-ki-v1`).
+- Harder work on a skill comes only after she has practised that skill and it has developed. When her first answers are right, the next work may be harder; right answers allow the step up, they do not replace the practice. Bijit, 15 Nov 2026: "if she does better, you can increase the rigor, but not gradually until she has practiced the skill and has developed it."
+- The graph describes candidate mathematical requirements, not verified knowledge about her. Older gates that defer teaching a principle until attainment do not exempt it from relevant prerequisite preparation. Inspect the required decisions and prepare what the task needs; record a target-specific clarification and verify before changing graph semantics.
+- Knowledge types and learning processes are distinct. Select explanation, comparison, retrieval, prediction/completion, procedural practice or strategic selection for the actual learning need; no type is forced into exactly one process. Core teaching must support that process, not merely reveal an answer or update a counter.
 
 ## What a knowledge item is (from Student 1, 10 to 11 Nov)
 
 - A knowledge item is mathematical knowledge: a fact, a concept or a principle that is true of numbers, equations or quantities. It is never a word cue or a habit of the screen. Bijit, 11 Nov: "goes up means plus is never a knowledge item, it is not mathematical knowledge." For her, "the same thing done to both sides keeps the equation true" can be an item; "take away means minus" or "move the number across and change its sign" cannot. The range of an item is kinds of situation or structure, never kinds of word.
 - Never restate an item as facts about the manipulative ("a bag weighs x"). The balance is a way to show the item, not the item.
-- A principle needs understanding, not only recall: it is shown on its own first, then practised and recorded inside the whole task. "Required before attainment" says when an item may be recorded, not whether it is taught.
+- A principle needs understanding and use, not only recall. Prepare it before it is needed, connect it to meaningful examples and practise it inside the whole task. “Required before attainment” in older metadata is not permission to leave a relevant principle untaught; isolated and integrated evidence remain distinct.
 - **The moment test.** For any item, ask: "Where does she decide this, and how would I see her decide it wrong?" An item with such a moment can be checked there. This is an evidence test, never a reason not to teach. Bijit: "if a knowledge item can be taught, we will teach them." An item with no moment is still taught; we only do not claim she holds it.
 
 ## Show, then predict, then fade (from Student 1, 11 Nov)
 
-The process for teaching a knowledge item. Bijit, 11 Nov: "first show, then predict, and then fade."
+A useful teaching pattern, selected for the target and current knowledge. Bijit, 11 Nov: "first show, then predict, and then fade." It does not replace explicit explanation or every other learning process.
 
-- **Show.** Build the example one unit at a time, with its mathematics written beside it each time, and keep the earlier lines on screen so they stack. Hold everything still except one thing, so that only one thing changes per line. She presses the control for each line herself. No prose stating the conclusion: the lines carry it. Choose the run so the shortcut she might form is wrong on every line, not on one line she has to notice.
+- **Show.** Model the relevant relationship or procedure clearly, with connected mathematics and explanation. In a controlled contrast change only the feature needed to expose the distinction; varied application can follow. She advances manageable steps and can revisit them. Choose examples that defeat a plausible shortcut without creating a different one.
 - **Predict.** The control is held back and she writes the next line before it is drawn, then continues past where the picture stopped. This is checkable without an adult and cannot be read off a picture that is not yet drawn.
 - **Fade.** Then practice with the supports removed one at a time (the picture with a marked start → the picture only → no picture → paper).
-- **Practice after modelling.** Up to 10 items may follow each modelled run, because they are graded by removing one support at a time, not ten tries at the same thing (Bijit, 11 Nov: "build 10 practice for each"). Two not right in a row on her own end that practice with her place kept. Both numbers are provisional lever points, not findings: Student 1's research found no source for either, and found that items spread over days and then mixed help more later than ten in a row.
+- **Practice after modelling.** The historical allowance of up to 10 items (Bijit, 11 Nov: "build 10 practice for each") is a project choice for graded practice, not a requirement to finish ten or a scientific threshold. Change support, variation and difficulty from the evidence, and distribute practice across days. If fresh checks still fail, repair the teaching or save a supported next step rather than repeat the same sequence indefinitely.
 
 ## Decisions rest on researched knowledge (from Student 1, 11 Nov)
 
@@ -99,7 +108,7 @@ The process for teaching a knowledge item. Bijit, 11 Nov: "first show, then pred
 
 ## Route for a new screen (from Student 1, 11 Nov)
 
-A local prototype beside the journey (loading the shared code, recording nothing) → play it and take screenshots → a second reader on the screens only → Bijit's yes to the played screens → only then into the shared engine and the live pages. Nothing goes into a live page or the engine on a yes to a description.
+Within authorised local work: build or revise with the shared policy/catalogue through her existing page interfaces → play the no-write preview and inspect real screens → check wording and use a second reader → repair and verify → deliver the reviewable local result. The current authorisation includes shared local code changes; do not repeat an approval loop for each repair. Production publishing and writing live records remain separate actions needing applicable authorisation.
 
 ## Practice that needs thinking
 
